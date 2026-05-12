@@ -1,786 +1,28 @@
-/*
+ï»¿/*
 ================================================================================
  [Engine Architecture]
- 1. WindowContext: Win32 Ã¢ »ı¼º ¹× ¸Ş½ÃÁö ·çÇÁ °ü¸®
- 2. GraphicsContext: DX11 µğ¹ÙÀÌ½º, ½º¿ÒÃ¼ÀÎ, ¼ÎÀÌ´õ ÄÄÆÄÀÏ ¹× ¿µ»ó ¼³Á¤ °ü¸®
- 3. DeltaTime: °íÇØ»óµµ Å¸ÀÌ¸Ó¸¦ ÀÌ¿ëÇÑ ½Ã°£ °è»ê
- 4. GameObject & Component: °´Ã¼ ÁöÇâÀû ±â´É È®Àå ±¸Á¶
- 5. GameLoop: ÀüÃ¼ Èå¸§(Input-Update-Render) Á¦¾î
+ 1. WindowContext: Win32 ì°½ ìƒì„± ë° ë©”ì‹œì§€ ë£¨í”„ ê´€ë¦¬
+ 2. GraphicsContext: DX11 ë””ë°”ì´ìŠ¤, ìŠ¤ì™‘ì²´ì¸, ì…°ì´ë” ì»´íŒŒì¼ ë° ì˜ìƒ ì„¤ì • ê´€ë¦¬
+ 3. DeltaTime: ê³ í•´ìƒë„ íƒ€ì´ë¨¸ë¥¼ ì´ìš©í•œ ì‹œê°„ ê³„ì‚°
+ 4. GameObject & Component: ê°ì²´ ì§€í–¥ì  ê¸°ëŠ¥ í™•ì¥ êµ¬ì¡°
+ 5. GameLoop: ì „ì²´ íë¦„(Input-Update-Render) ì œì–´
 ================================================================================
 */
 
-/*
- * [°­ÀÇ 1: ¼ÎÀÌ´õ ÄÄÆÄÀÏ°ú ÀçÈ°¿ë - "¿ä¸®¹ıÀº ÇÑ ¹ø¸¸ ÀĞ¾î¶ó"]
- *
- * 1. ·±Å¸ÀÓ ÄÄÆÄÀÏ (D3DCompile):
- *    - ÇÁ·Î±×·¥ ½ÇÇà Áß¿¡ .hlsl ¼Ò½º ÄÚµå¸¦ ÀĞ¾î GPU ±â°è¾î·Î ¹Ù²Ù´Â °úÁ¤.
- *    - ¸Å¿ì ¹«°Å¿î ÀÛ¾÷ÀÌ¹Ç·Î, ¸Å ÇÁ·¹ÀÓ È£ÃâÇÏ¸é °ÔÀÓÀÌ ¸ØÃã(Stuttering).
- *
- * 2. ¸®¼Ò½º Ä³½Ì (Caching):
- *    - ÇÑ ¹ø ÄÄÆÄÀÏµÈ °á°ú¹°(Blob)ÀÌ³ª Shader °´Ã¼´Â ¸Ş¸ğ¸®¿¡ ÀúÀåÇØµÎ°í Àç»ç¿ëÇÔ.
- *    - "º°ÀÌ 100°³¶ó°í ¼ÎÀÌ´õ¸¦ 100¹ø ±ÁÁö ¾Ê´Â´Ù."
- *
- * 3. °øÀ¯ (Sharing):
- *    - µ¿ÀÏÇÑ ¼Ò½º ÄÚµå¸¦ »ç¿ëÇÏ´Â °´Ã¼µéÀº ÄÄÆÄÀÏµÈ ¼ÎÀÌ´õÀÇ 'Æ÷ÀÎÅÍ'¸¸ ³ª´² °¡Áü.
- *
- * CompileAndCreate() ÂüÁ¶
- *
- * --------------------------------------------------------------------------------------
- * [°­ÀÇ 2: ÄÄÆÄÀÏµÈ ÆÄÀÏ(.CSO) - "¹Ì¸® ±¸¿öµĞ(pre-baked) »§"]
- *
- * 1. HLSL (Source Code): ÅØ½ºÆ® ÆÄÀÏ. ÀĞ±â ½±Áö¸¸ ½ÇÇà ½Ã ÄÄÆÄÀÏ ºñ¿ë ¹ß»ı.
- * 2. CSO (Compiled Shader Object): ¹ÙÀÌ³Ê¸® ÆÄÀÏ. GPU°¡ ¹Ù·Î ÀÌÇØÇÒ ¼ö ÀÖ´Â ÇüÅÂ.
- *
- * [½Ç¹«ÀÇ Èå¸§]
- * - °³¹ß ´Ü°è: ÄÚµå ¼öÁ¤ÀÌ ÀæÀ¸¹Ç·Î ¼Ò½º(.hlsl)¸¦ Á÷Á¢ ÄÄÆÄÀÏÇÔ.
- * - ¹èÆ÷ ´Ü°è: ºôµå ½ÃÁ¡¿¡ ¹Ì¸® ÄÄÆÄÀÏÇØ¼­ .cso ÆÄÀÏ¸¸ ¹èÆ÷ÇÔ (º¸¾È ¹× ¼Óµµ ¿ìÀ§).
- * - ÄÚµå: D3DReadFileToBlob()À» »ç¿ëÇØ ÄÄÆÄÀÏ °úÁ¤ ¾øÀÌ Áï½Ã ¸®¼Ò½º »ı¼º °¡´É.
- *
- * --------------------------------------------------------------------------------------
- * [°­ÀÇ 3: Mesh RendererÀÇ ¿ªÇÒ - "Á¢½Ã¿Í ¼­ºù"]
- *
- * 1. ¿ªÇÒ: '¹«¾ùÀ»(Mesh)' '¾î¶»°Ô(Material)' ±×¸±Áö °áÁ¤ÇÏ°í ½ÇÇàÇÔ.
- * 2. µ¥ÀÌÅÍ ¹ÙÀÎµù:
- *    - Á¤Á¡ ¹öÆÛ(VB)¸¦ ½½·Ô¿¡ ²È°í, »ó¼ö ¹öÆÛ(CB)¸¦ ÅëÇØ ¿ùµå Çà·ÄÀ» Àü¼ÛÇÔ.
- * 3. ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎ Á¦¾î:
- *    - IASetInputLayout, VSSetShader, PSSetShader µîÀ» È£ÃâÇÏ¿© GPUÀÇ »óÅÂ¸¦ ¼³Á¤ÇÔ.
- *    - "·»´õ·¯´Â ¿ä¸®»ç°¡ ¾Æ´Ï¶ó, ¼Õ´Ô ¾Õ¿¡ ¿ä¸®¸¦ ³»³õ´Â ¼­ºù ´ã´çÀÚ´Ù."
- *
- * --------------------------------------------------------------------------------------
- * [°­ÀÇ 4: Material - "¿ä¸®¹ı(Shader)°ú Àç·á(Data)ÀÇ °áÇÕ"]
- *
- * 1. Á¤ÀÇ: ¼ÎÀÌ´õ(ÄÚµå) + ÆÄ¶ó¹ÌÅÍ(µ¥ÀÌÅÍ, »ö»ó, ÅØ½ºÃ³ µî)ÀÇ ¹­À½.
- * 2. ¿Ö ¸¸µå´Â°¡?:
- *    - ¼ÎÀÌ´õ ÄÚµå´Â °°Áö¸¸ »ö±ò¸¸ ´Ù¸¥ °´Ã¼µéÀ» È¿À²ÀûÀ¸·Î °ü¸®ÇÏ±â À§ÇÔ.
- *    - ¿¹: 'º° ¼ÎÀÌ´õ'´Â ÇÏ³ªÁö¸¸, 'È²±İ ¸ÓÆ¼¸®¾ó'°ú '»¡°£ ¸ÓÆ¼¸®¾ó'Àº µ¥ÀÌÅÍ¸¸ ´Ù¸§.
- * 3. µ¶¸³¼º: ·»´õ·¯°¡ ¼ÎÀÌ´õÀÇ ¼¼ºÎ »çÇ×À» ¸ô¶óµµ ¸ÓÆ¼¸®¾ó¸¸ °¥¾Æ ³¢¿ì¸é ¸ğ½ÀÀÌ ¹Ù²ñ.
- *
- * --------------------------------------------------------------------------------------
- * [°­ÀÇ 5: ´ÙÇü¼º(Polymorphism) - "Ç¥ÁØÈ­µÈ ÀÎÅÍÆäÀÌ½º"]
- *
- * 1. Base Material (Ãß»ó Å¬·¡½º): ¸ğµç ¸ÓÆ¼¸®¾óÀÌ ÁöÄÑ¾ß ÇÒ ¾à¼Ó(Bind() ÇÔ¼ö) Á¤ÀÇ.
- * 2. »ó¼Ó (ColorMaterial, TextureMaterial): °¢ÀÚ ÇÊ¿äÇÑ µ¥ÀÌÅÍ¸¦ GPU ½½·Ô¿¡ ²ÈÀ½.
- *
- * [ÀÌµæ]
- * - È®Àå¼º: »õ·Î¿î È¿°ú°¡ ÇÊ¿äÇÏ¸é ±âÁ¸ ÄÚµå¸¦ °Çµå¸®Áö ¾Ê°í »õ·Î¿î ¸ÓÆ¼¸®¾ó Å¬·¡½º¸¸ Ãß°¡.
- * - ´Ü¼øÈ­: MeshRenderer´Â ºÎ¸ğ Å¸ÀÔÀÎ Material*¸¸ µé°í ÀÖÀ¸¸é µÊ.
- *   ±×°Ô »ö»ó¿ëÀÎÁö ÅØ½ºÃ³¿ëÀÎÁö ¸ô¶óµµ Bind()¸¸ È£ÃâÇÏ¸é ¾Ë¾Æ¼­ ±×·ÁÁü.
- *
- * --------------------------------------------------------------------------------------
- * [°­ÀÇ 6: ¼ÒÀ¯±Ç°ú ½ÇÇàÀÇ ºĞ¸® - "´©°¡ ¹«¾ùÀ» µé°í ÀÖ´Â°¡?"]
- *
- * 1. Mesh (Resource Owner):
- *    - Á¤Á¡ ¹öÆÛ(VB)¸¦ ¼ÒÀ¯ÇÔ.
- *    - ÀÚ±â µ¥ÀÌÅÍÀÇ Å©±â¿Í °³¼ö¸¦ ¾Ë°í ÀÖÀ½.
- *
- * 2. Material (Resource Owner):
- *    - ¼ÎÀÌ´õ(VS, PS)¿Í ÀÔ·Â ·¹ÀÌ¾Æ¿ô(IL)À» ¼ÒÀ¯ÇÔ.
- *    - µ¥ÀÌÅÍ¸¦ ¾î¶»°Ô ÇØ¼®ÇÒÁö(Layout) ¾Ë°í ÀÖÀ½.
- *
- * 3. MeshRenderer (Executor):
- *    - Mesh¿Í MaterialÀ» ÀÎÀÚ·Î ¹Ş¾Æ Á¶¸³ÇÔ.
- *    - ¼ÒÀ¯±ÇÀº ¾øÀ¸¸ç, ¸Å ÇÁ·¹ÀÓ GPU¿¡°Ô "ÀÌ°É·Î(Material) ÀÌ°É(Mesh) ±×·Á¶ó"¶ó°í ¸í·ÉÇÔ.
- */
+#include "GameLoop.h"
+#include "Object.h"
+#include "PlayerController.h"
+#include "Render.h"
 
-#include <windows.h>
-#include <d3d11.h>
 #include <d3dcompiler.h>
-#include <directxmath.h>
-#include <vector>
-#include <chrono>
-#include <string>
+#include <cmath>
 #include <random>
+#include <vector>
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
-
-using namespace DirectX;
-
-struct Vertex
-{
-    XMFLOAT3 pos; XMFLOAT4 col;
-};
-
-struct ConstantBuffer
-{
-    XMMATRIX matWorld;
-};
-
-/*
- * [Mesh - "ÀÚ±â ¸öÀº ÀÚ±â°¡ ¸¸µç´Ù"]
- * - Vertex Buffer´Â ¸Ş½¬ÀÇ ¹°¸®ÀûÀÎ ¸öÃ¼´Ù.
- * - ¸Ş½¬´Â Á¤Á¡ µ¥ÀÌÅÍ¸¦ ¹Ş¾Æ¼­ GPU ¸Ş¸ğ¸®¿¡ ³Ö´Â ¹ıÀ» ½º½º·Î ¾Ë°í ÀÖ¾î¾ß ÇÑ´Ù.
- * - Create()´Â ·Îµù ½ÃÁ¡¿¡ ´Ü ÇÑ ¹ø¸¸ È£ÃâÇÑ´Ù.
- */
-
-
- //±âº» ½¦ÀÌ´õ ¼Â
-struct ShaderSet {
-    ID3D11VertexShader* vs = nullptr;
-    ID3D11PixelShader* ps = nullptr;
-    ID3D11InputLayout* layout = nullptr;
-
-    ShaderSet() = default;
-
-    // »ı¼ºÀÚ¿¡¼­ ÃÊ±âÈ­ÇÏ±â ÆíÇÏ°Ô Ãß°¡
-    ShaderSet(ID3D11VertexShader* v, ID3D11PixelShader* p, ID3D11InputLayout* l)
-        : vs(v), ps(p), layout(l)
-    {
-    }
-
-    // * ¼Ò¸êÀÚ¿¡¼­ ¾ÈÀüÇÏ°Ô ÇØÁ¦
-    void Release()
-    {
-        if (vs) { vs->Release(); vs = nullptr; }
-        if (ps) { ps->Release(); ps = nullptr; }
-        if (layout) { layout->Release(); layout = nullptr; }
-    }
-};
-
-
-class DeltaTime
-{
-    std::chrono::high_resolution_clock::time_point prevTime;
-public:
-    DeltaTime()
-    {
-        prevTime = std::chrono::high_resolution_clock::now();
-    }
-
-    float GetDelta()
-    {
-        std::chrono::steady_clock::time_point currTime = std::chrono::high_resolution_clock::now();
-        float dt = std::chrono::duration<float>(currTime - prevTime).count();
-        prevTime = currTime;
-        return dt;
-    }
-};
-
-class WindowContext
-{
-public:
-    HWND hWnd;
-    int Width, Height;
-    LPCWSTR windowName;
-
-    WindowContext(LPCWSTR winName = L"DX11 Component Engine")
-        : windowName(winName), hWnd(nullptr), Width(800), Height(600)
-    {
-    }
-
-    ~WindowContext()
-    {
-        UnregisterClass(L"DX11Engine", GetModuleHandle(NULL));
-    }
-
-    bool Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM))
-    {
-        Width = w; Height = h;
-
-        WNDCLASSEX wc = { sizeof(WNDCLASSEX) };
-        wc.style = CS_HREDRAW | CS_VREDRAW;
-        wc.lpfnWndProc = wndProc;
-        wc.hInstance = hInst;
-        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.lpszClassName = L"DX11Engine";
-
-        if (!RegisterClassEx(&wc)) return false;
-
-        RECT rc = { 0, 0, w, h };
-        AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-
-        hWnd = CreateWindow(L"DX11Engine", windowName, WS_OVERLAPPEDWINDOW,
-            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
-            NULL, NULL, hInst, NULL);
-
-        if (!hWnd) return false;
-
-        ShowWindow(hWnd, SW_SHOW);
-        return true;
-    }
-};
-
-class GraphicsContext {
-public:
-    ID3D11Device* Device = nullptr;
-    ID3D11DeviceContext* ImmediateContext = nullptr;
-    IDXGISwapChain* SwapChain = nullptr;
-    ID3D11RenderTargetView* RTV = nullptr;
-
-    bool IsFullscreen = false;
-    int VSync = 1;
-
-    bool InitDX(HWND hWnd, int w, int h)
-    {
-        DXGI_SWAP_CHAIN_DESC sd = {};
-        sd.BufferCount = 1;
-        sd.BufferDesc.Width = w; sd.BufferDesc.Height = h;
-        sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        sd.OutputWindow = hWnd; sd.SampleDesc.Count = 1; sd.Windowed = TRUE;
-
-        HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, NULL, 0,
-            D3D11_SDK_VERSION, &sd, &SwapChain, &Device, NULL, &ImmediateContext);
-
-        return SUCCEEDED(hr) && CreateRTV(w, h);
-    }
-
-    bool CreateRTV(int w, int h)
-    {
-        if (RTV) RTV->Release();
-        ID3D11Texture2D* pBB;
-        SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBB);
-        Device->CreateRenderTargetView(pBB, NULL, &RTV);
-        pBB->Release();
-        return true;
-    }
-
-    void Resize(int w, int h)
-    {
-        ImmediateContext->OMSetRenderTargets(0, 0, 0);
-        RTV->Release(); RTV = nullptr;
-        SwapChain->ResizeBuffers(0, w, h, DXGI_FORMAT_UNKNOWN, 0);
-        CreateRTV(w, h);
-    }
-
-    void SetFullscreen(bool goFull)
-    {
-        IsFullscreen = goFull;
-        SwapChain->SetFullscreenState(goFull, NULL);
-    }
-
-    ID3DBlob* CompileShader(const std::string& src, const std::string& entry, const std::string& profile) {
-        ID3DBlob* blob = nullptr;
-        D3DCompile(src.c_str(), src.length(), NULL, NULL, NULL, entry.c_str(), profile.c_str(), 0, 0, &blob, NULL);
-        return blob;
-    }
-
-    // ½ÇÁ¦ ÄÄÆÄÀÏ ·ÎÁ÷À» ´ã´çÇÏ´Â ³»ºÎ ÇÔ¼ö
-    ShaderSet CompileAndCreate(const void* source, size_t length, bool isFile, D3D11_INPUT_ELEMENT_DESC* ied, UINT iedCount)
-    {
-        ShaderSet res;
-        ID3DBlob* vsBlob = nullptr;
-        ID3DBlob* psBlob = nullptr;
-        ID3DBlob* errBlob = nullptr;
-
-        HRESULT hr;
-        if (isFile)
-        {
-            // ÆÄÀÏ¿¡¼­ ÀĞ±â
-            hr = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
-            hr = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
-        }
-        else
-        {
-            // ¸Ş¸ğ¸®(String)¿¡¼­ ÀĞ±â
-            hr = D3DCompile(source, length, nullptr, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
-            hr = D3DCompile(source, length, nullptr, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
-        }
-
-        if (FAILED(hr))
-        {
-            if (errBlob)
-            {
-                OutputDebugStringA((char*)errBlob->GetBufferPointer());
-                errBlob->Release();
-            }
-            return res;
-        }
-
-        // GPU ¸®¼Ò½º »ı¼º
-        Device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &res.vs);
-        Device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &res.ps);
-
-        // ¸Å°³º¯¼ö·Î ¹ŞÀº ied¿Í iedCount¸¦ »ç¿ëÇØ¼­ ·¹ÀÌ¾Æ¿ô »ı¼º!
-        if (vsBlob && ied)
-        {
-            Device->CreateInputLayout(ied, iedCount, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &res.layout);
-        }
-
-        if (vsBlob) vsBlob->Release();
-        if (psBlob) psBlob->Release();
-
-        return res;
-    }
-
-
-    ~GraphicsContext() {
-        if (RTV)
-            RTV->Release();
-        if (SwapChain)
-            SwapChain->Release();
-        if (ImmediateContext)
-            ImmediateContext->Release();
-        if (Device)
-            Device->Release();
-    }
-};
-
-class GameObject;
-class Component
-{
-public:
-    GameObject* pOwner = nullptr;
-    bool isStarted = false;
-
-    Component() {}
-    virtual void Start(GraphicsContext* gfx) = 0;
-    virtual void Input() = 0; // ÄÄÆ÷³ÍÆ® ·¹º§ÀÇ ÀÔ·Â Ã³¸®
-    virtual void Update(float dt) = 0;
-    virtual void Render(GraphicsContext* gfx) = 0;
-    virtual ~Component() {}
-};
-
-class GameObject
-{
-public:
-    XMFLOAT3 pos = { 0, 0, 0 };
-    XMFLOAT3 rot = { 0, 0, 0 };
-    XMFLOAT3 scale = { 1, 1, 1 };
-    std::vector<Component*> components;
-
-    GameObject(float x, float y, float z)
-    {
-        pos.x = x;
-        pos.y = y;
-        pos.z = z;
-    }
-    ~GameObject()
-    {
-        for (int i = 0; i < (int)components.size(); i++)
-            delete components[i];
-    }
-
-    void AddComponent(Component* c)
-    {
-        c->pOwner = this;
-        components.push_back(c);
-    }
-
-    void Input()
-    {
-        // ÀÎµ¦½º ±â¹İ ·çÇÁ·Î ÇÏÀ§ ÄÄÆ÷³ÍÆ®ÀÇ Input È£Ãâ
-        int componentCount = (int)components.size();
-        for (int i = 0; i < componentCount; i++)
-        {
-            if (components[i] != nullptr)
-            {
-                components[i]->Input();
-            }
-        }
-    }
-
-    void Update(float dt, GraphicsContext* gfx)
-    {
-        for (int j = 0; j < (int)components.size(); j++)
-        {
-            if (components[j] != nullptr)
-            {
-                if (components[j]->isStarted == false)
-                {
-                    components[j]->Start(gfx);
-                    components[j]->isStarted = true;
-                }
-
-                components[j]->Update(dt);
-            }
-        }
-    }
-    void Render(GraphicsContext* gfx)
-    {
-        for (int i = 0; i < components.size(); i++)
-        {
-            if (components[i] != nullptr)
-            {
-                components[i]->Render(gfx);
-            }
-        }
-    }
-};
-
-struct Mesh
-{
-public:
-    ID3D11Buffer* vBuffer;
-    UINT vertexCount;
-
-    Mesh()
-    {
-        vBuffer = nullptr;
-        vertexCount = 0;
-    }
-
-    ~Mesh()
-    {
-        if (vBuffer)
-        {
-            vBuffer->Release();
-            vBuffer = nullptr;
-        }
-    }
-
-    // [ÇÙ½É] ¿ÜºÎ¿¡¼­ Á¤Á¡ º¤ÅÍ¸¦ ´øÁ®ÁÖ¸é ½º½º·Î GPU ¹öÆÛ¸¦ »ı¼ºÇÔ
-    void Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices)
-    {
-        vertexCount = (UINT)vertices.size();
-
-        D3D11_BUFFER_DESC bd = { 0 };
-        bd.Usage = D3D11_USAGE_DEFAULT;
-        bd.ByteWidth = sizeof(Vertex) * vertexCount;
-        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-        D3D11_SUBRESOURCE_DATA sd = { 0 };
-        sd.pSysMem = vertices.data();
-
-        gfx->Device->CreateBuffer(&bd, &sd, &vBuffer);
-    }
-};
-
-class Material {
-public:
-    ShaderSet shaders; // ¸ğµç ¸ÓÆ¼¸®¾óÀº ¼ÎÀÌ´õ¸¦ °¡Áü
-
-
-    Material(ShaderSet s) : shaders(s) {}
-    virtual ~Material() {}
-
-    // ÀÌ ¸ÓÆ¼¸®¾óÀÌ °¡Áø ¼ÎÀÌ´õ¿Í ÆÄ¶ó¹ÌÅÍ¸¦ GPU ½½·Ô¿¡ ²È´Â ÇÔ¼ö
-    virtual void Bind(ID3D11DeviceContext* context) = 0;
-};
-
-// ÇÈ¼¿ ¼ÎÀÌ´õ¿¡¼­ ¾µ »ö»ó »ó¼ö ¹öÆÛ ±¸Á¶Ã¼
-struct ColorBuffer
-{
-    XMFLOAT4 tintColor;
-};
-
-class ColorMaterial : public Material {
-
-public:
-
-    XMFLOAT4 color;
-    ID3D11Buffer* pColorBuffer = nullptr; // »ö»ó Àü¼Û¿ë »ó¼ö ¹öÆÛ
-
-
-    ColorMaterial(ShaderSet s, XMFLOAT4 col, ID3D11Device* device)
-        : Material(s), color(col)
-    {
-        // »ö»ó Á¤º¸¸¦ ´ãÀ» Àü¿ë »ó¼ö ¹öÆÛ »ı¼º (b1 ½½·Ô¿ë)
-        D3D11_BUFFER_DESC cbd = { 0 };
-        cbd.Usage = D3D11_USAGE_DEFAULT;
-        cbd.ByteWidth = sizeof(ColorBuffer);
-        cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
-        device->CreateBuffer(&cbd, nullptr, &pColorBuffer);
-    }
-
-    virtual ~ColorMaterial()
-    {
-        if (pColorBuffer) pColorBuffer->Release();
-    }
-
-    // »ö»óÀ» ½Ç½Ã°£À¸·Î ¹Ù²Ü ¼ö ÀÖ°Ô Á¦°ø (¾Ö´Ï¸ŞÀÌ¼Ç¿ë)
-    void SetColor(XMFLOAT4 col) { color = col; }
-
-    void Bind(ID3D11DeviceContext* context) override
-    {
-        // 1. ¼ÎÀÌ´õ ¹× ·¹ÀÌ¾Æ¿ô ¹ÙÀÎµù (°øÅë)
-        context->IASetInputLayout(shaders.layout);
-        context->VSSetShader(shaders.vs, nullptr, 0);
-        context->PSSetShader(shaders.ps, nullptr, 0);
-
-        // 2. ¸ÓÆ¼¸®¾ó °íÀ¯ÀÇ »ö»ó µ¥ÀÌÅÍ ¾÷µ¥ÀÌÆ® (b1 ½½·Ô¿¡ ²È±â)
-        ColorBuffer cb = { color };
-        context->UpdateSubresource(pColorBuffer, 0, nullptr, &cb, 0, 0);
-
-        // Pixel ShaderÀÇ 1¹ø ½½·Ô(b1)¿¡ »ö»ó ¹öÆÛ¸¦ ²ÈÀ½
-        context->PSSetConstantBuffers(1, 1, &pColorBuffer);
-    }
-};
-
-
-
-class MeshRenderer : public Component
-{
-public:
-    Mesh* pMeshData = nullptr;
-    ID3D11Buffer* cBuffer = nullptr;
-    Material* pMaterial; // ´ÙÇü¼º(Polymorphism) È°¿ë!
-
-    MeshRenderer(Mesh* mesh, Material* mat) : Component()
-    {
-        pMeshData = mesh;
-        pMaterial = mat;
-        cBuffer = nullptr;
-    }
-
-    MeshRenderer(Mesh* mesh)
-    {
-
-
-    }
-
-    ~MeshRenderer()
-    {
-        if (cBuffer)
-        {
-            cBuffer->Release();
-            cBuffer = nullptr;
-        }
-    }
-
-    void Start(GraphicsContext* gfx) override
-    {
-        D3D11_BUFFER_DESC cbd = { 0 };
-        cbd.Usage = D3D11_USAGE_DEFAULT;
-        cbd.ByteWidth = sizeof(ConstantBuffer);
-        cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
-        gfx->Device->CreateBuffer(&cbd, nullptr, &cBuffer);
-    }
-
-    void Render(GraphicsContext* gfx) override
-    {
-        if (!pMeshData || !pMaterial) return;
-
-        // 1. ¸ÓÆ¼¸®¾ó Çü´ÔÇÑÅ× "³×°¡ ¾Ë¾Æ¼­ ¼ÎÀÌ´õ¶û »ö»ó ´Ù ²È¾Æ¶ó"¶ó°í ½ÃÅ´
-        pMaterial->Bind(gfx->ImmediateContext);
-
-        // 2. World º¯È¯ Çà·Ä ¾÷µ¥ÀÌÆ® (b0 ½½·Ô - ÀÌ°Ç °´Ã¼¸¶´Ù ´Ù¸£´Ï ¿©±â¼­ Ã³¸®)
-        float s = 1.0f / (pOwner->pos.z + 1.0f);
-        XMMATRIX world = XMMatrixScaling(s * pOwner->scale.x, s * pOwner->scale.y, 1.0f) *
-            XMMatrixRotationZ(pOwner->rot.z) *
-            XMMatrixTranslation(pOwner->pos.x, pOwner->pos.y, 0.0f);
-
-        ConstantBuffer cb;
-        cb.matWorld = XMMatrixTranspose(world);
-        gfx->ImmediateContext->UpdateSubresource(cBuffer, 0, nullptr, &cb, 0, 0);
-        gfx->ImmediateContext->VSSetConstantBuffers(0, 1, &cBuffer);
-
-        // 3. ±×¸®±â
-        UINT stride = sizeof(Vertex), offset = 0;
-        gfx->ImmediateContext->IASetVertexBuffers(0, 1, &pMeshData->vBuffer, &stride, &offset);
-        gfx->ImmediateContext->Draw(pMeshData->vertexCount, 0);
-    }
-
-    void Input() override {}
-    void Update(float dt) override {}
-};
-
-class PlayerController : public Component
-{
-    // ÀÔ·Â »óÅÂ¸¦ ÀúÀåÇÏ±â À§ÇÑ ¸â¹ö º¯¼ö (³»ºÎ¿ë)
-    XMFLOAT2 moveDir;  // x: ÁÂ¿ì, y: »óÇÏ
-    float    rotDir;   // È¸Àü ¹æÇâ
-    float    zoomDir;  // È®´ë/Ãà¼Ò ¹æÇâ
-
-public:
-    PlayerController() : Component()
-    {
-        moveDir = { 0, 0 };
-        rotDir = 0.0f;
-        zoomDir = 0.0f;
-    }
-
-    ~PlayerController()
-    {
-    }
-
-    void Start(GraphicsContext* gfx) override
-    {
-    }
-
-    // [Step 1] ÀÔ·Â °¨Áö ¹× »óÅÂ ÀúÀå
-    void Input() override
-    {
-        // ¸Å ÇÁ·¹ÀÓ ÀÔ·Â »óÅÂ ÃÊ±âÈ­
-        moveDir = { 0, 0 };
-        rotDir = 0.0f;
-        zoomDir = 0.0f;
-
-        // ¹æÇâÅ° ÀÔ·Â (ÀÌµ¿)
-        if (GetAsyncKeyState(VK_UP) & 0x8000)    moveDir.y += 1.0f;
-        if (GetAsyncKeyState(VK_DOWN) & 0x8000)  moveDir.y -= 1.0f;
-        if (GetAsyncKeyState(VK_LEFT) & 0x8000)  moveDir.x -= 1.0f;
-        if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveDir.x += 1.0f;
-
-        // AD Å° ÀÔ·Â (È¸Àü)
-        if (GetAsyncKeyState('A') & 0x8000) rotDir += 1.0f;
-        if (GetAsyncKeyState('D') & 0x8000) rotDir -= 1.0f;
-
-        // WS Å° ÀÔ·Â (ÁÜ)
-        if (GetAsyncKeyState('W') & 0x8000) zoomDir -= 1.0f;
-        if (GetAsyncKeyState('S') & 0x8000) zoomDir += 1.0f;
-    }
-
-    // [Step 2] ÀúÀåµÈ »óÅÂ¸¦ ¹ÙÅÁÀ¸·Î µ¥ÀÌÅÍ °»½Å
-    void Update(float dt) override
-    {
-        // 1. ¼Óµµ Á¤ÀÇ (»çÀÌÁî ºñ·Ê ¼Óµµ Àû¿ë °¡´É)
-        float speedFactor = pOwner->scale.x;
-        float moveSpeed = 2.0f * speedFactor;
-        float rotateSpeed = 3.0f * speedFactor;
-        float zoomSpeed = 5.0f * speedFactor;
-
-        // 2. À§Ä¡ ¾÷µ¥ÀÌÆ®
-        pOwner->pos.x += moveDir.x * moveSpeed * dt;
-        pOwner->pos.y += moveDir.y * moveSpeed * dt;
-
-        // 3. È¸Àü ¾÷µ¥ÀÌÆ®
-        pOwner->rot.z += rotDir * rotateSpeed * dt;
-
-        // 4. ÁÜ(ZÃà) ¾÷µ¥ÀÌÆ® ¹× Á¦ÇÑ
-        pOwner->pos.z += zoomDir * zoomSpeed * dt;
-
-        if (pOwner->pos.z < -0.9f)
-        {
-            pOwner->pos.z = -0.9f;
-        }
-    }
-
-    void Render(GraphicsContext* gfx) override
-    {
-    }
-};
-
-class GameLoop
-{
-public:
-    WindowContext win;
-    GraphicsContext gfx;
-    DeltaTime timer;
-    std::vector<GameObject*> world;
-    bool isRunning = true;
-
-    ID3D11VertexShader* pDefaultVS = nullptr;
-    ID3D11PixelShader* pDefaultPS = nullptr;
-    ID3D11InputLayout* pDefaultLayout = nullptr;
-
-    GameLoop() : isRunning(true)
-    {
-        world.clear();
-        printf("[Engine] GameLoop Created.\n");
-    }
-
-    ~GameLoop()
-    {
-        for (int i = 0; i < (int)world.size(); i++)
-        {
-            if (world[i])
-            {
-                delete world[i];
-                world[i] = nullptr;
-            }
-        }
-        world.clear();
-
-        if (pDefaultLayout) pDefaultLayout->Release();
-        if (pDefaultVS) pDefaultVS->Release();
-        if (pDefaultPS) pDefaultPS->Release();
-
-        printf("[Engine] GameLoop Destroyed. All resources released.\n");
-    }
-
-    void Initialize(HINSTANCE hInst, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM))
-    {
-        win.Initialize(hInst, 800, 600, wndProc);
-        gfx.InitDX(win.hWnd, 800, 600);
-    }
-
-    void Input()
-    {
-        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-            isRunning = false;
-        if (GetAsyncKeyState('F') & 0x0001)
-            gfx.SetFullscreen(!gfx.IsFullscreen);
-
-        if (GetAsyncKeyState('C') & 0x0001) // 0x0001Àº ÀÌ¹ø ÇÁ·¹ÀÓ¿¡ ´­·È´ÂÁö È®ÀÎ(Toggle)
-        {
-            // 1. ³»ºÎ º¯¼ö ¾÷µ¥ÀÌÆ®
-            win.Width = 600;
-            win.Height = 600;
-
-            // 2. ½ÇÁ¦ Win32 À©µµ¿ì Å©±â º¯°æ
-            // SWP_NOMOVE: À§Ä¡´Â À¯Áö, SWP_NOZORDER: ·¹ÀÌ¾î ¼ø¼­ À¯Áö
-            RECT rc = { 0, 0, win.Width, win.Height };
-            AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-
-            SetWindowPos(win.hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOZORDER);
-
-            // 3. DX11 ¹é¹öÆÛ ¹× RTV ¸®»çÀÌÁî (GraphicsContext¿¡ Á¤ÀÇµÈ ÇÔ¼ö È£Ãâ)
-            gfx.Resize(win.Width, win.Height);
-
-            printf("[Engine] Window Resized to 600x600\n");
-        }
-
-        // 2. ¿ùµå ³» ¸ğµç ¿ÀºêÁ§Æ®¿¡ ÀÔ·Â ÀüÆÄ
-        int objectCount = (int)world.size();
-        for (int i = 0; i < objectCount; i++)
-        {
-            if (world[i] != nullptr)
-            {
-                world[i]->Input();
-            }
-        }
-    }
-
-    void Update()
-    {
-        float dt = timer.GetDelta();
-        for (int i = 0; i < (int)world.size(); i++)
-        {
-            if (world[i] != nullptr)
-            {
-                world[i]->Update(dt, &gfx);
-            }
-        }
-    }
-
-    void Render()
-    {
-        float col[] = { 0.1f, 0.2f, 0.3f, 1.0f };
-        gfx.ImmediateContext->ClearRenderTargetView(gfx.RTV, col);
-
-        D3D11_VIEWPORT vp = { 0, 0, (float)win.Width, (float)win.Height, 0, 1 };
-        gfx.ImmediateContext->RSSetViewports(1, &vp);
-        gfx.ImmediateContext->OMSetRenderTargets(1, &gfx.RTV, NULL);
-
-        if (pDefaultLayout)
-        {
-            gfx.ImmediateContext->IASetInputLayout(pDefaultLayout);
-        }
-        gfx.ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-        for (int i = 0; i < (int)world.size(); i++)
-        {
-            if (world[i] != nullptr)
-            {
-                world[i]->Render(&gfx);
-            }
-        }
-        gfx.SwapChain->Present(gfx.VSync, 0);
-    }
-
-    void Run()
-    {
-        MSG msg = {};
-        while (msg.message != WM_QUIT && isRunning)
-        {
-            if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-            {
-                TranslateMessage(&msg); DispatchMessage(&msg);
-            }
-            else
-            {
-                Input();
-                Update();
-                Render();
-            }
-        }
-    }
-};
 
 LRESULT CALLBACK GlobalWndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -793,32 +35,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 
-    std::string triShader = R"(
-        cbuffer cbWorld    : register(b0) { matrix matWorld; };
-        cbuffer cbMaterial : register(b1) { float4 tintColor; }; // ¸ÓÆ¼¸®¾ó »ö»ó Ãß°¡!
-
-        struct VS_IN { float3 pos : POSITION; float4 col : COLOR; };
-        struct PS_IN { float4 pos : SV_POSITION; float4 col : COLOR; };
-        
-        PS_IN VS(VS_IN input) 
-        {
-            PS_IN output;
-            output.pos = mul(float4(input.pos, 1.0f), matWorld);
-            output.col = input.col; 
-            return output;
-        }
-
-        // input.col(Á¤Á¡ »ö»ó) ¹«½ÃÇÏ°í tintColor(¸ÓÆ¼¸®¾ó »ö»ó)¸¦ Ãâ·Â
-        float4 PS(PS_IN input) : SV_Target 
-        { 
-            return tintColor; 
-        }
-    )";
-
-
-
-    //º°±×¸®±â
-    float outerR = 0.5f; float innerR = 0.2f;
+    float outerR = 0.5f;
+    float innerR = 0.2f;
     XMFLOAT3 p[10];
     for (int i = 0; i < 10; ++i)
     {
@@ -826,21 +44,21 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
         if (i % 2 == 0)
         {
-            r = outerR; // ¹Ù±ùÂÊ ¹İÁö¸§(outerR)À» ´ëÀÔ
+            r = outerR;
         }
         else
         {
-            r = innerR; // ¾ÈÂÊ ¹İÁö¸§(innerR)À» ´ëÀÔ
+            r = innerR;
         }
+
         float angle = XM_PIDIV2 - (i * XM_2PI / 10.0f);
         p[i] = { cosf(angle) * r, sinf(angle) * r, 0.0f };
     }
 
-    //Á¤¼®´ë·Î ±×¸®±â
     std::vector<Vertex> vGold;
     for (int i = 0; i < 10; i++)
     {
-        vGold.push_back({ {0,0,0}, { 0, 0, 0, 0 } });
+        vGold.push_back({ {0, 0, 0}, { 0, 0, 0, 0 } });
         vGold.push_back({ p[i], { 0, 0, 0, 0 } });
         vGold.push_back({ p[(i + 1) % 10], { 0, 0, 0, 0 } });
     }
@@ -853,56 +71,34 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     Mesh* gMesh = new Mesh();
     gMesh->vertexCount = 30;
-
     gMesh->Create(&gEngine.gfx, vGold);
 
-    // 1. ¼ÎÀÌ´õ µü ÇÑ ¹ø¸¸ ±¸¿öµÎ±â (Àç»ç¿ë!)
-    //ShaderSet starShaders = gEngine.gfx.CreateShaderFromMemory(triShader);
-    ShaderSet starShaders = gEngine.gfx.CompileAndCreate(triShader.c_str(), triShader.length(), false, ied, 2);
+    ShaderSet starShaders = gEngine.gfx.CompileAndCreate(L"Star.hlsl", 0, true, ied, 2);
 
-    // 2. ¸ÓÆ¼¸®¾ó µü µÎ Á¾·ù¸¸ ¸¸µé±â (ºØ¾î»§ Æ²)
     ColorMaterial* goldMat = new ColorMaterial(starShaders, { 1, 0.8f, 0, 1 }, gEngine.gfx.Device);
     ColorMaterial* redMat = new ColorMaterial(starShaders, { 1, 0, 0, 1 }, gEngine.gfx.Device);
 
-
-    // ½Ãµå°ª ÁØºñ (ÁøÂ¥ ¹«ÀÛÀ§¼ºÀ» À§ÇØ ÇÏµå¿ş¾î¿¡¼­ °ªÀ» °¡Á®¿È)
     std::random_device rd;
-
-    // ³­¼ö ¿£Áø »ı¼º (gen) - "¼ıÀÚ¸¦ ¸¶±¸ »Õ¾î³»´Â ±â°è"
     std::mt19937 gen(rd());
-
-    // ºĞÆ÷±â ¼³Á¤ (dis) - "»Õ¾îÁ® ³ª¿Â ¼ıÀÚ¸¦ 0.0 ~ 1.0 »çÀÌ·Î °ñ°í·ç ÆìÁÖ´Â ±â°è"
     std::uniform_real_distribution<float> dis(0.0f, 1.0f);
 
-    // ½ÇÇà (dis(gen))
-    float randomValue = dis(gen); // "±â°è(gen)¸¦ °¡µ¿ÇØ¼­ °á°ú¹°À» ºĞÆ÷±â(dis)¿¡ Åë°ú½ÃÄÑ¶ó"
-
-    // 3. º°µé »ı¼º (µ¥ÀÌÅÍ´Â °øÀ¯, »óÅÂ´Â °³º°)
     for (int i = 0; i < 20; i++)
     {
         GameObject* star = new GameObject(dis(gen), dis(gen), 0);
 
-        // °°Àº ¼ÎÀÌ´õ¸¦ ¾²´Â ¸ÓÆ¼¸®¾óÀ» ÄÄÆ÷³ÍÆ®¿¡ ÀåÂø
         star->AddComponent(new MeshRenderer(gMesh, (i % 2 == 0) ? goldMat : redMat));
         star->AddComponent(new PlayerController());
 
         gEngine.world.push_back(star);
     }
 
-
-
     gEngine.Run();
 
-
-    // [Áß¿ä: °øÀ¯ ¸®¼Ò½º ¼öµ¿ ÇØÁ¦]
-    // ·»´õ·¯µéÀÌ ÀÌ¹Ì world ¼Ò¸ê ½ÃÁ¡¿¡ »ç¶óÁ³À¸¹Ç·Î, ÀÌÁ¦ ¾ÈÀüÇÏ°Ô ¸®¼Ò½º¸¦ Áö¿ï ¼ö ÀÖÀ½.
     if (goldMat) { delete goldMat; goldMat = nullptr; }
-    if (redMat) { delete redMat;  redMat = nullptr; }
+    if (redMat) { delete redMat; redMat = nullptr; }
 
-    // ¼ÎÀÌ´õ ¼¼Æ®µµ ¸±¸®Áî (ÀÌ°Ç ¼öµ¿À¸·Î Release È£ÃâÇØÁà¾ß ÇÔ)
     starShaders.Release();
 
-    // ¸Ş½¬ µ¥ÀÌÅÍ ÇØÁ¦
     if (gMesh) { delete gMesh; gMesh = nullptr; }
 
     return 0;
