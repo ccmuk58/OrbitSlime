@@ -1,5 +1,4 @@
 #include "GameLoop.h"
-
 #include "Object.h"
 
 #include <cstdio>

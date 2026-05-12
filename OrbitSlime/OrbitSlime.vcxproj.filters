@@ -56,4 +56,9 @@
       <Filter>리소스 파일</Filter>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="asteroid.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>

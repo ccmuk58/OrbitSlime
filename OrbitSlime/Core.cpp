@@ -34,7 +34,7 @@ WindowContext::WindowContext(LPCWSTR winName)
 
 WindowContext::~WindowContext()
 {
-    UnregisterClass(L"DX11Engine", GetModuleHandle(NULL));
+    UnregisterClass(L"Orbit Slime", GetModuleHandle(NULL));
 }
 
 bool WindowContext::Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM))
@@ -47,14 +47,14 @@ bool WindowContext::Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* 
     wc.lpfnWndProc = wndProc;
     wc.hInstance = hInst;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.lpszClassName = L"DX11Engine";
+    wc.lpszClassName = L"Orbit Slime";
 
     if (!RegisterClassEx(&wc)) return false;
 
     RECT rc = { 0, 0, w, h };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-    hWnd = CreateWindow(L"DX11Engine", windowName, WS_OVERLAPPEDWINDOW,
+    hWnd = CreateWindow(L"Orbit Slime", windowName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
         NULL, NULL, hInst, NULL);
 

@@ -34,7 +34,7 @@ public:
     int Height;
     LPCWSTR windowName;
 
-    WindowContext(LPCWSTR winName = L"DX11 Component Engine");
+    WindowContext(LPCWSTR winName = L"Orbit Slime");
     ~WindowContext();
 
     bool Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM));

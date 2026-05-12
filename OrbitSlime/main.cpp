@@ -43,7 +43,6 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         float angle = XM_PIDIV2 - (i * XM_2PI / slimeVertexCnt);
         p[i] = { cosf(angle) * slimeR, sinf(angle) * slimeR, 0.0f };
     }
-
     std::vector<Vertex> slimeVector;
     for (int i = 0; i < slimeVertexCnt; i++)
     {
@@ -62,16 +61,11 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* slimeMesh = new Mesh();
     slimeMesh->vertexCount = slimeVertexCnt;
     slimeMesh->Create(&gEngine.gfx, slimeVector);
-
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
-
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
-
     GameObject* slime = new GameObject(0, 0 ,0);
-
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController());
-
     gEngine.world.push_back(slime);
 
     gEngine.Run();
