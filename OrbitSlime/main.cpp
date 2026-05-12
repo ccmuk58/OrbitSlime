@@ -90,7 +90,7 @@
 #include <chrono>
 #include <string>
 #include <random>
-#include "DeltaTime.h"
+
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -140,6 +140,23 @@ struct ShaderSet {
 };
 
 
+class DeltaTime
+{
+    std::chrono::high_resolution_clock::time_point prevTime;
+public:
+    DeltaTime()
+    {
+        prevTime = std::chrono::high_resolution_clock::now();
+    }
+
+    float GetDelta()
+    {
+        std::chrono::steady_clock::time_point currTime = std::chrono::high_resolution_clock::now();
+        float dt = std::chrono::duration<float>(currTime - prevTime).count();
+        prevTime = currTime;
+        return dt;
+    }
+};
 
 class WindowContext
 {
