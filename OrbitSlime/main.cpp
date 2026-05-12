@@ -35,71 +35,52 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 
-    float outerR = 0.5f;
-    float innerR = 0.2f;
-    XMFLOAT3 p[10];
-    for (int i = 0; i < 10; ++i)
+    const int slimeVertexCnt = 100;
+    XMFLOAT3 p[slimeVertexCnt];
+    float slimeR = 0.25f;
+    for (int i = 0; i < slimeVertexCnt; ++i)
     {
-        float r;
-
-        if (i % 2 == 0)
-        {
-            r = outerR;
-        }
-        else
-        {
-            r = innerR;
-        }
-
-        float angle = XM_PIDIV2 - (i * XM_2PI / 10.0f);
-        p[i] = { cosf(angle) * r, sinf(angle) * r, 0.0f };
+        float angle = XM_PIDIV2 - (i * XM_2PI / slimeVertexCnt);
+        p[i] = { cosf(angle) * slimeR, sinf(angle) * slimeR, 0.0f };
     }
 
-    std::vector<Vertex> vGold;
-    for (int i = 0; i < 10; i++)
+    std::vector<Vertex> slimeVector;
+    for (int i = 0; i < slimeVertexCnt; i++)
     {
-        vGold.push_back({ {0, 0, 0}, { 0, 0, 0, 0 } });
-        vGold.push_back({ p[i], { 0, 0, 0, 0 } });
-        vGold.push_back({ p[(i + 1) % 10], { 0, 0, 0, 0 } });
+        slimeVector.push_back({ {0, 0, 0}, { 0, 0, 0, 0 } });
+        slimeVector.push_back({ p[i], { 0, 0, 0, 0 } });
+        slimeVector.push_back({ p[(i + 1) % slimeVertexCnt], { 0, 0, 0, 0 } });
     }
 
+	// Define the input layout for the vertex shader
     D3D11_INPUT_ELEMENT_DESC ied[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
-    Mesh* gMesh = new Mesh();
-    gMesh->vertexCount = 30;
-    gMesh->Create(&gEngine.gfx, vGold);
+    Mesh* slimeMesh = new Mesh();
+    slimeMesh->vertexCount = slimeVertexCnt;
+    slimeMesh->Create(&gEngine.gfx, slimeVector);
 
-    ShaderSet starShaders = gEngine.gfx.CompileAndCreate(L"Star.hlsl", 0, true, ied, 2);
+    ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
 
-    ColorMaterial* goldMat = new ColorMaterial(starShaders, { 1, 0.8f, 0, 1 }, gEngine.gfx.Device);
-    ColorMaterial* redMat = new ColorMaterial(starShaders, { 1, 0, 0, 1 }, gEngine.gfx.Device);
+    ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+    GameObject* slime = new GameObject(0, 0 ,0);
 
-    for (int i = 0; i < 20; i++)
-    {
-        GameObject* star = new GameObject(dis(gen), dis(gen), 0);
+    slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
+    slime->AddComponent(new PlayerController());
 
-        star->AddComponent(new MeshRenderer(gMesh, (i % 2 == 0) ? goldMat : redMat));
-        star->AddComponent(new PlayerController());
-
-        gEngine.world.push_back(star);
-    }
+    gEngine.world.push_back(slime);
 
     gEngine.Run();
 
-    if (goldMat) { delete goldMat; goldMat = nullptr; }
-    if (redMat) { delete redMat; redMat = nullptr; }
+    if (slimeMat) { delete slimeMat; slimeMat = nullptr; }
 
-    starShaders.Release();
+    slimeShader.Release();
 
-    if (gMesh) { delete gMesh; gMesh = nullptr; }
+    if (slimeMesh) { delete slimeMesh; slimeMesh = nullptr; }
 
     return 0;
 }

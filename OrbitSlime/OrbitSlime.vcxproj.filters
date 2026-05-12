@@ -52,7 +52,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Star.hlsl">
+    <Content Include="Slime.hlsl">
       <Filter>리소스 파일</Filter>
     </Content>
   </ItemGroup>

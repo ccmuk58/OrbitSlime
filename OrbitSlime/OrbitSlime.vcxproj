@@ -34,7 +34,7 @@
     <ClInclude Include="Render.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Star.hlsl">
+    <Content Include="Slime.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
