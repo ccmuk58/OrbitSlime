@@ -2,6 +2,107 @@
 
 #include <d3dcompiler.h>
 
+EngineSettings& EngineSettings::Instance()
+{
+    static EngineSettings settings;
+    return settings;
+}
+
+int EngineSettings::GetWindowWidth() const
+{
+    return windowWidth;
+}
+
+int EngineSettings::GetWindowHeight() const
+{
+    return windowHeight;
+}
+
+void EngineSettings::SetWindowSize(int width, int height)
+{
+    windowWidth = width;
+    windowHeight = height;
+}
+
+int EngineSettings::GetResizedWindowWidth() const
+{
+    return resizedWindowWidth;
+}
+
+int EngineSettings::GetResizedWindowHeight() const
+{
+    return resizedWindowHeight;
+}
+
+void EngineSettings::SetResizedWindowSize(int width, int height)
+{
+    resizedWindowWidth = width;
+    resizedWindowHeight = height;
+}
+
+bool EngineSettings::IsFullscreen() const
+{
+    return fullscreen;
+}
+
+void EngineSettings::SetFullscreen(bool value)
+{
+    fullscreen = value;
+}
+
+void EngineSettings::ToggleFullscreen()
+{
+    fullscreen = !fullscreen;
+}
+
+bool EngineSettings::IsVSyncEnabled() const
+{
+    return vSync;
+}
+
+UINT EngineSettings::GetPresentInterval() const
+{
+    return vSync ? 1 : 0;
+}
+
+void EngineSettings::SetVSync(bool value)
+{
+    vSync = value;
+}
+
+const float* EngineSettings::GetClearColor() const
+{
+    return clearColor;
+}
+
+void EngineSettings::SetClearColor(float r, float g, float b, float a)
+{
+    clearColor[0] = r;
+    clearColor[1] = g;
+    clearColor[2] = b;
+    clearColor[3] = a;
+}
+
+LPCWSTR EngineSettings::GetWindowTitle() const
+{
+    return windowTitle;
+}
+
+void EngineSettings::SetWindowTitle(LPCWSTR title)
+{
+    windowTitle = title;
+}
+
+LPCWSTR EngineSettings::GetWindowClassName() const
+{
+    return windowClassName;
+}
+
+void EngineSettings::SetWindowClassName(LPCWSTR className)
+{
+    windowClassName = className;
+}
+
 ShaderSet::ShaderSet(ID3D11VertexShader* v, ID3D11PixelShader* p, ID3D11InputLayout* l)
     : vs(v), ps(p), layout(l)
 {
@@ -34,7 +135,7 @@ WindowContext::WindowContext(LPCWSTR winName)
 
 WindowContext::~WindowContext()
 {
-    UnregisterClass(L"Orbit Slime", GetModuleHandle(NULL));
+    UnregisterClass(EngineSettings::Instance().GetWindowClassName(), GetModuleHandle(NULL));
 }
 
 bool WindowContext::Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM))
@@ -47,14 +148,14 @@ bool WindowContext::Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* 
     wc.lpfnWndProc = wndProc;
     wc.hInstance = hInst;
     wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.lpszClassName = L"Orbit Slime";
+    wc.lpszClassName = EngineSettings::Instance().GetWindowClassName();
 
     if (!RegisterClassEx(&wc)) return false;
 
     RECT rc = { 0, 0, w, h };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-    hWnd = CreateWindow(L"Orbit Slime", windowName, WS_OVERLAPPEDWINDOW,
+    hWnd = CreateWindow(EngineSettings::Instance().GetWindowClassName(), windowName, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
         NULL, NULL, hInst, NULL);
 
@@ -115,7 +216,7 @@ void GraphicsContext::Resize(int w, int h)
 
 void GraphicsContext::SetFullscreen(bool goFull)
 {
-    IsFullscreen = goFull;
+    EngineSettings::Instance().SetFullscreen(goFull);
     SwapChain->SetFullscreenState(goFull, NULL);
 }
 

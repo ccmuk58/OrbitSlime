@@ -32,6 +32,14 @@ LRESULT CALLBACK GlobalWndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 
 int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 {
+    EngineSettings& settings = EngineSettings::Instance();
+    settings.SetWindowTitle(L"Orbit Slime");
+    settings.SetWindowClassName(L"Orbit Slime");
+    settings.SetWindowSize(800, 600);
+    settings.SetResizedWindowSize(600, 600);
+    settings.SetVSync(true);
+    settings.SetClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 

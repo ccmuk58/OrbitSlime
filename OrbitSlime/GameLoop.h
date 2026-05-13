@@ -28,4 +28,5 @@ public:
     void Update();
     void Render();
     void Run();
+    void ResizeWindow(int width, int height);
 };
