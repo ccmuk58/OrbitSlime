@@ -8,9 +8,9 @@
 class EngineSettings
 {
     int windowWidth = 800;
-    int windowHeight = 600;
-    int resizedWindowWidth = 600;
-    int resizedWindowHeight = 600;
+    int windowHeight = 800;
+    int resizedWindowWidth = 1600;
+    int resizedWindowHeight = 900;
     bool fullscreen = false;
     bool vSync = true;
     float clearColor[4] = { 0.1f, 0.2f, 0.3f, 1.0f };
