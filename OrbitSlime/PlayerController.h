@@ -8,12 +8,14 @@ using namespace DirectX;
 
 class PlayerController : public Component
 {
-    XMFLOAT2 moveDir;
-    float rotDir;
-    float zoomDir;
+    GameObject* orbitTarget = nullptr;
+    float orbitRadius = 0.0f;
+    float orbitAngle = XM_PIDIV2;
+    float orbitDir = 0.0f;
+    float angularSpeed = 2.5f;
 
 public:
-    PlayerController();
+    PlayerController(GameObject* target = nullptr, float radius = 0.5f, float speed = 2.5f);
     ~PlayerController() override;
 
     void Start(GraphicsContext* gfx) override;

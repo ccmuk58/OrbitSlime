@@ -1,9 +1,10 @@
 #include "PlayerController.h"
 
+#include <cmath>
 #include <windows.h>
 
-PlayerController::PlayerController()
-    : Component(), moveDir{ 0, 0 }, rotDir(0.0f), zoomDir(0.0f)
+PlayerController::PlayerController(GameObject* target, float radius, float speed)
+    : Component(), orbitTarget(target), orbitRadius(radius), angularSpeed(speed)
 {
 }
 
@@ -13,42 +14,42 @@ PlayerController::~PlayerController()
 
 void PlayerController::Start(GraphicsContext* gfx)
 {
+    if (!orbitTarget)
+    {
+        return;
+    }
+
+    float dx = pOwner->pos.x - orbitTarget->pos.x;
+    float dy = pOwner->pos.y - orbitTarget->pos.y;
+
+    if (dx != 0.0f || dy != 0.0f)
+    {
+        orbitAngle = atan2f(dy, dx);
+    }
+    pOwner->pos.x = orbitTarget->pos.x + cosf(orbitAngle) * orbitRadius;
+    pOwner->pos.y = orbitTarget->pos.y + sinf(orbitAngle) * orbitRadius;
 }
 
 void PlayerController::Input()
 {
-    moveDir = { 0, 0 };
-    rotDir = 0.0f;
-    zoomDir = 0.0f;
+    orbitDir = 0.0f;
 
-    if (GetAsyncKeyState(VK_UP) & 0x8000)    moveDir.y += 1.0f;
-    if (GetAsyncKeyState(VK_DOWN) & 0x8000)  moveDir.y -= 1.0f;
-    if (GetAsyncKeyState(VK_LEFT) & 0x8000)  moveDir.x -= 1.0f;
-    if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveDir.x += 1.0f;
-
-    if (GetAsyncKeyState('A') & 0x8000) rotDir += 1.0f;
-    if (GetAsyncKeyState('D') & 0x8000) rotDir -= 1.0f;
-
-    if (GetAsyncKeyState('W') & 0x8000) zoomDir -= 1.0f;
-    if (GetAsyncKeyState('S') & 0x8000) zoomDir += 1.0f;
+    if (GetAsyncKeyState(VK_LEFT) & 0x8000 || GetAsyncKeyState('A') & 0x8000)  orbitDir += 1.0f;
+    if (GetAsyncKeyState(VK_RIGHT) & 0x8000 || GetAsyncKeyState('D') & 0x8000) orbitDir -= 1.0f;
 }
 
 void PlayerController::Update(float dt)
 {
-    float speedFactor = pOwner->scale.x;
-    float moveSpeed = 2.0f * speedFactor;
-    float rotateSpeed = 3.0f * speedFactor;
-    float zoomSpeed = 5.0f * speedFactor;
-
-    pOwner->pos.x += moveDir.x * moveSpeed * dt;
-    pOwner->pos.y += moveDir.y * moveSpeed * dt;
-    pOwner->rot.z += rotDir * rotateSpeed * dt;
-    pOwner->pos.z += zoomDir * zoomSpeed * dt;
-
-    if (pOwner->pos.z < -0.9f)
+    if (!orbitTarget)
     {
-        pOwner->pos.z = -0.9f;
+        return;
     }
+
+    orbitAngle += orbitDir * angularSpeed * dt;
+
+    pOwner->pos.x = orbitTarget->pos.x + cosf(orbitAngle) * orbitRadius;
+    pOwner->pos.y = orbitTarget->pos.y + sinf(orbitAngle) * orbitRadius;
+    pOwner->rot.z = orbitAngle - XM_PIDIV2;
 }
 
 void PlayerController::Render(GraphicsContext* gfx)
