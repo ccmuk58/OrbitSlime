@@ -52,12 +52,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Slime.hlsl">
+    <FxCompile Include="Slime.hlsl">
       <Filter>리소스 파일</Filter>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="asteroid.hlsl">
+    </FxCompile>
+    <FxCompile Include="Asteroid.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>

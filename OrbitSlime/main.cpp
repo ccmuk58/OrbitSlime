@@ -68,13 +68,26 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slime->AddComponent(new PlayerController());
     gEngine.world.push_back(slime);
 
+
+    Mesh* asteroidMesh = new Mesh();
+    asteroidMesh->vertexCount = slimeVertexCnt;
+    asteroidMesh->Create(&gEngine.gfx, slimeVector);
+    ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, 2);
+    ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.8f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
+    GameObject* asteroid = new GameObject(0.3f, 0.3f, 0);
+    asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
+    gEngine.world.push_back(asteroid);
+
     gEngine.Run();
 
     if (slimeMat) { delete slimeMat; slimeMat = nullptr; }
+	if (asteroidMat) { delete asteroidMat; asteroidMat = nullptr; }
 
     slimeShader.Release();
+	asteroidShader.Release();
 
     if (slimeMesh) { delete slimeMesh; slimeMesh = nullptr; }
+	if (asteroidMesh) { delete asteroidMesh; asteroidMesh = nullptr; }
 
     return 0;
 }
