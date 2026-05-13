@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="DeltaTime.cpp" />
+    <ClCompile Include="EngineSettings.cpp" />
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -28,6 +30,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="DeltaTime.h" />
+    <ClInclude Include="EngineSettings.h" />
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="PlayerController.h" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "DeltaTime.h"
 
 #include <d3d11.h>
 #include <vector>
