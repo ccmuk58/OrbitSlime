@@ -13,10 +13,8 @@
 #include "Object.h"
 #include "PlayerController.h"
 #include "Render.h"
-
+#include "MeshGenerator.h"
 #include <d3dcompiler.h>
-#include <cmath>
-#include <random>
 #include <vector>
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
@@ -43,22 +41,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 
-    const int slimeVertexCnt = 100;
-    XMFLOAT3 p[slimeVertexCnt];
-    float slimeR = 0.25f;
-    for (int i = 0; i < slimeVertexCnt; ++i)
-    {
-        float angle = XM_PIDIV2 - (i * XM_2PI / slimeVertexCnt);
-        p[i] = { cosf(angle) * slimeR, sinf(angle) * slimeR, 0.0f };
-    }
-    std::vector<Vertex> slimeVector;
-    for (int i = 0; i < slimeVertexCnt; i++)
-    {
-        slimeVector.push_back({ {0, 0, 0}, { 0, 0, 0, 0 } });
-        slimeVector.push_back({ p[i], { 0, 0, 0, 0 } });
-        slimeVector.push_back({ p[(i + 1) % slimeVertexCnt], { 0, 0, 0, 0 } });
-    }
-
+    std::vector<Vertex> circleVertices = MeshGenerator::CreateCircle(0.25f, 100);
+	std::vector<Vertex> sphereVertices = MeshGenerator::CreateSphere(0.5f, 20, 20);
+    
 	// Define the input layout for the vertex shader
     D3D11_INPUT_ELEMENT_DESC ied[] =
     {
@@ -66,10 +51,18 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
+	Mesh* sphereMesh = new Mesh();
+	sphereMesh->Create(&gEngine.gfx, sphereVertices);
+	ShaderSet sphereShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
+	ColorMaterial* sphereMat = new ColorMaterial(sphereShader, { 0.8f, 0.8f, 0.8f, 1 }, gEngine.gfx.Device);
+	GameObject* sphere = new GameObject(0, 0, 0);
+	sphere->scale = { 1.0f, 1.0f, 1.0f };
+	sphere->AddComponent(new MeshRenderer(sphereMesh, sphereMat));
+	gEngine.world.push_back(sphere);
+
     // 행성
     Mesh* planetMesh = new Mesh();
-    planetMesh->vertexCount = slimeVertexCnt;
-    planetMesh->Create(&gEngine.gfx, slimeVector);
+    planetMesh->Create(&gEngine.gfx, circleVertices);
     ShaderSet planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, ied, 2);
     ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.1f, 0.1f, 0.8f, 1 }, gEngine.gfx.Device);
     GameObject* planet = new GameObject(0, 0, 0);
@@ -79,8 +72,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     // 슬라임
     Mesh* slimeMesh = new Mesh();
-    slimeMesh->vertexCount = slimeVertexCnt;
-    slimeMesh->Create(&gEngine.gfx, slimeVector);
+    slimeMesh->Create(&gEngine.gfx, circleVertices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
     GameObject* slime = new GameObject(0, 0.65f, 0);
@@ -92,8 +84,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     // 소행성
     Mesh* asteroidMesh = new Mesh();
-    asteroidMesh->vertexCount = slimeVertexCnt;
-    asteroidMesh->Create(&gEngine.gfx, slimeVector);
+    asteroidMesh->Create(&gEngine.gfx, circleVertices);
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, 2);
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
