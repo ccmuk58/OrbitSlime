@@ -120,25 +120,28 @@ ShaderSet GraphicsContext::CompileAndCreate(const void* source, size_t length, b
     ID3DBlob* psBlob = nullptr;
     ID3DBlob* errBlob = nullptr;
 
-    HRESULT hr;
+    HRESULT hrVS;
+    HRESULT hrPS;
     if (isFile)
     {
-        hr = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
-        hr = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
+        hrVS = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
+        hrPS = D3DCompileFromFile((LPCWSTR)source, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
     }
     else
     {
-        hr = D3DCompile(source, length, nullptr, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
-        hr = D3DCompile(source, length, nullptr, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
+        hrVS = D3DCompile(source, length, nullptr, nullptr, nullptr, "VS", "vs_5_0", 0, 0, &vsBlob, &errBlob);
+        hrPS = D3DCompile(source, length, nullptr, nullptr, nullptr, "PS", "ps_5_0", 0, 0, &psBlob, &errBlob);
     }
 
-    if (FAILED(hr))
+    if (FAILED(hrVS) || FAILED(hrPS) || !vsBlob || !psBlob)
     {
         if (errBlob)
         {
             OutputDebugStringA((char*)errBlob->GetBufferPointer());
             errBlob->Release();
         }
+        if (vsBlob) vsBlob->Release();
+        if (psBlob) psBlob->Release();
         return res;
     }
 
