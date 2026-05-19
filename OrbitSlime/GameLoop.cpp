@@ -35,6 +35,7 @@ void GameLoop::Initialize(HINSTANCE hInst, LRESULT(CALLBACK* wndProc)(HWND, UINT
     EngineSettings& settings = EngineSettings::Instance();
     win.Initialize(hInst, settings.GetWindowWidth(), settings.GetWindowHeight(), wndProc);
     gfx.InitDX(win.hWnd, settings.GetWindowWidth(), settings.GetWindowHeight());
+    lightManager.Initialize(&gfx);
 }
 
 void GameLoop::Input()
@@ -89,6 +90,7 @@ void GameLoop::Render()
         gfx.ImmediateContext->IASetInputLayout(pDefaultLayout);
     }
     gfx.ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    lightManager.Bind(gfx.ImmediateContext);
 
     for (int i = 0; i < (int)world.size(); i++)
     {
