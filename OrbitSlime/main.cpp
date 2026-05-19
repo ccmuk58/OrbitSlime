@@ -41,9 +41,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 
-    std::vector<Vertex> circleVertices = MeshGenerator::CreateCircle(0.25f, 100);
-	std::vector<Vertex> sphereVertices = MeshGenerator::CreateSphere(0.5f, 20, 20);
-    
+    std::vector<Vertex> planetVertices = MeshGenerator::CreateSphere(0.3f, 20, 20);
+    std::vector<Vertex> slimeVertices = MeshGenerator::CreateSphere(0.1f, 20, 20);
+    std::vector<Vertex> asteroidVertices = MeshGenerator::CreateSphere(0.05f, 20, 20);
+
 	// Define the input layout for the vertex shader
     D3D11_INPUT_ELEMENT_DESC ied[] =
     {
@@ -51,32 +52,21 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
-	Mesh* sphereMesh = new Mesh();
-	sphereMesh->Create(&gEngine.gfx, sphereVertices);
-	ShaderSet sphereShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
-	ColorMaterial* sphereMat = new ColorMaterial(sphereShader, { 0.8f, 0.8f, 0.8f, 1 }, gEngine.gfx.Device);
-	GameObject* sphere = new GameObject(0, 0, 0);
-	sphere->scale = { 1.0f, 1.0f, 1.0f };
-	sphere->AddComponent(new MeshRenderer(sphereMesh, sphereMat));
-	gEngine.world.push_back(sphere);
-
     // 행성
     Mesh* planetMesh = new Mesh();
-    planetMesh->Create(&gEngine.gfx, circleVertices);
+    planetMesh->Create(&gEngine.gfx, planetVertices);
     ShaderSet planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, ied, 2);
     ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.1f, 0.1f, 0.8f, 1 }, gEngine.gfx.Device);
     GameObject* planet = new GameObject(0, 0, 0);
-    planet->scale = { 1.0f, 1.0f, 1.0f };
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
     gEngine.world.push_back(planet);
 
     // 슬라임
     Mesh* slimeMesh = new Mesh();
-    slimeMesh->Create(&gEngine.gfx, circleVertices);
+    slimeMesh->Create(&gEngine.gfx, slimeVertices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
     GameObject* slime = new GameObject(0, 0.65f, 0);
-    slime->scale = { 0.6f, 0.6f, 1.0f };
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     // radius 수정 필요(0.4f -> dynamic value)
     slime->AddComponent(new PlayerController(planet, 0.4f, 2.5f));
@@ -84,11 +74,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     // 소행성
     Mesh* asteroidMesh = new Mesh();
-    asteroidMesh->Create(&gEngine.gfx, circleVertices);
+    asteroidMesh->Create(&gEngine.gfx, asteroidVertices);
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, 2);
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
-	asteroid->scale = { 0.3f, 0.3f, 1.0f };
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
     gEngine.world.push_back(asteroid);
 
