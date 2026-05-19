@@ -6,8 +6,10 @@ MeshData MeshGenerator::CreateSphere(float radius, int sliceCount, int stackCoun
 {
     MeshData meshData;
     XMFLOAT4 color = { 0, 0, 0, 0 };
+    XMFLOAT3 normal = { 0, 0, 0 };
 
-    meshData.vertices.push_back({ { 0.0f, radius, 0.0f }, color });
+	// sphere's top vertex
+    meshData.vertices.push_back({ { 0.0f, radius, 0.0f }, color , {0, 1, 0} });
 
     for (int stack = 1; stack < stackCount; ++stack)
     {
@@ -19,12 +21,13 @@ MeshData MeshGenerator::CreateSphere(float radius, int sliceCount, int stackCoun
             float x = radius * sinf(phi) * cosf(theta);
             float y = radius * cosf(phi);
             float z = radius * sinf(phi) * sinf(theta);
-
-            meshData.vertices.push_back({ { x, y, z }, color });
+            XMFLOAT3 normal = { x / radius, y / radius, z / radius };
+            meshData.vertices.push_back({ { x, y, z }, color, normal });
         }
     }
 
-    meshData.vertices.push_back({ { 0.0f, -radius, 0.0f }, color });
+    // sphere's bottom vertex
+    meshData.vertices.push_back({ { 0.0f, -radius, 0.0f }, color, {0, -1, 0} });
     UINT topIndex = (UINT)0;
     UINT bottomIndex = (UINT)meshData.vertices.size() - 1;
 
