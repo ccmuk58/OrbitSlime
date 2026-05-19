@@ -7,6 +7,13 @@ cbuffer cbMaterial : register(b1)
 {
     float4 tintColor;
 };
+cbuffer cbLight : register(b2)
+{
+    float3 lightDir;
+    float ambient;
+    float3 lightColor;
+    float diffuseStrength;
+};
 
 struct VS_IN
 {
@@ -27,10 +34,19 @@ PS_IN VS(VS_IN input)
     PS_IN output;
     output.pos = mul(float4(input.pos, 1.0f), matWorld);
     output.col = input.col;
+    output.normal = mul(float4(input.normal, 0.0f), matWorld).xyz;
     return output;
 }
 
 float4 PS(PS_IN input) : SV_Target
 {
-    return tintColor;
+    float3 n = normalize(input.normal);
+    float3 l = normalize(lightDir);
+    
+    float ndotl = saturate(dot(n, l));
+    float lighting = ambient + ndotl * diffuseStrength;
+    
+    float3 finalColor = tintColor.rgb * lightColor * lighting;
+    
+    return float4(finalColor, tintColor.a);
 }

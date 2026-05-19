@@ -19,6 +19,17 @@ struct ConstantBuffer
 {
     XMMATRIX matWorld;
 };
+struct ColorBuffer
+{
+    XMFLOAT4 tintColor;
+};
+struct LightBuffer
+{
+    XMFLOAT3 lightDir;
+    float ambient;
+    XMFLOAT3 lightColor;
+    float diffuseStrength;
+};
 
 struct Mesh
 {
@@ -46,16 +57,17 @@ public:
     virtual void Bind(ID3D11DeviceContext* context) = 0;
 };
 
-struct ColorBuffer
-{
-    XMFLOAT4 tintColor;
-};
 
 class ColorMaterial : public Material
 {
 public:
     XMFLOAT4 color;
     ID3D11Buffer* pColorBuffer = nullptr;
+	ID3D11Buffer* pLightBuffer = nullptr;
+    XMFLOAT3 lightDir = { -0.5f, 0.5f, 0.0f };
+    float ambient = 0.7f;
+	XMFLOAT3 lightColor = { 1.0f, 0.95f, 0.85f };
+	float diffuseStrength = 0.7f;
 
     ColorMaterial(ShaderSet s, XMFLOAT4 col, ID3D11Device* device);
     ~ColorMaterial() override;

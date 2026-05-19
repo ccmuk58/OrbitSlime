@@ -73,11 +73,19 @@ ColorMaterial::ColorMaterial(ShaderSet s, XMFLOAT4 col, ID3D11Device* device)
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     device->CreateBuffer(&cbd, nullptr, &pColorBuffer);
+
+    D3D11_BUFFER_DESC lbd = { 0 };
+    lbd.Usage = D3D11_USAGE_DEFAULT;
+    lbd.ByteWidth = sizeof(LightBuffer);
+    lbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	device->CreateBuffer(&lbd, nullptr, &pLightBuffer);
 }
 
 ColorMaterial::~ColorMaterial()
 {
     if (pColorBuffer) pColorBuffer->Release();
+	if (pLightBuffer) pLightBuffer->Release();
 }
 
 void ColorMaterial::SetColor(XMFLOAT4 col)
@@ -94,6 +102,15 @@ void ColorMaterial::Bind(ID3D11DeviceContext* context)
     ColorBuffer cb = { color };
     context->UpdateSubresource(pColorBuffer, 0, nullptr, &cb, 0, 0);
     context->PSSetConstantBuffers(1, 1, &pColorBuffer);
+
+
+    LightBuffer lb;
+	lb.lightDir = lightDir;
+	lb.ambient = ambient;
+	lb.lightColor = lightColor;
+	lb.diffuseStrength = diffuseStrength;
+    context->UpdateSubresource(pLightBuffer, 0, nullptr, &lb, 0, 0);
+    context->PSSetConstantBuffers(2, 1, &pLightBuffer);
 }
 
 MeshRenderer::MeshRenderer(Mesh* mesh, Material* mat)
