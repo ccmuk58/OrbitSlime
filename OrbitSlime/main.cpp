@@ -41,10 +41,6 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
 
-    std::vector<Vertex> planetVertices = MeshGenerator::CreateSphere(0.3f, 20, 20);
-    std::vector<Vertex> slimeVertices = MeshGenerator::CreateSphere(0.1f, 20, 20);
-    std::vector<Vertex> asteroidVertices = MeshGenerator::CreateSphere(0.05f, 20, 20);
-
 	// Define the input layout for the vertex shader
     D3D11_INPUT_ELEMENT_DESC ied[] =
     {
@@ -52,9 +48,14 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
     };
 
+
+    MeshData planetMeshData = MeshGenerator::CreateSphere(0.3f, 20, 20);
+    MeshData slimeMeshData = MeshGenerator::CreateSphere(0.1f, 20, 20);
+    MeshData asteroidMeshData = MeshGenerator::CreateSphere(0.05f, 20, 20);
+
     // 행성
     Mesh* planetMesh = new Mesh();
-    planetMesh->Create(&gEngine.gfx, planetVertices);
+    planetMesh->Create(&gEngine.gfx, planetMeshData.vertices, planetMeshData.indices);
     ShaderSet planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, ied, 2);
     ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.1f, 0.1f, 0.8f, 1 }, gEngine.gfx.Device);
     GameObject* planet = new GameObject(0, 0, 0);
@@ -63,7 +64,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     // 슬라임
     Mesh* slimeMesh = new Mesh();
-    slimeMesh->Create(&gEngine.gfx, slimeVertices);
+    slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, 2);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
     GameObject* slime = new GameObject(0, 0.65f, 0);
@@ -74,7 +75,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     // 소행성
     Mesh* asteroidMesh = new Mesh();
-    asteroidMesh->Create(&gEngine.gfx, asteroidVertices);
+    asteroidMesh->Create(&gEngine.gfx, asteroidMeshData.vertices, asteroidMeshData.indices);
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, 2);
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);

@@ -3,7 +3,9 @@
 Mesh::Mesh()
 {
     vBuffer = nullptr;
+    iBuffer = nullptr;
     vertexCount = 0;
+    indexCount = 0;
 }
 
 Mesh::~Mesh()
@@ -12,6 +14,12 @@ Mesh::~Mesh()
     {
         vBuffer->Release();
         vBuffer = nullptr;
+    }
+
+    if (iBuffer)
+    {
+        iBuffer->Release();
+        iBuffer = nullptr;
     }
 }
 
@@ -28,6 +36,23 @@ void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices)
     sd.pSysMem = vertices.data();
 
     gfx->Device->CreateBuffer(&bd, &sd, &vBuffer);
+}
+
+void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices, const std::vector<UINT>& indices)
+{
+    Create(gfx, vertices);
+
+    indexCount = (UINT)indices.size();
+
+    D3D11_BUFFER_DESC bd = { 0 };
+    bd.Usage = D3D11_USAGE_DEFAULT;
+    bd.ByteWidth = sizeof(UINT) * indexCount;
+    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+    D3D11_SUBRESOURCE_DATA sd = { 0 };
+    sd.pSysMem = indices.data();
+
+    gfx->Device->CreateBuffer(&bd, &sd, &iBuffer);
 }
 
 Material::Material(ShaderSet s)
@@ -119,7 +144,16 @@ void MeshRenderer::Render(GraphicsContext* gfx)
     UINT stride = sizeof(Vertex);
     UINT offset = 0;
     gfx->ImmediateContext->IASetVertexBuffers(0, 1, &pMeshData->vBuffer, &stride, &offset);
-    gfx->ImmediateContext->Draw(pMeshData->vertexCount, 0);
+
+    if (pMeshData->iBuffer)
+    {
+        gfx->ImmediateContext->IASetIndexBuffer(pMeshData->iBuffer, DXGI_FORMAT_R32_UINT, 0);
+        gfx->ImmediateContext->DrawIndexed(pMeshData->indexCount, 0, 0);
+    }
+    else
+    {
+        gfx->ImmediateContext->Draw(pMeshData->vertexCount, 0);
+    }
 }
 
 void MeshRenderer::Input()

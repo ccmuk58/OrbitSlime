@@ -70,14 +70,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Slime.hlsl">
+    <Content Include="Slime.hlsl">
       <Filter>리소스 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="Asteroid.hlsl">
+    </Content>
+    <Content Include="Asteroid.hlsl">
       <Filter>리소스 파일</Filter>
-    </FxCompile>
-    <FxCompile Include="Planet.hlsl">
+    </Content>
+    <Content Include="Planet.hlsl">
       <Filter>리소스 파일</Filter>
-    </FxCompile>
+    </Content>
   </ItemGroup>
 </Project>
