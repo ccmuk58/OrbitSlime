@@ -49,8 +49,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     };
 
 
-    MeshData planetMeshData = MeshGenerator::CreateSphere(0.3f, 20, 20);
-    MeshData slimeMeshData = MeshGenerator::CreateSphere(0.1f, 20, 20);
+	float planetRadius = 0.3f;
+	float slimeRadius = 0.1f;
+    MeshData planetMeshData = MeshGenerator::CreateSphere(planetRadius, 20, 20);
+    MeshData slimeMeshData = MeshGenerator::CreateSphere(slimeRadius, 20, 20);
     MeshData asteroidMeshData = MeshGenerator::CreateSphere(0.05f, 20, 20);
 
     // 행성
@@ -69,8 +71,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
     GameObject* slime = new GameObject(0, 0.65f, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    // radius 수정 필요(0.4f -> dynamic value)
-    slime->AddComponent(new PlayerController(planet, 0.4f, 2.5f));
+    slime->AddComponent(new PlayerController(planet, planetRadius + slimeRadius, 2.5f));
     gEngine.world.push_back(slime);
 
     // 소행성
