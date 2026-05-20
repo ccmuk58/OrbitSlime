@@ -10,7 +10,7 @@ class EngineSettings
     int resizedWindowHeight = 900;
     bool fullscreen = false;
     bool vSync = true;
-    float clearColor[4] = { 0.1f, 0.2f, 0.3f, 1.0f };
+    float clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
     LPCWSTR windowTitle = L"Orbit Slime";
     LPCWSTR windowClassName = L"Orbit Slime";
 

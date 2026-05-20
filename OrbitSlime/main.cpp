@@ -36,7 +36,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     settings.SetWindowSize(800, 800);
     settings.SetResizedWindowSize(1600, 900);
     settings.SetVSync(true);
-    settings.SetClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+    settings.SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     GameLoop gEngine;
     gEngine.Initialize(hI, GlobalWndProc);
