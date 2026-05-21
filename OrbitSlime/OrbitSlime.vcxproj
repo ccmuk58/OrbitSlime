@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AstroidMovement.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="Render.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AstroidMovement.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
     <ClInclude Include="EngineSettings.h" />

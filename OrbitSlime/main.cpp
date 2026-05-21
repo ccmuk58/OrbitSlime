@@ -14,8 +14,10 @@
 #include "PlayerController.h"
 #include "Render.h"
 #include "MeshGenerator.h"
+#include "AstroidMovement.h"
 #include <d3dcompiler.h>
 #include <vector>
+
 
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #pragma comment(lib, "d3d11.lib")
@@ -83,7 +85,20 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
-    gEngine.world.push_back(asteroid);
+    // 소행성 10개 소환
+    const int ASTEROID_COUNT = 10;
+    for (int i = 0; i < ASTEROID_COUNT; i++)
+    {
+        // 위치, 크기 모두 알아서 할 테니 일단 대충 생성!
+        GameObject* asteroid = new GameObject(0, 0, 0);
+
+        asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
+
+        // 속도도 지가 알아서 정할 거니까 빈칸으로 넣기
+        asteroid->AddComponent(new AsteroidMovement(planet));
+
+        gEngine.world.push_back(asteroid);
+    }
 
     gEngine.Run();
 
