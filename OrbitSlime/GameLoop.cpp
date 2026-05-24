@@ -64,9 +64,12 @@ void GameLoop::Input()
     }
 }
 
+
 void GameLoop::Update()
 {
     float dt = timer.GetDelta();
+    frameCounter.Update(dt);
+
     for (int i = 0; i < (int)world.size(); i++)
     {
         if (world[i] != nullptr)

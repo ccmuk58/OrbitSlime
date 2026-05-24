@@ -23,6 +23,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
+    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
     <ClInclude Include="EngineSettings.h" />
+    <ClInclude Include="Frame.h" />
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="MeshGenerator.h" />

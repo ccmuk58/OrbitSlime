@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "DeltaTime.h"
+#include "Frame.h"
 #include "LightManager.h"
 
 #include <d3d11.h>
@@ -15,6 +16,7 @@ public:
     WindowContext win;
     GraphicsContext gfx;
     DeltaTime timer;
+    Frame frameCounter;
     LightManager lightManager;
     std::vector<GameObject*> world;
     bool isRunning = true;
