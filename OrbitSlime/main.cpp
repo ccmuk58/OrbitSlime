@@ -64,6 +64,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     planetMesh->Create(&gEngine.gfx, planetMeshData.vertices, planetMeshData.indices);
     ShaderSet planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, ied, iedCount);
     ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.1f, 0.1f, 0.8f, 1 }, gEngine.gfx.Device);
+	planetMat->SetSpecular(0.5f, 32.0f);
     GameObject* planet = new GameObject(0, 0, 0);
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
     gEngine.world.push_back(planet);
@@ -73,7 +74,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
-    slimeMat->SetSpecular(0.75f, 48.0f);
+    slimeMat->SetSpecular(0.9f, 48.0f);
     GameObject* slime = new GameObject(0, 0.65f, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController(planet, planetRadius + slimeRadius, 2.5f));
@@ -84,6 +85,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     asteroidMesh->Create(&gEngine.gfx, asteroidMeshData.vertices, asteroidMeshData.indices);
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, iedCount);
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
+	asteroidMat->SetSpecular(0.3f, 16.0f);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
     // 소행성 10개 소환
