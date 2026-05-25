@@ -61,7 +61,11 @@ float4 PS(PS_IN input) : SV_Target
     
     float ndotl = saturate(dot(n, l));
     float3 reflection = reflect(-l, n);
-    float specular = pow(saturate(dot(reflection, v)), specularPower) * specularStrength;
+    float specular = 0.0f;
+    if (ndotl > 0.0f)
+    {
+        specular = pow(saturate(dot(reflection, v)), specularPower) * specularStrength;
+    }
     
     float3 ambientColor = tintColor.rgb * ambient;
     float3 diffuseColor = tintColor.rgb * lightColor * ndotl * diffuseStrength;

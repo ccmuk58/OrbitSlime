@@ -73,6 +73,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
+    slimeMat->SetSpecular(0.75f, 48.0f);
     GameObject* slime = new GameObject(0, 0.65f, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController(planet, planetRadius + slimeRadius, 2.5f));

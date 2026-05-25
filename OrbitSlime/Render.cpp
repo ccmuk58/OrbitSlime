@@ -85,13 +85,24 @@ void ColorMaterial::SetColor(XMFLOAT4 col)
     color = col;
 }
 
+void ColorMaterial::SetSpecular(float strength, float power)
+{
+    specularStrength = strength;
+    specularPower = power;
+}
+
 void ColorMaterial::Bind(ID3D11DeviceContext* context)
 {
     context->IASetInputLayout(shaders.layout);
     context->VSSetShader(shaders.vs, nullptr, 0);
     context->PSSetShader(shaders.ps, nullptr, 0);
 
-    ColorBuffer cb = { color };
+    ColorBuffer cb;
+    cb.tintColor = color;
+    cb.specularStrength = specularStrength;
+    cb.specularPower = specularPower;
+    cb.padding = { 0.0f, 0.0f };
+
     context->UpdateSubresource(pColorBuffer, 0, nullptr, &cb, 0, 0);
     context->PSSetConstantBuffers(1, 1, &pColorBuffer);
 }

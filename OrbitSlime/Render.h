@@ -22,6 +22,9 @@ struct ConstantBuffer
 struct ColorBuffer
 {
     XMFLOAT4 tintColor;
+    float specularStrength;
+    float specularPower;
+    XMFLOAT2 padding;
 };
 
 struct Mesh
@@ -55,12 +58,15 @@ class ColorMaterial : public Material
 {
 public:
     XMFLOAT4 color;
+    float specularStrength = 0.55f;
+    float specularPower = 32.0f;
     ID3D11Buffer* pColorBuffer = nullptr;
 
     ColorMaterial(ShaderSet s, XMFLOAT4 col, ID3D11Device* device);
     ~ColorMaterial() override;
 
     void SetColor(XMFLOAT4 col);
+    void SetSpecular(float strength, float power);
     void Bind(ID3D11DeviceContext* context) override;
 };
 
