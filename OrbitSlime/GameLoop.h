@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Camera.h"
 #include "Core.h"
 #include "DeltaTime.h"
 #include "Frame.h"
@@ -17,6 +18,7 @@ public:
     GraphicsContext gfx;
     DeltaTime timer;
     Frame frameCounter;
+    Camera camera;
     LightManager lightManager;
     std::vector<GameObject*> world;
     bool isRunning = true;
