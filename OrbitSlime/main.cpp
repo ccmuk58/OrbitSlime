@@ -14,7 +14,9 @@
 #include "PlayerController.h"
 #include "Render.h"
 #include "MeshGenerator.h"
-#include "AstroidMovement.h"
+#include "AsteroidMovement.h"
+#include "CircleCollider.h"
+#include "ObjectShake.h"
 #include <d3dcompiler.h>
 #include <vector>
 
@@ -62,6 +64,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     MeshData slimeMeshData = MeshGenerator::CreateSphere(slimeRadius, 20, 20);
     MeshData asteroidMeshData = MeshGenerator::CreateSphere(0.05f, 20, 20);
 
+
 	// 행성
     Mesh* planetMesh = new Mesh();
     planetMesh->Create(&gEngine.gfx, planetMeshData.vertices, planetMeshData.indices);
@@ -71,6 +74,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameObject* planet = new GameObject(0, 0, 0);
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
     gEngine.world.push_back(planet);
+
+    ObjectShake* planetShake = new ObjectShake();
+    planet->AddComponent(planetShake);
 
     // 슬라임
     Mesh* slimeMesh = new Mesh();
@@ -82,6 +88,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController(planet, planetRadius + slimeRadius, 2.5f));
     gEngine.world.push_back(slime);
+
 
     // 소행성
     Mesh* asteroidMesh = new Mesh();
@@ -102,7 +109,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
         // 속도도 지가 알아서 정할 거니까 빈칸으로 넣기
-        asteroid->AddComponent(new AsteroidMovement(planet));
+        AsteroidMovement* astMove = new AsteroidMovement(planet, 0.0f, planetShake);
+        asteroid->AddComponent(astMove);
+
+        asteroid->AddComponent(new CircleCollider(slime, 0.05f, planetRadius, astMove));
 
         gEngine.world.push_back(asteroid);
     }

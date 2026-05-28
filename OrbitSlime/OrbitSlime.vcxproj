@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="AstroidMovement.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CircleCollider.cpp" />
+    <ClCompile Include="CircleCollider.h" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
@@ -30,11 +32,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshGenerator.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="ObjectShake.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="ScoreManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AstroidMovement.h" />
+    <ClInclude Include="AsteroidMovement.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
@@ -44,8 +48,10 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="MeshGenerator.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="ObjectShake.h" />
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="ScoreManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Asteroid.hlsl">

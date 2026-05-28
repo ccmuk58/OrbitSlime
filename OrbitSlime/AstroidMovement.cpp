@@ -1,15 +1,15 @@
-#include "AstroidMovement.h"
-
+ï»¿#include "AsteroidMovement.h"
+#include "ScoreManager.h"
 #include <cmath>
 #include <cstdlib>
 
-// »ý¼ºÀÚ
-AsteroidMovement::AsteroidMovement(GameObject* target, float speed)
-    : target(target), speed(speed)
+// ìƒì„±ìž
+AsteroidMovement::AsteroidMovement(GameObject* target, float speed, ObjectShake* targetShake)
+    : target(target), speed(speed), targetShake(targetShake)
 {
 }
 
-// ¼Ò¸êÀÚ
+// ì†Œë©¸ìž
 AsteroidMovement::~AsteroidMovement()
 {
 }
@@ -33,7 +33,8 @@ void AsteroidMovement::Update(float dt)
 
     float distance = sqrtf(dirX * dirX + dirY * dirY + dirZ * dirZ);
 
-    if (distance > 0.275f)
+    // ì£¼ì˜: í–‰ì„± ì¶©ëŒ í¬ê¸°
+    if (distance > 0.325f)
     {
         dirX /= distance;
         dirY /= distance;
@@ -45,36 +46,35 @@ void AsteroidMovement::Update(float dt)
     }
     else
     {
-        // ºÎµúÇûÀ» ¶§ ´Ù½Ã ½ºÆùµÇ´Â ·ÎÁ÷! (ucrtbased.dll ¿¡·¯ À¯¹ß ÄÚµå Á¦°Å)
+        //ì†Œí–‰ì„±ì´ í–‰ì„± ì¤‘ì‹¬ì— ë‹¿ì•„ë²„ë¦¼
 
-        // °¢µµ: 0 ~ 359µµ
-        float randomAngle = (rand() % 360) * 3.141592f / 180.0f;
+        //í–‰ì„± í”¼ê²© íšŸìˆ˜ 1 ì¦ê°€ì‹œí‚¤ê³  ì ìˆ˜ ì¶œë ¥
+        ScoreManager::planetHitCount++;
+        ScoreManager::PrintScore();
 
-        // °Å¸®: 1.2 ~ 2.5 »çÀÌ
-        float spawnDist = 1.2f + ((float)rand() / (float)RAND_MAX) * 1.3f;
+        if (targetShake != nullptr)
+        {
+            targetShake->Trigger(0.2f, 0.03f);
+        }
 
-        pOwner->pos.x = cosf(randomAngle) * spawnDist;
-        pOwner->pos.y = sinf(randomAngle) * spawnDist;
-        pOwner->pos.z = 0.0f;
-
-            // ¼Óµµ: 0.2 ~ 0.6 »çÀÌ·Î ¸®¼Â
-        this->speed = 0.2f + ((float)rand() / (float)RAND_MAX) * 0.4f;
+        //ë‹¤ì‹œ ë©€ë¦¬ì„œ ë‚ ì•„ì˜¤ë„ë¡ ë¬´ìž‘ìœ„ ìŠ¤í°
+        Respawn();
     }
 }
 void AsteroidMovement::Respawn()
 {
-    // 1. À§Ä¡ ¹«ÀÛÀ§
+    // 1. ìœ„ì¹˜ ë¬´ìž‘ìœ„
     float randomAngle = (rand() % 360) * 3.141592f / 180.0f;
     float randomDist = 1.0f + ((float)rand() / (float)RAND_MAX) * 1.5f;
     pOwner->pos.x = cosf(randomAngle) * randomDist;
     pOwner->pos.y = sinf(randomAngle) * randomDist;
     pOwner->pos.z = 0.0f;
 
-    // 2. Å©±â ¹«ÀÛÀ§ (0.5 ~ 0.9)
+    // 2. í¬ê¸° ë¬´ìž‘ìœ„ (0.5 ~ 0.9)
     float randomScale = 0.5f + ((float)rand() / (float)RAND_MAX) * 0.4f;
     pOwner->scale = { randomScale, randomScale, 1.0f };
 
-    // 3. ¼Óµµ ¹«ÀÛÀ§ (0.2 ~ 0.5)
+    // 3. ì†ë„ ë¬´ìž‘ìœ„ (0.2 ~ 0.5)
     this->speed = 0.2f + ((float)rand() / (float)RAND_MAX) * 0.3f;
 }
 
