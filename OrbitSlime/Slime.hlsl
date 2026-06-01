@@ -159,10 +159,10 @@ float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
 float3 CalculateFresnelGlow(float3 normal, float3 viewDirection)
 {
     float fresnel = 1.0f - saturate(dot(normal, viewDirection));
-    fresnel = pow(fresnel, 3.0f);
+    fresnel = pow(fresnel, 2.0f);
 
     float3 fresnelColor = float3(0.85f, 1.0f, 0.72f);
-    float fresnelStrength = 0.7f;
+    float fresnelStrength = 0.5f;
     return fresnelColor * fresnel * fresnelStrength;
 }
 
