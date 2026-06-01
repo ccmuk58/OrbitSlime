@@ -61,7 +61,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	float planetRadius = 0.3f;
 	float slimeRadius = 0.1f;
     MeshData planetMeshData = MeshGenerator::CreateSphere(planetRadius, 20, 20);
-    MeshData slimeMeshData = MeshGenerator::CreateSphere(slimeRadius, 20, 20);
+    MeshData slimeMeshData = MeshGenerator::CreateHemiSphere(slimeRadius, 20, 20);
     MeshData asteroidMeshData = MeshGenerator::CreateSphere(0.05f, 20, 20);
 
 
@@ -84,9 +84,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
     slimeMat->SetSpecular(0.9f, 48.0f);
-    GameObject* slime = new GameObject(0, 0.65f, 0);
+    GameObject* slime = new GameObject(0, 0, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    slime->AddComponent(new PlayerController(planet, planetRadius + slimeRadius, 2.5f));
+    slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
     gEngine.world.push_back(slime);
 
 

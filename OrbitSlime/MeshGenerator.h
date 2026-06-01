@@ -4,6 +4,7 @@
 
 #include <vector>
 
+// 메쉬 데이터 구조체
 struct MeshData
 {
     std::vector<Vertex> vertices;
@@ -13,7 +14,8 @@ struct MeshData
 class MeshGenerator
 {
 public:
-    static std::vector<Vertex> CreateCircle(float radius, int segmentCount);
+    // 구 생성 함수
     static MeshData CreateSphere(float radius, int sliceCount, int stackCount);
+    static MeshData CreateHemiSphere(float radius, int sliceCount, int stackCount);
 };
 
