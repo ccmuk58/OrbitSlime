@@ -38,7 +38,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     EngineSettings& settings = EngineSettings::Instance();
     settings.SetWindowTitle(L"Orbit Slime");
     settings.SetWindowClassName(L"Orbit Slime");
-    settings.SetWindowSize(800, 800);
+    settings.SetWindowSize(1600, 900);
     settings.SetResizedWindowSize(1600, 900);
     settings.SetVSync(true);
     settings.SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
