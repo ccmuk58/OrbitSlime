@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	float slimeRadius = 0.1f;
     MeshData planetMeshData = MeshGenerator::CreateSphere(planetRadius, 20, 20);
     MeshData slimeMeshData = MeshGenerator::CreateHemiSphere(slimeRadius, 20, 20);
-    MeshData asteroidMeshData = MeshGenerator::CreateSphere(0.05f, 20, 20);
+    MeshData asteroidMeshData = MeshGenerator::CreateIrregularSphere(0.05f, 14, 10, 0.32f);
 
 
 	// 행성
