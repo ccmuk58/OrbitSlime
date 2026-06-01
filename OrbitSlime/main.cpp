@@ -41,7 +41,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     settings.SetWindowSize(800, 800);
     settings.SetResizedWindowSize(1600, 900);
     settings.SetVSync(true);
-    settings.SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    settings.SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
 	// 게임루프 생성 및 초기화
     GameLoop gEngine;
