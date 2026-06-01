@@ -54,9 +54,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="CircleCollider.h">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CircleCollider.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
     <ClInclude Include="Camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CircleCollider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="ScoreManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -112,8 +112,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Asteroid.hlsl" />
-    <FxCompile Include="Planet.hlsl" />
-    <FxCompile Include="Slime.hlsl" />
+    <Content Include="Asteroid.hlsl" />
+    <Content Include="Planet.hlsl" />
+    <Content Include="Slime.hlsl" />
   </ItemGroup>
 </Project>

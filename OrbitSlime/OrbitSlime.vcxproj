@@ -22,7 +22,6 @@
     <ClCompile Include="AstroidMovement.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircleCollider.cpp" />
-    <ClCompile Include="CircleCollider.h" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
@@ -40,6 +39,7 @@
   <ItemGroup>
     <ClInclude Include="AsteroidMovement.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
     <ClInclude Include="EngineSettings.h" />
@@ -54,30 +54,18 @@
     <ClInclude Include="ScoreManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Asteroid.hlsl">
+    <Content Include="Asteroid.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </FxCompile>
-    <FxCompile Include="Planet.hlsl">
+    </Content>
+    <Content Include="Planet.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </FxCompile>
-    <FxCompile Include="Slime.hlsl">
+    </Content>
+    <Content Include="Slime.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
-    </FxCompile>
+    </Content>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
