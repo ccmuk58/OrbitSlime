@@ -94,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* asteroidMesh = new Mesh();
     asteroidMesh->Create(&gEngine.gfx, asteroidMeshData.vertices, asteroidMeshData.indices);
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, iedCount);
-    ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.9f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
+    ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.1f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
 	asteroidMat->SetSpecular(0.3f, 16.0f);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
