@@ -115,6 +115,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         asteroid->AddComponent(new CircleCollider(slime, 0.05f, planetRadius, astMove));
 
         gEngine.world.push_back(asteroid);
+        gEngine.pointLightObjects.push_back(asteroid);
     }
 
 	// 게임 루프 시작

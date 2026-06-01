@@ -53,23 +53,25 @@ PS_IN VS(VS_IN input)
     return output;
 }
 
+float3 CalculateFireEmissive(float3 worldPos, float3 normal)
+{
+    float3 planetCenter = float3(0.0f, 0.0f, 0.0f);
+    float3 toPlanet = normalize(planetCenter - worldPos);
+
+    float front = saturate(dot(normal, toPlanet));
+    float3 fireColor = float3(1.0f, 0.35f, 0.05f);
+    float fireStrength = 3.0f;
+    float fireFocus = 1.5f;
+
+    return fireColor * fireStrength * pow(front, fireFocus);
+}
+
 float4 PS(PS_IN input) : SV_Target
 {
-    float3 p = input.worldPos;
     float3 n = normalize(input.normal);
     float3 l = normalize(lightDir);
     float3 v = normalize(cameraPos - input.worldPos);
-    
-    float3 planetCenter = float3(0.0f, 0.0f, 0.0f);
-    float3 dirToPlanet = normalize(planetCenter - input.worldPos);
-    float front = saturate(dot(n, dirToPlanet));
-    
-    float3 fireColor = float3(1.0f, 0.35f, 0.05f);
-    float fireStrength = 3.0f;
-    float3 fire = fireColor * fireStrength * pow(front, 1.5f);
-    
-    
-    
+
     float ndotl = saturate(dot(n, l));
     float3 reflection = reflect(-l, n);
     float specular = 0.0f;
@@ -77,11 +79,12 @@ float4 PS(PS_IN input) : SV_Target
     {
         specular = pow(saturate(dot(reflection, v)), specularPower) * specularStrength;
     }
-    
+
     float3 ambientColor = tintColor.rgb * ambient;
     float3 diffuseColor = tintColor.rgb * lightColor * ndotl * diffuseStrength;
     float3 specularColor = lightColor * specular;
+    float3 fire = CalculateFireEmissive(input.worldPos, n);
     float3 finalColor = ambientColor + diffuseColor + specularColor + fire;
-    
+
     return float4(finalColor, tintColor.a);
 }

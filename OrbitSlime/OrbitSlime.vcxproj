@@ -33,6 +33,12 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectShake.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="PointLightManager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
   </ItemGroup>
@@ -50,6 +56,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectShake.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="PointLightManager.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="ScoreManager.h" />
   </ItemGroup>

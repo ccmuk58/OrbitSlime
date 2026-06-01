@@ -5,6 +5,7 @@
 #include "DeltaTime.h"
 #include "Frame.h"
 #include "LightManager.h"
+#include "PointLightManager.h"
 
 #include <d3d11.h>
 #include <vector>
@@ -20,7 +21,9 @@ public:
     Frame frameCounter;
     Camera camera;
     LightManager lightManager;
+    PointLightManager pointLightManager;
     std::vector<GameObject*> world;
+    std::vector<GameObject*> pointLightObjects;
     bool isRunning = true;
 
     ID3D11VertexShader* pDefaultVS = nullptr;

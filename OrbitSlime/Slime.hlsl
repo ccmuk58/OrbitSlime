@@ -27,6 +27,22 @@ cbuffer cbCamera : register(b3)
     float cameraPadding;
 };
 
+#define MAX_POINT_LIGHTS 16
+struct PointLight
+{
+    float3 position;
+    float radius;
+    float3 color;
+    float intensity;
+};
+
+cbuffer cbPointLight : register(b4)
+{
+    PointLight pointLights[MAX_POINT_LIGHTS];
+    int pointLightCount;
+    float3 pointLightPadding;
+};
+
 struct VS_IN
 {
     float3 pos : POSITION;
@@ -97,6 +113,41 @@ float3 CalculatePhongLighting(float3 normal, float3 lightDirection, float3 viewD
     return ambientColor + diffuseColor + specularColor;
 }
 
+float3 CalculatePointLight(PointLight light, float3 worldPos, float3 normal, float3 viewDirection)
+{
+    float3 toLight = light.position - worldPos;
+    float distanceToLight = length(toLight);
+
+    if (distanceToLight > light.radius)
+    {
+        return float3(0.0f, 0.0f, 0.0f);
+    }
+
+    float3 pointLightDir = normalize(toLight);
+    float attenuation = saturate(1.0f - distanceToLight / light.radius);
+    attenuation *= attenuation;
+
+    float ndotl = saturate(dot(normal, pointLightDir));
+    float3 diffuseColor = tintColor.rgb * light.color * ndotl * light.intensity * attenuation;
+
+    float specular = CalculateSpecular(normal, pointLightDir, viewDirection, ndotl);
+    float3 specularColor = light.color * specular * light.intensity * attenuation;
+
+    return diffuseColor + specularColor;
+}
+
+float3 CalculatePointLights(float3 worldPos, float3 normal, float3 viewDirection)
+{
+    float3 result = float3(0.0f, 0.0f, 0.0f);
+
+    for (int i = 0; i < pointLightCount; i++)
+    {
+        result += CalculatePointLight(pointLights[i], worldPos, normal, viewDirection);
+    }
+
+    return result;
+}
+
 float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
 {
     float shadowStrength = 0.65f;
@@ -107,13 +158,14 @@ float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
 
 float4 PS(PS_IN input) : SV_Target
 {
-
     float3 n = normalize(input.normal);
     float3 l = normalize(lightDir);
     float3 v = normalize(cameraPos - input.worldPos);
 
     float3 ambientColor = tintColor.rgb * ambient;
     float3 litColor = CalculatePhongLighting(n, l, v);
+    litColor += CalculatePointLights(input.worldPos, n, v);
+
     float shadow = CalculatePlanetShadow(input.worldPos, l);
     float3 finalColor = ApplyPlanetShadow(litColor, ambientColor, shadow);
 

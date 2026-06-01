@@ -54,7 +54,7 @@ void AsteroidMovement::Update(float dt)
 
         if (targetShake != nullptr)
         {
-            targetShake->Trigger(0.2f, 0.03f);
+            //targetShake->Trigger(0.2f, 0.03f);
         }
 
         //다시 멀리서 날아오도록 무작위 스폰
