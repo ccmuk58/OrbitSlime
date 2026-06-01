@@ -156,18 +156,29 @@ float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
     return ambientColor + (litColor - ambientColor) * shadowFactor;
 }
 
+float3 CalculateFresnelGlow(float3 normal, float3 viewDirection)
+{
+    float fresnel = 1.0f - saturate(dot(normal, viewDirection));
+    fresnel = pow(fresnel, 3.0f);
+
+    float3 fresnelColor = float3(0.85f, 1.0f, 0.72f);
+    float fresnelStrength = 0.7f;
+    return fresnelColor * fresnel * fresnelStrength;
+}
+
 float4 PS(PS_IN input) : SV_Target
 {
+
     float3 n = normalize(input.normal);
     float3 l = normalize(lightDir);
     float3 v = normalize(cameraPos - input.worldPos);
-
     float3 ambientColor = tintColor.rgb * ambient;
     float3 litColor = CalculatePhongLighting(n, l, v);
     litColor += CalculatePointLights(input.worldPos, n, v);
 
     float shadow = CalculatePlanetShadow(input.worldPos, l);
     float3 finalColor = ApplyPlanetShadow(litColor, ambientColor, shadow);
+    finalColor += CalculateFresnelGlow(n, -v);
 
     return float4(finalColor, tintColor.a);
 }
