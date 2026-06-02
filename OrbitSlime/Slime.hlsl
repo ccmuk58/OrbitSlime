@@ -74,7 +74,7 @@ float CalculatePlanetShadow(float3 worldPos, float3 lightDirection)
 {
     float3 planetCenter = float3(0.0f, 0.0f, 0.0f);
     float planetRadius = 0.3f;
-    float shadowSoftness = 0.08f;
+    float shadowSoftness = 0.03f;
 
     float3 toPlanet = planetCenter - worldPos;
     float projected = dot(toPlanet, lightDirection);
@@ -89,6 +89,14 @@ float CalculatePlanetShadow(float3 worldPos, float3 lightDirection)
 
     return 1.0f - smoothstep(planetRadius, planetRadius + shadowSoftness, distToRay);
 }
+float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
+{
+    float shadowStrength = 0.65f;
+    float shadowFactor = 1.0f - shadow * shadowStrength;
+
+    return ambientColor + (litColor - ambientColor) * shadowFactor;
+}
+
 
 float CalculateSpecular(float3 normal, float3 lightDirection, float3 viewDirection, float ndotl)
 {
@@ -148,13 +156,6 @@ float3 CalculatePointLights(float3 worldPos, float3 normal, float3 viewDirection
     return result;
 }
 
-float3 ApplyPlanetShadow(float3 litColor, float3 ambientColor, float shadow)
-{
-    float shadowStrength = 0.65f;
-    float shadowFactor = 1.0f - shadow * shadowStrength;
-
-    return ambientColor + (litColor - ambientColor) * shadowFactor;
-}
 
 float3 CalculateFresnelGlow(float3 normal, float3 viewDirection)
 {
