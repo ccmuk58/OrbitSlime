@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsteroidTrailRenderer.cpp" />
     <ClCompile Include="AstroidMovement.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircleCollider.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="ScoreManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AsteroidTrailRenderer.h" />
     <ClInclude Include="AsteroidMovement.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CircleCollider.h" />

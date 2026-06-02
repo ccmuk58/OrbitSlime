@@ -15,6 +15,7 @@
 #include "Render.h"
 #include "MeshGenerator.h"
 #include "AsteroidMovement.h"
+#include "AsteroidTrailRenderer.h"
 #include "CircleCollider.h"
 #include "ObjectShake.h"
 #include <d3dcompiler.h>
@@ -84,6 +85,11 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     ShaderSet asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, ied, iedCount);
     ColorMaterial* asteroidMat = new ColorMaterial(asteroidShader, { 0.1f, 0.1f, 0.1f, 1 }, gEngine.gfx.Device);
 	asteroidMat->SetSpecular(0.3f, 16.0f);
+    // 소행성 잔상 머티리얼
+    ColorMaterial* asteroidTrailMat = new ColorMaterial(asteroidShader, { 1.0f, 0.28f, 0.05f, 0.18f }, gEngine.gfx.Device);
+    asteroidTrailMat->SetSpecular(0.0f, 1.0f);
+    asteroidTrailMat->SetAlphaBlend(true);
+    
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
@@ -105,6 +111,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         // 위치, 크기 모두 알아서 할 테니 일단 대충 생성!
         GameObject* asteroid = new GameObject(0, 0, 0);
 
+        // 소행성 잔상 컴포넌트 추가
+        asteroid->AddComponent(new AsteroidTrailRenderer(asteroidMesh, asteroidTrailMat));
         asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
         // 속도도 지가 알아서 정할 거니까 빈칸으로 넣기
@@ -126,6 +134,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     if (slimeMat) { delete slimeMat; slimeMat = nullptr; }
 	if (asteroidMat) { delete asteroidMat; asteroidMat = nullptr; }
+    if (asteroidTrailMat) { delete asteroidTrailMat; asteroidTrailMat = nullptr; }
 	if (planetMat) { delete planetMat; planetMat = nullptr; }
 
     slimeShader.Release();
