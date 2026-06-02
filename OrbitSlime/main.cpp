@@ -60,7 +60,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	// 메쉬 데이터 생성
 	float planetRadius = 0.3f;
 	float slimeRadius = 0.1f;
-    MeshData planetMeshData = MeshGenerator::CreateSphere(planetRadius, 20, 20);
+    // MeshData planetMeshData = MeshGenerator::CreateSphere(planetRadius, 20, 20);
+    MeshData planetMeshData = MeshGenerator::CreateIrregularSphere(planetRadius, 20, 20, 0.05f);
     MeshData slimeMeshData = MeshGenerator::CreateHemiSphere(slimeRadius, 20, 20);
     MeshData asteroidMeshData = MeshGenerator::CreateIrregularSphere(0.05f, 14, 10, 0.32f);
 
@@ -69,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* planetMesh = new Mesh();
     planetMesh->Create(&gEngine.gfx, planetMeshData.vertices, planetMeshData.indices);
     ShaderSet planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, ied, iedCount);
-    ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.1f, 0.1f, 0.8f, 1 }, gEngine.gfx.Device);
+    ColorMaterial* planetMat = new ColorMaterial(planetShader, { 0.4f, 0.25f, 0.15f, 1 }, gEngine.gfx.Device);
 	planetMat->SetSpecular(0.5f, 32.0f);
     GameObject* planet = new GameObject(0, 0, 0);
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
