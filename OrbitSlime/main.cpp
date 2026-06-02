@@ -16,6 +16,7 @@
 #include "MeshGenerator.h"
 #include "AsteroidMovement.h"
 #include "AsteroidTrailRenderer.h"
+#include "StarFieldRenderer.h"
 #include "CircleCollider.h"
 #include "ObjectShake.h"
 #include <d3dcompiler.h>
@@ -42,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     settings.SetWindowSize(1600, 900);
     settings.SetResizedWindowSize(1600, 900);
     settings.SetVSync(true);
-    settings.SetClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+    settings.SetClearColor(0.02f, 0.025f, 0.045f, 1.0f);
 
 	// 게임루프 생성 및 초기화
     GameLoop gEngine;
@@ -65,6 +66,14 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     MeshData planetMeshData = MeshGenerator::CreateIrregularSphere(planetRadius, 20, 20, 0.05f);
     MeshData slimeMeshData = MeshGenerator::CreateHemiSphere(slimeRadius, 20, 20);
     MeshData asteroidMeshData = MeshGenerator::CreateIrregularSphere(0.05f, 14, 10, 0.32f);
+
+
+    // 배경 별
+    ShaderSet starShader = gEngine.gfx.CompileAndCreate(L"StarField.hlsl", 0, true, ied, iedCount);
+    ColorMaterial* starMat = new ColorMaterial(starShader, { 0.85f, 0.9f, 1.0f, 1.0f }, gEngine.gfx.Device);
+    starMat->SetSpecular(0.0f, 1.0f);
+    GameObject* starField = new GameObject(0, 0, 0);
+    starField->AddComponent(new StarFieldRenderer(starMat, 128*2, 5.3f*2, 3.0f, 0.01f));
 
 
 	// 행성
@@ -104,6 +113,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
 
+    gEngine.world.push_back(starField);
+
     // 소행성 10개 소환
     const int ASTEROID_COUNT = 10;
     for (int i = 0; i < ASTEROID_COUNT; i++)
@@ -136,10 +147,12 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	if (asteroidMat) { delete asteroidMat; asteroidMat = nullptr; }
     if (asteroidTrailMat) { delete asteroidTrailMat; asteroidTrailMat = nullptr; }
 	if (planetMat) { delete planetMat; planetMat = nullptr; }
+    if (starMat) { delete starMat; starMat = nullptr; }
 
     slimeShader.Release();
 	asteroidShader.Release();
 	planetShader.Release();
+    starShader.Release();
 
     if (slimeMesh) { delete slimeMesh; slimeMesh = nullptr; }
 	if (asteroidMesh) { delete asteroidMesh; asteroidMesh = nullptr; }
