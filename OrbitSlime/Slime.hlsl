@@ -179,6 +179,7 @@ float4 PS(PS_IN input) : SV_Target
     float shadow = CalculatePlanetShadow(input.worldPos, l);
     float3 finalColor = ApplyPlanetShadow(litColor, ambientColor, shadow);
     finalColor += CalculateFresnelGlow(n, -v);
-
-    return float4(finalColor, tintColor.a);
+    float alphaMask = smoothstep(0.3f, 0.7f, finalColor.g);
+    float alpha = lerp(0.1f, 1.0f, alphaMask);
+    return float4(finalColor, alpha);
 }

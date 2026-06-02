@@ -90,6 +90,15 @@ void ColorMaterial::SetSpecular(float strength, float power)
     specularStrength = strength;
     specularPower = power;
 }
+void ColorMaterial::SetAlphaBlend(bool enabled)
+{
+    useAlphaBlend = enabled;
+}
+
+bool ColorMaterial::UseAlphaBlend() const
+{
+    return useAlphaBlend;
+}
 
 void ColorMaterial::Bind(ID3D11DeviceContext* context)
 {
@@ -106,6 +115,7 @@ void ColorMaterial::Bind(ID3D11DeviceContext* context)
     context->UpdateSubresource(pColorBuffer, 0, nullptr, &cb, 0, 0);
     context->PSSetConstantBuffers(1, 1, &pColorBuffer);
 }
+
 
 MeshRenderer::MeshRenderer(Mesh* mesh, Material* mat)
     : Component(), pMeshData(mesh), cBuffer(nullptr), pMaterial(mat)
@@ -140,6 +150,14 @@ void MeshRenderer::Render(GraphicsContext* gfx)
 {
     if (!pMeshData || !pMaterial) return;
 
+
+    ColorMaterial* colorMat = dynamic_cast<ColorMaterial*>(pMaterial);
+
+    if (colorMat)
+    {
+        gfx->SetAlphaBlend(colorMat->UseAlphaBlend());
+    }
+
     pMaterial->Bind(gfx->ImmediateContext);
 
     float s = 1.0f / (pOwner->pos.z + 1.0f);
@@ -165,6 +183,8 @@ void MeshRenderer::Render(GraphicsContext* gfx)
     {
         gfx->ImmediateContext->Draw(pMeshData->vertexCount, 0);
     }
+	gfx->SetAlphaBlend(false);
+
 }
 
 void MeshRenderer::Input()

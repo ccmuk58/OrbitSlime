@@ -73,22 +73,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	planetMat->SetSpecular(0.5f, 32.0f);
     GameObject* planet = new GameObject(0, 0, 0);
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
-    gEngine.world.push_back(planet);
 
     ObjectShake* planetShake = new ObjectShake();
     planet->AddComponent(planetShake);
-
-    // 슬라임
-    Mesh* slimeMesh = new Mesh();
-    slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
-    ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
-    ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1 }, gEngine.gfx.Device);
-    slimeMat->SetSpecular(0.25f, 12.0f);
-    GameObject* slime = new GameObject(0, 0, 0);
-    slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
-    gEngine.world.push_back(slime);
-
 
     // 소행성
     Mesh* asteroidMesh = new Mesh();
@@ -98,6 +85,17 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	asteroidMat->SetSpecular(0.3f, 16.0f);
     GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
     asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
+
+    // 슬라임
+    Mesh* slimeMesh = new Mesh();
+    slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
+    ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
+    ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 0.2f }, gEngine.gfx.Device);
+    slimeMat->SetSpecular(0.25f, 12.0f);
+    slimeMat->SetAlphaBlend(true);
+    GameObject* slime = new GameObject(0, 0, 0);
+    slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
+    slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
 
     // 소행성 10개 소환
     const int ASTEROID_COUNT = 10;
@@ -117,6 +115,9 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         gEngine.world.push_back(asteroid);
         gEngine.pointLightObjects.push_back(asteroid);
     }
+
+    gEngine.world.push_back(planet);
+    gEngine.world.push_back(slime);
 
 	// 게임 루프 시작
     gEngine.Run();
