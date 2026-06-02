@@ -1,13 +1,12 @@
 #include "MeshGenerator.h"
 
 #include <cmath>
+#include <cstdlib>
 
-static float Noise01(int x, int y)
+static float RandomRange(float minValue, float maxValue)
 {
-    int n = x * 15731 + y * 789221 + 1376312589;
-    n = (n << 13) ^ n;
-    int nn = (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
-    return (float)nn / 2147483647.0f;
+    float t = (float)rand() / (float)RAND_MAX;
+    return minValue + (maxValue - minValue) * t;
 }
 
 static XMFLOAT3 Normalize(const XMFLOAT3& v)
@@ -139,7 +138,9 @@ MeshData MeshGenerator::CreateIrregularSphere(float radius, int sliceCount, int 
     MeshData meshData;
     XMFLOAT4 color = { 0, 0, 0, 0 };
 
-    float topRadius = radius * (1.0f + (Noise01(0, 0) * 2.0f - 1.0f) * roughness * 0.45f);
+    srand(1);
+
+    float topRadius = radius * (1.0f + RandomRange(-roughness, roughness) * 0.45f);
     meshData.vertices.push_back({ { 0.0f, topRadius, 0.0f }, color, { 0.0f, 1.0f, 0.0f } });
 
     for (int stack = 1; stack < stackCount; ++stack)
@@ -149,8 +150,7 @@ MeshData MeshGenerator::CreateIrregularSphere(float radius, int sliceCount, int 
         for (int slice = 0; slice < sliceCount; ++slice)
         {
             float theta = XM_2PI * slice / sliceCount;
-            float noise = Noise01(slice, stack) * 2.0f - 1.0f;
-            float localRadius = radius * (1.0f + noise * roughness);
+            float localRadius = radius * (1.0f + RandomRange(-roughness, roughness));
 
             float x = localRadius * sinf(phi) * cosf(theta);
             float y = localRadius * cosf(phi);
@@ -161,7 +161,7 @@ MeshData MeshGenerator::CreateIrregularSphere(float radius, int sliceCount, int 
         }
     }
 
-    float bottomRadius = radius * (1.0f + (Noise01(0, stackCount) * 2.0f - 1.0f) * roughness * 0.45f);
+    float bottomRadius = radius * (1.0f + RandomRange(-roughness, roughness) * 0.45f);
     meshData.vertices.push_back({ { 0.0f, -bottomRadius, 0.0f }, color, { 0.0f, -1.0f, 0.0f } });
 
     UINT topIndex = 0;
