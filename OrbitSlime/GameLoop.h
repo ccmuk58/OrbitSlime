@@ -29,6 +29,8 @@ public:
     ID3D11VertexShader* pDefaultVS = nullptr;
     ID3D11PixelShader* pDefaultPS = nullptr;
     ID3D11InputLayout* pDefaultLayout = nullptr;
+    int windowedWidth = 0;
+    int windowedHeight = 0;
 
     GameLoop();
     ~GameLoop();
@@ -39,4 +41,5 @@ public:
     void Render();
     void Run();
     void ResizeWindow(int width, int height);
+    void ToggleFullscreen();
 };

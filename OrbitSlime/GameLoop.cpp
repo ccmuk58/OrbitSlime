@@ -46,15 +46,16 @@ void GameLoop::Input()
 		isRunning = false;
 	if (GetAsyncKeyState('F') & 0x0001)
 	{
-		EngineSettings::Instance().ToggleFullscreen();
-		gfx.SetFullscreen(EngineSettings::Instance().IsFullscreen());
+		ToggleFullscreen();
 	}
 
+	/*
 	if (GetAsyncKeyState('C') & 0x0001)
 	{
 		EngineSettings& settings = EngineSettings::Instance();
 		ResizeWindow(settings.GetResizedWindowWidth(), settings.GetResizedWindowHeight());
 	}
+	*/
 
 	int objectCount = (int)world.size();
 	for (int i = 0; i < objectCount; i++)
@@ -152,4 +153,41 @@ void GameLoop::ResizeWindow(int width, int height)
 	gfx.Resize(win.Width, win.Height);
 
 	printf("[Engine] Window Resized to %dx%d\n", win.Width, win.Height);
+}
+
+void GameLoop::ToggleFullscreen()
+{
+	EngineSettings& settings = EngineSettings::Instance();
+	const bool goFullscreen = !settings.IsFullscreen();
+
+	if (goFullscreen)
+	{
+		windowedWidth = settings.GetWindowWidth();
+		windowedHeight = settings.GetWindowHeight();
+
+		HMONITOR monitor = MonitorFromWindow(win.hWnd, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO monitorInfo = { sizeof(MONITORINFO) };
+		if (GetMonitorInfo(monitor, &monitorInfo))
+		{
+			const int fullscreenWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
+			const int fullscreenHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
+
+			settings.SetWindowSize(fullscreenWidth, fullscreenHeight);
+			win.Width = fullscreenWidth;
+			win.Height = fullscreenHeight;
+			gfx.Resize(fullscreenWidth, fullscreenHeight);
+		}
+
+		gfx.SetFullscreen(true);
+		printf("[Engine] Fullscreen Enabled at %dx%d\n", win.Width, win.Height);
+		return;
+	}
+
+	gfx.SetFullscreen(false);
+
+	const int restoreWidth = windowedWidth > 0 ? windowedWidth : settings.GetResizedWindowWidth();
+	const int restoreHeight = windowedHeight > 0 ? windowedHeight : settings.GetResizedWindowHeight();
+	ResizeWindow(restoreWidth, restoreHeight);
+
+	printf("[Engine] Fullscreen Disabled. Restored to %dx%d\n", restoreWidth, restoreHeight);
 }
