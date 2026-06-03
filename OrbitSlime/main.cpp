@@ -19,6 +19,7 @@
 #include "StarFieldRenderer.h"
 #include "CircleCollider.h"
 #include "ObjectShake.h"
+#include "Particle.h"
 #include "TimerDisplay.h"
 #include "SlimeSquashStretch.h"
 #include <d3dcompiler.h>
@@ -29,6 +30,9 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+
+
+std::vector<ParticleComponent*> ParticleManager::pool;
 
 LRESULT CALLBACK GlobalWndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -158,7 +162,27 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         gEngine.world.push_back(asteroid);
         gEngine.pointLightObjects.push_back(asteroid);
     }
+    MeshData particleData = MeshGenerator::CreateIrregularSphere(1.0f, 6, 6, 0.0f);
+    Mesh* particleMesh = new Mesh();
+    particleMesh->Create(&gEngine.gfx, particleData.vertices, particleData.indices);
 
+    // ?åÌé∏ ?âÏÉÅ?Ä ?©Ïïî/Î∂àÍΩÉ ?êÎÇå??Ï£ºÌô©+Îπ®Í∞ï! (asteroidShader ?¨ÏÇ¨??
+    ColorMaterial* particleMat = new ColorMaterial(asteroidShader, { 1.0f, 0.4f, 0.0f, 1.0f }, gEngine.gfx.Device);
+    particleMat->SetSpecular(0.0f, 1.0f);
+
+    for (int i = 0; i < 60; i++)
+    {
+        GameObject* pObj = new GameObject(0, 0, 0);
+        pObj->isActive = false; //?úÏùº Ï§ëÏöî! ?âÏÜå???¨Î™Ö?òÍ≤å ?®Í≤®??
+
+        pObj->AddComponent(new MeshRenderer(particleMesh, particleMat));
+
+        ParticleComponent* pComp = new ParticleComponent();
+        pObj->AddComponent(pComp);
+
+        gEngine.world.push_back(pObj);
+        ParticleManager::pool.push_back(pComp); // Îß§Îãà?Ä???±Î°ù
+    }
     gEngine.world.push_back(planet);
     gEngine.world.push_back(slime);
     gEngine.world.push_back(timerObject);
@@ -172,6 +196,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     if (asteroidTrailMat) { delete asteroidTrailMat; asteroidTrailMat = nullptr; }
 	if (planetMat) { delete planetMat; planetMat = nullptr; }
     if (starMat) { delete starMat; starMat = nullptr; }
+    if (particleMat) { delete particleMat; particleMat = nullptr; }
     if (timerMat) { delete timerMat; timerMat = nullptr; }
 
     slimeShader.Release();
@@ -183,7 +208,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     if (slimeMesh) { delete slimeMesh; slimeMesh = nullptr; }
 	if (asteroidMesh) { delete asteroidMesh; asteroidMesh = nullptr; }
 	if (planetMesh) { delete planetMesh; planetMesh = nullptr; }
+    if (particleMesh) { delete particleMesh; particleMesh = nullptr; }
     if (timerMesh) { delete timerMesh; timerMesh = nullptr; }
-
     return 0;
 }

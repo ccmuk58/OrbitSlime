@@ -1,5 +1,6 @@
 ﻿#include "AsteroidMovement.h"
 #include "ScoreManager.h"
+#include "Particle.h"
 #include <cmath>
 #include <cstdlib>
 
@@ -17,7 +18,7 @@ AsteroidMovement::~AsteroidMovement()
 void AsteroidMovement::Start(GraphicsContext* gfx)
 {
     Respawn();
-}
+}   
 
 void AsteroidMovement::Input()
 {
@@ -50,6 +51,9 @@ void AsteroidMovement::Update(float dt)
     {
         //소행성이 행성 중심에 닿아버림
 
+        float backX = pOwner->pos.x - target->pos.x;
+        float backY = pOwner->pos.y - target->pos.y;
+        ParticleManager::Spawn(pOwner->pos.x, pOwner->pos.y, pOwner->pos.z, backX, backY);
         //행성 피격 횟수 1 증가시키고 점수 출력
         ScoreManager::planetHitCount++;
         ScoreManager::PrintScore();
