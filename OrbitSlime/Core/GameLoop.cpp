@@ -51,14 +51,7 @@ void GameLoop::Input()
 
     if (GetAsyncKeyState('F') & 0x0001)
     {
-        EngineSettings::Instance().ToggleFullscreen();
-        gfx.SetFullscreen(EngineSettings::Instance().IsFullscreen());
-    }
-
-    if (GetAsyncKeyState('C') & 0x0001)
-    {
-        EngineSettings& settings = EngineSettings::Instance();
-        ResizeWindow(settings.GetResizedWindowWidth(), settings.GetResizedWindowHeight());
+        ToggleFullscreen();
     }
 
     // 2. ★ 대기(Title) 상태일 때 입력
@@ -68,7 +61,6 @@ void GameLoop::Input()
         {
             ResetGame();
             currentState = GameState::Playing;
-            SetWindowText(win.hWnd, L"Orbit Slime | 조심해! 소행성이 날아온다!");
         }
     }
 
@@ -80,7 +72,6 @@ void GameLoop::Input()
         {
             ResetGame();
             currentState = GameState::Playing;
-            SetWindowText(win.hWnd, L"Orbit Slime | 조심해! 소행성이 날아온다!");
         }
     }
 
@@ -119,13 +110,6 @@ void GameLoop::Update()
             asteroids[i]->isFrozen = shouldFreeze;
         }
     }
-
-    // 시작 화면일 때 안내 메시지 띄우기
-    if (currentState == GameState::Title)
-    {
-        SetWindowText(win.hWnd, L"Orbit Slime | 방향키로 움직여보세요! [스페이스바]를 누르면 게임이 시작됩니다.");
-    }
-
     
     // 2. 오브젝트 업데이트
     for (int i = 0; i < (int)world.size(); i++)
@@ -144,7 +128,6 @@ void GameLoop::Update()
         if (ScoreManager::planetHitCount > 4)
         {
             currentState = GameState::GameOver;
-            SetWindowText(win.hWnd, L"Orbit Slime | [GAME OVER] 다시 시작하려면 [R] 키를 누르세요! 종료는 [ESC]");
         }
     }
 }
@@ -239,8 +222,8 @@ void GameLoop::ToggleFullscreen()
 
 	if (goFullscreen)
 	{
-		windowedWidth = settings.GetWindowWidth();
-		windowedHeight = settings.GetWindowHeight();
+		windowedWidth = settings.GetResizedWindowWidth();
+		windowedHeight = settings.GetResizedWindowHeight();
 
 		HMONITOR monitor = MonitorFromWindow(win.hWnd, MONITOR_DEFAULTTONEAREST);
 		MONITORINFO monitorInfo = { sizeof(MONITORINFO) };
@@ -249,18 +232,29 @@ void GameLoop::ToggleFullscreen()
 			const int fullscreenWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
 			const int fullscreenHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
 
+			SetWindowLong(win.hWnd, GWL_STYLE, WS_POPUP | WS_VISIBLE);
+			SetWindowPos(
+				win.hWnd,
+				HWND_TOP,
+				monitorInfo.rcMonitor.left,
+				monitorInfo.rcMonitor.top,
+				fullscreenWidth,
+				fullscreenHeight,
+				SWP_FRAMECHANGED);
+
 			settings.SetWindowSize(fullscreenWidth, fullscreenHeight);
 			win.Width = fullscreenWidth;
 			win.Height = fullscreenHeight;
-			gfx.Resize(fullscreenWidth, fullscreenHeight);
 		}
 
 		gfx.SetFullscreen(true);
+		gfx.Resize(win.Width, win.Height);
 		Logger::LogFormat("[Engine] Fullscreen Enabled at %dx%d", win.Width, win.Height);
 		return;
 	}
 
 	gfx.SetFullscreen(false);
+	SetWindowLong(win.hWnd, GWL_STYLE, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 
 	const int restoreWidth = windowedWidth > 0 ? windowedWidth : settings.GetResizedWindowWidth();
 	const int restoreHeight = windowedHeight > 0 ? windowedHeight : settings.GetResizedWindowHeight();
@@ -284,3 +278,5 @@ void GameLoop::ResetGame()
         }
     }
 }
+
+

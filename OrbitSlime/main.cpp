@@ -29,8 +29,8 @@ void SetupWindowSettings()
 	EngineSettings& settings = EngineSettings::Instance();
 	settings.SetWindowTitle(L"Orbit Slime");
 	settings.SetWindowClassName(L"Orbit Slime");
-	settings.SetWindowSize(1600, 900);
-	settings.SetResizedWindowSize(1600, 900);
+	settings.SetWindowSize(1280, 720);
+	settings.SetResizedWindowSize(1280, 720);
 	settings.SetVSync(true);
 	settings.SetClearColor(0.02f, 0.025f, 0.045f, 1.0f);
 }
