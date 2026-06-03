@@ -43,7 +43,6 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="ScoreDisplay.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="StarFieldRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +64,6 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="ScoreDisplay.h" />
     <ClInclude Include="ScoreManager.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="StarFieldRenderer.h" />
   </ItemGroup>
   <ItemGroup>
