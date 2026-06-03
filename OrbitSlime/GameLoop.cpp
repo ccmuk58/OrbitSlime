@@ -141,7 +141,7 @@ void GameLoop::Update()
     // 플레이 중 행성 피격 체크
     if (currentState == GameState::Playing)
     {
-        if (ScoreManager::planetHitCount > 9)
+        if (ScoreManager::planetHitCount > 4)
         {
             currentState = GameState::GameOver;
             SetWindowText(win.hWnd, L"Orbit Slime | [GAME OVER] 다시 시작하려면 [R] 키를 누르세요! 종료는 [ESC]");
