@@ -4,8 +4,8 @@
 
 class EngineSettings
 {
-    int windowWidth = 800;
-    int windowHeight = 800;
+    int windowWidth = 1280;
+    int windowHeight = 720;
     int resizedWindowWidth = 1280;
     int resizedWindowHeight = 720;
     bool fullscreen = false;
