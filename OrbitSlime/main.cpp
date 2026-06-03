@@ -127,16 +127,27 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* slimeMesh = new Mesh();
     slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
     ShaderSet slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, ied, iedCount);
+
     ColorMaterial* slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 0.2f }, gEngine.gfx.Device);
     slimeMat->SetSpecular(0.25f, 12.0f);
     slimeMat->SetAlphaBlend(true);
+    // 슬라임 잔상 머티리얼
+    ColorMaterial* slimeTrailMat = new ColorMaterial(slimeShader, { 0.1f, 0.9f, 0.3f, 0.18f }, gEngine.gfx.Device);
+    slimeTrailMat->SetSpecular(0.0f, 1.0f);
+    slimeTrailMat->SetAlphaBlend(true);
+
     GameObject* slime = new GameObject(0, 0, 0);
+
+    AsteroidTrailRenderer* slimeTrail = new AsteroidTrailRenderer(slimeMesh, slimeTrailMat);
+    slimeTrail->isEmitting = false;
+    slime->AddComponent(slimeTrail);
+
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    PlayerController* slimeController = new PlayerController(planet, planetRadius-0.015f, 2.5f);
+    PlayerController* slimeController = new PlayerController(planet, planetRadius, 2.5f);
+    slimeController->trail = slimeTrail;
     slime->AddComponent(slimeController);
     SlimeSquashStretch* slimeSquash = new SlimeSquashStretch(slimeController);
     slime->AddComponent(slimeSquash);
-    slime->AddComponent(new AsteroidTrailRenderer(slimeMesh, slimeMat));
 
     gEngine.world.push_back(starField);
 

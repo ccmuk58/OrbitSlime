@@ -3,8 +3,11 @@
 #include "Object.h"
 
 #include <directxmath.h>
+#include "AsteroidTrailRenderer.h"
 
 using namespace DirectX;
+
+class AsteroidTrailRenderer;
 
 class PlayerController : public Component
 {
@@ -19,6 +22,8 @@ class PlayerController : public Component
 public:
     PlayerController(GameObject* target = nullptr, float radius = 0.5f, float speed = 2.5f);
     ~PlayerController() override;
+
+    AsteroidTrailRenderer* trail = nullptr; // 잔상을 조종할 리모컨
 
     bool IsMoving() const;
     bool IsDashing() const;
