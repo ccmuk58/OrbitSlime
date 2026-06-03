@@ -1,5 +1,6 @@
 #include "Core.h"
 
+#include <cstdio>
 #include <d3dcompiler.h>
 
 ShaderSet::ShaderSet(ID3D11VertexShader* v, ID3D11PixelShader* p, ID3D11InputLayout* l)
@@ -135,7 +136,9 @@ ShaderSet GraphicsContext::CompileAndCreate(const void* source, size_t length, b
     {
         if (errBlob)
         {
-            OutputDebugStringA((char*)errBlob->GetBufferPointer());
+            const char* errorText = (const char*)errBlob->GetBufferPointer();
+            printf("[ShaderCompile] %s\n", errorText);
+            OutputDebugStringA(errorText);
             errBlob->Release();
         }
         if (vsBlob) vsBlob->Release();

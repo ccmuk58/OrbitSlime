@@ -12,6 +12,7 @@
 
 class GameObject;
 class AsteroidMovement;
+class TimerDisplay;
 
 enum class GameState
 {
@@ -36,6 +37,8 @@ public:
     bool isRunning = true;
     GameObject* uiTitle = nullptr;    // 타이틀 UI 리모컨
     GameObject* uiGameOver = nullptr; // 게임오버 UI 리모컨
+
+    TimerDisplay* uiTimer = nullptr;
 
     ID3D11VertexShader* pDefaultVS = nullptr;
     ID3D11PixelShader* pDefaultPS = nullptr;

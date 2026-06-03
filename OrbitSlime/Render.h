@@ -95,9 +95,12 @@ class TextureMaterial : public Material
 public:
     ID3D11ShaderResourceView* pSRV;
     ID3D11SamplerState* pSampler;
+    bool useAlphaBlend = true;
 
     TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Device* device);
     virtual ~TextureMaterial();
 
+    void SetAlphaBlend(bool enabled);
+    bool UseAlphaBlend() const;
     virtual void Bind(ID3D11DeviceContext* context) override;
 };
