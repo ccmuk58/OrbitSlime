@@ -63,6 +63,9 @@
     <ClCompile Include="ScoreManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SlimeSquashStretch.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectShake.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -129,6 +132,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ScoreManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SlimeSquashStretch.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ObjectShake.h">

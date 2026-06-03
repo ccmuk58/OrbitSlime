@@ -1,9 +1,10 @@
 #include "CircleCollider.h"
 #include "ScoreManager.h"
+#include "SlimeSquashStretch.h"
 #include <cmath>
 
-CircleCollider::CircleCollider(GameObject* target, float myBaseRadius, float targetBaseRadius, AsteroidMovement* movement)
-    : target(target), myBaseRadius(myBaseRadius), targetBaseRadius(targetBaseRadius), movement(movement)
+CircleCollider::CircleCollider(GameObject* target, float myBaseRadius, float targetBaseRadius, AsteroidMovement* movement, SlimeSquashStretch* targetSquash)
+    : target(target), myBaseRadius(myBaseRadius), targetBaseRadius(targetBaseRadius), movement(movement), targetSquash(targetSquash)
 {
 }
 
@@ -34,6 +35,10 @@ void CircleCollider::Update(float dt)
     {
         ScoreManager::slimeHitCount++;
         ScoreManager::PrintScore();
+        if (targetSquash != nullptr)
+        {
+            targetSquash->TriggerAbsorbSquash();
+        }
         // 움직임 컴포넌트에게 즉시 '리스폰(Respawn)'
         if (movement != nullptr)
         {

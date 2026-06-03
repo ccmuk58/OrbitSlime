@@ -12,6 +12,25 @@ PlayerController::~PlayerController()
 {
 }
 
+bool PlayerController::IsMoving() const
+{
+    return orbitDir != 0.0f;
+}
+
+bool PlayerController::IsDashing() const
+{
+    return dashTimer > 0.0f;
+}
+
+float PlayerController::GetMoveDirection() const
+{
+    return orbitDir;
+}
+
+float PlayerController::GetOrbitAngle() const
+{
+    return orbitAngle;
+}
 void PlayerController::Start(GraphicsContext* gfx)
 {
     if (!orbitTarget)

@@ -20,6 +20,7 @@
 #include "CircleCollider.h"
 #include "ObjectShake.h"
 #include "TimerDisplay.h"
+#include "SlimeSquashStretch.h"
 #include <d3dcompiler.h>
 #include <vector>
 
@@ -127,7 +128,10 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slimeMat->SetAlphaBlend(true);
     GameObject* slime = new GameObject(0, 0, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
+    PlayerController* slimeController = new PlayerController(planet, planetRadius-0.015f, 2.5f);
+    slime->AddComponent(slimeController);
+    SlimeSquashStretch* slimeSquash = new SlimeSquashStretch(slimeController);
+    slime->AddComponent(slimeSquash);
     slime->AddComponent(new AsteroidTrailRenderer(slimeMesh, slimeMat));
 
     gEngine.world.push_back(starField);
@@ -149,7 +153,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
         gEngine.asteroids.push_back(astMove);
 
-        asteroid->AddComponent(new CircleCollider(slime, 0.05f, 0.1f, astMove));
+        asteroid->AddComponent(new CircleCollider(slime, 0.05f, 0.1f, astMove, slimeSquash));
 
         gEngine.world.push_back(asteroid);
         gEngine.pointLightObjects.push_back(asteroid);

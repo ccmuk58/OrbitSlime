@@ -20,6 +20,11 @@ public:
     PlayerController(GameObject* target = nullptr, float radius = 0.5f, float speed = 2.5f);
     ~PlayerController() override;
 
+    bool IsMoving() const;
+    bool IsDashing() const;
+    float GetMoveDirection() const;
+    float GetOrbitAngle() const;
+
 
     void Start(GraphicsContext* gfx) override;
     void Input() override;

@@ -44,6 +44,7 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="ScoreDisplay.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
+    <ClCompile Include="SlimeSquashStretch.cpp" />
     <ClCompile Include="StarFieldRenderer.cpp" />
     <ClCompile Include="TimerDisplay.cpp" />
   </ItemGroup>
@@ -67,6 +68,7 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="ScoreDisplay.h" />
     <ClInclude Include="ScoreManager.h" />
+    <ClInclude Include="SlimeSquashStretch.h" />
     <ClInclude Include="StarFieldRenderer.h" />
     <ClInclude Include="TimerDisplay.h" />
   </ItemGroup>
