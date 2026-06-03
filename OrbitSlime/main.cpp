@@ -19,6 +19,7 @@
 #include "StarFieldRenderer.h"
 #include "CircleCollider.h"
 #include "ObjectShake.h"
+#include "Particle.h"
 #include <d3dcompiler.h>
 #include <vector>
 
@@ -27,6 +28,9 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+
+
+std::vector<ParticleComponent*> ParticleManager::pool;
 
 LRESULT CALLBACK GlobalWndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -135,7 +139,27 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         gEngine.world.push_back(asteroid);
         gEngine.pointLightObjects.push_back(asteroid);
     }
+    MeshData particleData = MeshGenerator::CreateIrregularSphere(1.0f, 6, 6, 0.0f);
+    Mesh* particleMesh = new Mesh();
+    particleMesh->Create(&gEngine.gfx, particleData.vertices, particleData.indices);
 
+    // 파편 색상은 용암/불꽃 느낌의 주황+빨강! (asteroidShader 재사용)
+    ColorMaterial* particleMat = new ColorMaterial(asteroidShader, { 1.0f, 0.4f, 0.0f, 1.0f }, gEngine.gfx.Device);
+    particleMat->SetSpecular(0.0f, 1.0f);
+
+    for (int i = 0; i < 60; i++)
+    {
+        GameObject* pObj = new GameObject(0, 0, 0);
+        pObj->isActive = false; //제일 중요! 평소엔 투명하게 숨겨둠
+
+        pObj->AddComponent(new MeshRenderer(particleMesh, particleMat));
+
+        ParticleComponent* pComp = new ParticleComponent();
+        pObj->AddComponent(pComp);
+
+        gEngine.world.push_back(pObj);
+        ParticleManager::pool.push_back(pComp); // 매니저에 등록
+    }
     gEngine.world.push_back(planet);
     gEngine.world.push_back(slime);
 
@@ -148,6 +172,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     if (asteroidTrailMat) { delete asteroidTrailMat; asteroidTrailMat = nullptr; }
 	if (planetMat) { delete planetMat; planetMat = nullptr; }
     if (starMat) { delete starMat; starMat = nullptr; }
+    if (particleMat) { delete particleMat; particleMat = nullptr; }
 
     slimeShader.Release();
 	asteroidShader.Release();
@@ -157,6 +182,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     if (slimeMesh) { delete slimeMesh; slimeMesh = nullptr; }
 	if (asteroidMesh) { delete asteroidMesh; asteroidMesh = nullptr; }
 	if (planetMesh) { delete planetMesh; planetMesh = nullptr; }
-
+    if (particleMesh) { delete particleMesh; particleMesh = nullptr; }
+   
     return 0;
 }
