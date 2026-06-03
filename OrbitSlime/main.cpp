@@ -162,14 +162,14 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* particleMesh = new Mesh();
     particleMesh->Create(&gEngine.gfx, particleData.vertices, particleData.indices);
 
-    // ÆÄÆí »ö»óÀº ¿ë¾Ï/ºÒ²É ´À³¦ÀÇ ÁÖÈ²+»¡°­! (asteroidShader Àç»ç¿ë)
+    // ?Œí¸ ?‰ìƒ?€ ?©ì•”/ë¶ˆê½ƒ ?ë‚Œ??ì£¼í™©+ë¹¨ê°•! (asteroidShader ?¬ì‚¬??
     ColorMaterial* particleMat = new ColorMaterial(asteroidShader, { 1.0f, 0.4f, 0.0f, 1.0f }, gEngine.gfx.Device);
     particleMat->SetSpecular(0.0f, 1.0f);
 
     for (int i = 0; i < 60; i++)
     {
         GameObject* pObj = new GameObject(0, 0, 0);
-        pObj->isActive = false; //Á¦ÀÏ Áß¿ä! Æò¼Ò¿£ Åõ¸íÇÏ°Ô ¼û°ÜµÒ
+        pObj->isActive = false; //?œì¼ ì¤‘ìš”! ?‰ì†Œ???¬ëª…?˜ê²Œ ?¨ê²¨??
 
         pObj->AddComponent(new MeshRenderer(particleMesh, particleMat));
 
@@ -177,7 +177,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         pObj->AddComponent(pComp);
 
         gEngine.world.push_back(pObj);
-        ParticleManager::pool.push_back(pComp); // ¸Å´ÏÀú¿¡ µî·Ï
+        ParticleManager::pool.push_back(pComp); // ë§¤ë‹ˆ?€???±ë¡
     }
     gEngine.world.push_back(planet);
     gEngine.world.push_back(slime);
