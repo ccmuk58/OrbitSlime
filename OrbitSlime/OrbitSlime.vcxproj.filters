@@ -64,10 +64,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ScoreDisplay.cpp">
-    <ClCompile Include="CircleCollider.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CircleCollider.cpp">
@@ -132,12 +128,6 @@
     <ClInclude Include="ScoreDisplay.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CircleCollider.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="PointLightManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -156,5 +146,4 @@
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
-</Project>
 </Project>
