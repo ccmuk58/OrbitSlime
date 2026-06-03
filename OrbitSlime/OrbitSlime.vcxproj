@@ -29,6 +29,7 @@
     <ClCompile Include="EngineSettings.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameLoop.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="EngineSettings.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="GameLoop.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MeshGenerator.h" />
