@@ -1,19 +1,19 @@
-#include "SlimeSquashStretch.h"
+#include "SlimePhysics.h"
 
 #include "PlayerController.h"
 
 #include <cmath>
 
-SlimeSquashStretch::SlimeSquashStretch(PlayerController* playerController)
+SlimePhysics::SlimePhysics(PlayerController* playerController)
     : controller(playerController)
 {
 }
 
-SlimeSquashStretch::~SlimeSquashStretch()
+SlimePhysics::~SlimePhysics()
 {
 }
 
-void SlimeSquashStretch::Start(GraphicsContext* gfx)
+void SlimePhysics::Start(GraphicsContext* gfx)
 {
     if (pOwner)
     {
@@ -21,11 +21,11 @@ void SlimeSquashStretch::Start(GraphicsContext* gfx)
     }
 }
 
-void SlimeSquashStretch::Input()
+void SlimePhysics::Input()
 {
 }
 
-void SlimeSquashStretch::Update(float dt)
+void SlimePhysics::Update(float dt)
 {
     if (!pOwner || !controller)
     {
@@ -80,11 +80,11 @@ void SlimeSquashStretch::Update(float dt)
     wasDashing = isDashing;
 }
 
-void SlimeSquashStretch::Render(GraphicsContext* gfx)
+void SlimePhysics::Render(GraphicsContext* gfx)
 {
 }
 
-XMFLOAT3 SlimeSquashStretch::GetTargetScale() const
+XMFLOAT3 SlimePhysics::GetTargetScale() const
 {
     switch (state)
     {
@@ -102,23 +102,23 @@ XMFLOAT3 SlimeSquashStretch::GetTargetScale() const
     }
 }
 
-void SlimeSquashStretch::SetState(SquashState nextState)
+void SlimePhysics::SetState(SquashState nextState)
 {
     previousState = state;
     state = nextState;
 }
 
-void SlimeSquashStretch::TriggerPlanetSquash()
+void SlimePhysics::TriggerPlanetSquash()
 {
     planetSquashTimer = planetSquashDuration;
 }
 
-void SlimeSquashStretch::TriggerAbsorbSquash()
+void SlimePhysics::TriggerAbsorbSquash()
 {
     absorbSquashTimer = absorbSquashDuration;
 }
 
-float SlimeSquashStretch::MoveTowards(float current, float target, float maxDelta)
+float SlimePhysics::MoveTowards(float current, float target, float maxDelta)
 {
     const float delta = target - current;
     if (fabsf(delta) <= maxDelta)
@@ -128,3 +128,4 @@ float SlimeSquashStretch::MoveTowards(float current, float target, float maxDelt
 
     return current + (delta > 0.0f ? maxDelta : -maxDelta);
 }
+

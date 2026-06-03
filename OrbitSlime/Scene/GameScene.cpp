@@ -10,7 +10,7 @@
 #include "Particle.h"
 #include "PlanetHealthVisual.h"
 #include "PlayerController.h"
-#include "SlimeSquashStretch.h"
+#include "SlimePhysics.h"
 #include "StarFieldRenderer.h"
 #include "TimerDisplay.h"
 
@@ -107,8 +107,8 @@ void GameScene::CreateSlime(GameLoop& gEngine)
     slimeController->trail = slimeTrail;
     slime->AddComponent(slimeController);
 
-    slimeSquash = new SlimeSquashStretch(slimeController);
-    slime->AddComponent(slimeSquash);
+    slimePhysics = new SlimePhysics(slimeController);
+    slime->AddComponent(slimePhysics);
 }
 
 void GameScene::CreateAsteroids(GameLoop& gEngine)
@@ -125,7 +125,7 @@ void GameScene::CreateAsteroids(GameLoop& gEngine)
         asteroid->AddComponent(astMove);
         gEngine.asteroids.push_back(astMove);
 
-        asteroid->AddComponent(new CircleCollider(slime, 0.05f, 0.1f, astMove, slimeSquash));
+        asteroid->AddComponent(new CircleCollider(slime, 0.05f, 0.1f, astMove, slimePhysics));
 
         gEngine.world.push_back(asteroid);
         gEngine.pointLightObjects.push_back(asteroid);
@@ -217,5 +217,7 @@ void GameScene::ReleaseResources()
     if (titleTextMesh) { delete titleTextMesh; titleTextMesh = nullptr; }
     if (gameOverTextMesh) { delete gameOverTextMesh; gameOverTextMesh = nullptr; }
 }
+
+
 
 

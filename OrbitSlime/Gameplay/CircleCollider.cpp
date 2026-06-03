@@ -1,10 +1,10 @@
 #include "CircleCollider.h"
 #include "ScoreManager.h"
-#include "SlimeSquashStretch.h"
+#include "SlimePhysics.h"
 #include <cmath>
 
-CircleCollider::CircleCollider(GameObject* target, float myBaseRadius, float targetBaseRadius, AsteroidMovement* movement, SlimeSquashStretch* targetSquash)
-    : target(target), myBaseRadius(myBaseRadius), targetBaseRadius(targetBaseRadius), movement(movement), targetSquash(targetSquash)
+CircleCollider::CircleCollider(GameObject* target, float myBaseRadius, float targetBaseRadius, AsteroidMovement* movement, SlimePhysics* targetSlimePhysics)
+    : target(target), myBaseRadius(myBaseRadius), targetBaseRadius(targetBaseRadius), movement(movement), targetSlimePhysics(targetSlimePhysics)
 {
 }
 
@@ -35,9 +35,9 @@ void CircleCollider::Update(float dt)
     {
         ScoreManager::slimeHitCount++;
         ScoreManager::PrintScore();
-        if (targetSquash != nullptr)
+        if (targetSlimePhysics != nullptr)
         {
-            targetSquash->TriggerAbsorbSquash();
+            targetSlimePhysics->TriggerAbsorbSquash();
         }
         // 움직임 컴포넌트에게 즉시 '리스폰(Respawn)'
         if (movement != nullptr)
@@ -51,3 +51,4 @@ void CircleCollider::Render(GraphicsContext* gfx)
 {
     // 충돌체는 눈에 보이지 않으므로 비워둠
 }
+

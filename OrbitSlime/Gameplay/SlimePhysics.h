@@ -8,7 +8,7 @@ using namespace DirectX;
 
 class PlayerController;
 
-class SlimeSquashStretch : public Component
+class SlimePhysics : public Component
 {
 private:
     enum class SquashState
@@ -43,8 +43,8 @@ private:
     static float MoveTowards(float current, float target, float maxDelta);
 
 public:
-    SlimeSquashStretch(PlayerController* playerController);
-    ~SlimeSquashStretch() override;
+    SlimePhysics(PlayerController* playerController);
+    ~SlimePhysics() override;
 
     void TriggerAbsorbSquash();
 
@@ -53,3 +53,4 @@ public:
     void Update(float dt) override;
     void Render(GraphicsContext* gfx) override;
 };
+

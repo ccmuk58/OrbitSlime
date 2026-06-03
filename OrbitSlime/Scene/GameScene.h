@@ -7,7 +7,7 @@
 class GameLoop;
 class GameObject;
 class ObjectShake;
-class SlimeSquashStretch;
+class SlimePhysics;
 
 class GameScene
 {
@@ -55,7 +55,7 @@ class GameScene
     GameObject* gameOverTextObject = nullptr;
 
     ObjectShake* planetShake = nullptr;
-    SlimeSquashStretch* slimeSquash = nullptr;
+    SlimePhysics* slimePhysics = nullptr;
 
     void SetupInputLayouts();
     void CreateStarField(GameLoop& gEngine);
@@ -70,3 +70,5 @@ public:
     void CreateUI(GameLoop& gEngine);
     void ReleaseResources();
 };
+
+

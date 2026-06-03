@@ -33,7 +33,7 @@
     <ClCompile Include="Gameplay\PlanetHealthVisual.cpp" />
     <ClCompile Include="Gameplay\PlayerController.cpp" />
     <ClCompile Include="Gameplay\ScoreManager.cpp" />
-    <ClCompile Include="Gameplay\SlimeSquashStretch.cpp" />
+    <ClCompile Include="Gameplay\SlimePhysics.cpp" />
     <ClCompile Include="Rendering\TrailRenderer.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\LightManager.cpp" />
@@ -63,7 +63,7 @@
     <ClInclude Include="Gameplay\PlanetHealthVisual.h" />
     <ClInclude Include="Gameplay\PlayerController.h" />
     <ClInclude Include="Gameplay\ScoreManager.h" />
-    <ClInclude Include="Gameplay\SlimeSquashStretch.h" />
+    <ClInclude Include="Gameplay\SlimePhysics.h" />
     <ClInclude Include="Rendering\TrailRenderer.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\LightManager.h" />
@@ -216,6 +216,8 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
+
+
 
 
 
