@@ -1,16 +1,16 @@
-ï»¿#include "TimerDisplay.h"
+#include "TimerDisplay.h"
 
 #include <cstdio>
 #include <string>
 
 TimerDisplay::TimerDisplay(Mesh* mesh, float width, float height, float gap)
-    : DigitTextureDisplay(mesh, width, height, gap)
+    : BitmapTextRenderer(mesh, width, height, gap)
 {
 }
 
 void TimerDisplay::Reset()
 {
-    // ê²Œì„ ì¬ì‹œì‘ ë•Œ ëˆ„ì  ì‹œê°„ê³¼ í™”ë©´ í‘œì‹œë¥¼ ëª¨ë‘ ì²˜ìŒ ìƒíƒœë¡œ ëŒë¦°ë‹¤.
+    // °ÔÀÓ Àç½ÃÀÛ ¶§ ´©Àû ½Ã°£°ú È­¸é Ç¥½Ã¸¦ ¸ğµÎ Ã³À½ »óÅÂ·Î µ¹¸°´Ù.
     elapsedSeconds = 0.0f;
     lastShownDecisecond = -1;
     SetText("00:00.0");
@@ -18,13 +18,13 @@ void TimerDisplay::Reset()
 
 void TimerDisplay::SetRunning(bool running)
 {
-    // GameLoopê°€ í˜„ì¬ ìƒíƒœ(Title/Playing/GameOver)ì— ë§ì¶° íƒ€ì´ë¨¸ ì§„í–‰ ì—¬ë¶€ë¥¼ ì•Œë ¤ì¤€ë‹¤.
+    // GameLoop°¡ ÇöÀç »óÅÂ(Title/Playing/GameOver)¿¡ ¸ÂÃç Å¸ÀÌ¸Ó ÁøÇà ¿©ºÎ¸¦ ¾Ë·ÁÁØ´Ù.
     isRunning = running;
 }
 
 void TimerDisplay::Update(float dt)
 {
-    // Playing ìƒíƒœì¼ ë•Œë§Œ dtë¥¼ ëˆ„ì í•œë‹¤.
+    // Playing »óÅÂÀÏ ¶§¸¸ dt¸¦ ´©ÀûÇÑ´Ù.
     if (isRunning)
     {
         elapsedSeconds += dt;
@@ -32,7 +32,7 @@ void TimerDisplay::Update(float dt)
 
     int shownDecisecond = (int)(elapsedSeconds * 10.0f);
 
-    // 0.1ì´ˆ ë‹¨ìœ„ê°€ ë°”ë€” ë•Œë§Œ ë©”ì‰¬ë¥¼ ë‹¤ì‹œ ë§Œë“ ë‹¤.
+    // 0.1ÃÊ ´ÜÀ§°¡ ¹Ù²ğ ¶§¸¸ ¸Ş½¬¸¦ ´Ù½Ã ¸¸µç´Ù.
     if (shownDecisecond != lastShownDecisecond)
     {
         lastShownDecisecond = shownDecisecond;

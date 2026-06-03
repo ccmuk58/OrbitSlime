@@ -1,4 +1,4 @@
-#include "DigitTextureDisplay.h"
+#include "BitmapTextRenderer.h"
 
 #include <vector>
 
@@ -47,16 +47,16 @@ namespace
     }
 }
 
-DigitTextureDisplay::DigitTextureDisplay(Mesh* mesh, float width, float height, float gap)
+BitmapTextRenderer::BitmapTextRenderer(Mesh* mesh, float width, float height, float gap)
     : targetMesh(mesh), digitWidth(width), digitHeight(height), spacing(gap)
 {
 }
 
-DigitTextureDisplay::~DigitTextureDisplay()
+BitmapTextRenderer::~BitmapTextRenderer()
 {
 }
 
-void DigitTextureDisplay::SetDisplayText(const std::string& text)
+void BitmapTextRenderer::SetDisplayText(const std::string& text)
 {
     initialText = text;
 
@@ -66,25 +66,25 @@ void DigitTextureDisplay::SetDisplayText(const std::string& text)
     }
 }
 
-void DigitTextureDisplay::Start(GraphicsContext* gfx)
+void BitmapTextRenderer::Start(GraphicsContext* gfx)
 {
     cachedGfx = gfx;
     SetText(initialText);
 }
 
-void DigitTextureDisplay::Input()
+void BitmapTextRenderer::Input()
 {
 }
 
-void DigitTextureDisplay::Update(float dt)
+void BitmapTextRenderer::Update(float dt)
 {
 }
 
-void DigitTextureDisplay::Render(GraphicsContext* gfx)
+void BitmapTextRenderer::Render(GraphicsContext* gfx)
 {
 }
 
-void DigitTextureDisplay::SetText(const std::string& text)
+void BitmapTextRenderer::SetText(const std::string& text)
 {
     if (!targetMesh || !cachedGfx || text == currentText)
     {

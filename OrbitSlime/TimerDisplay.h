@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DigitTextureDisplay.h"
+#include "BitmapTextRenderer.h"
 
-class TimerDisplay : public DigitTextureDisplay
+class TimerDisplay : public BitmapTextRenderer
 {
 private:
     float elapsedSeconds = 0.0f;

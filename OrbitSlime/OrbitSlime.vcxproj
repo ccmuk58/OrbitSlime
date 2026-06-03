@@ -25,7 +25,7 @@
     <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
-    <ClCompile Include="DigitTextureDisplay.cpp" />
+    <ClCompile Include="BitmapTextRenderer.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameLoop.cpp" />
@@ -57,7 +57,7 @@
     <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
-    <ClInclude Include="DigitTextureDisplay.h" />
+    <ClInclude Include="BitmapTextRenderer.h" />
     <ClInclude Include="EngineSettings.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="GameLoop.h" />

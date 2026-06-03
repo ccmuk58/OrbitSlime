@@ -21,6 +21,7 @@
 #include "ObjectShake.h"
 #include "Particle.h"
 #include "TimerDisplay.h"
+#include "BitmapTextRenderer.h"
 #include "SlimeSquashStretch.h"
 #include "PlanetHealthVisual.h"
 #include <d3dcompiler.h>
@@ -102,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     gEngine.uiTimer = timerDisplay;
     Mesh* titleTextMesh = new Mesh();
     GameObject* titleTextObject = new GameObject(0.0f, -0.62f, 0.0f);
-    DigitTextureDisplay* titleText = new DigitTextureDisplay(titleTextMesh, 0.055f, 0.10f, 0.0015f);
+    BitmapTextRenderer* titleText = new BitmapTextRenderer(titleTextMesh, 0.055f, 0.10f, 0.0015f);
     titleText->SetDisplayText("Press 'Space' to start");
     titleTextObject->AddComponent(new MeshRenderer(titleTextMesh, timerMat));
     titleTextObject->AddComponent(titleText);
@@ -110,7 +111,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 
     Mesh* gameOverTextMesh = new Mesh();
     GameObject* gameOverTextObject = new GameObject(0.0f, -0.62f, 0.0f);
-    DigitTextureDisplay* gameOverText = new DigitTextureDisplay(gameOverTextMesh, 0.055f, 0.10f, 0.0015f);
+    BitmapTextRenderer* gameOverText = new BitmapTextRenderer(gameOverTextMesh, 0.055f, 0.10f, 0.0015f);
     gameOverText->SetDisplayText("Press 'R' to restart");
     gameOverTextObject->AddComponent(new MeshRenderer(gameOverTextMesh, timerMat));
     gameOverTextObject->AddComponent(gameOverText);
