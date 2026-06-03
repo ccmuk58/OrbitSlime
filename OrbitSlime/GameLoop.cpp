@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "ScoreManager.h" // 점수 확인을 위해 추가
 #include "AsteroidMovement.h" // 소행성 리셋을 위해 추가
+#include "TimerDisplay.h"
 
 #include <cstdio>
 #include <windows.h>
@@ -105,6 +106,8 @@ void GameLoop::Update()
 
     if (uiTitle) uiTitle->isActive = (currentState == GameState::Title);
     if (uiGameOver) uiGameOver->isActive = (currentState == GameState::GameOver);
+    // 게임 플레이 중에만 타이머가 흐르게 한다.
+    if (uiTimer) uiTimer->SetRunning(currentState == GameState::Playing);
 
    
     // 1.제어: 현재 상태에 따라 소행성들만 얼리기
@@ -270,6 +273,8 @@ void GameLoop::ResetGame()
 {
     ScoreManager::slimeHitCount = 0;
     ScoreManager::planetHitCount = 0;
+    // 새 게임을 시작하면 타이머도 0초로 되돌린다.
+    if (uiTimer) uiTimer->Reset();
 
     for (int i = 0; i < (int)asteroids.size(); i++)
     {

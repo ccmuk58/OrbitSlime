@@ -25,6 +25,7 @@
     <ClCompile Include="CircleCollider.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DeltaTime.cpp" />
+    <ClCompile Include="DigitTextureDisplay.cpp" />
     <ClCompile Include="EngineSettings.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="GameLoop.cpp" />
@@ -44,6 +45,7 @@
     <ClCompile Include="ScoreDisplay.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
     <ClCompile Include="StarFieldRenderer.cpp" />
+    <ClCompile Include="TimerDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidTrailRenderer.h" />
@@ -52,6 +54,7 @@
     <ClInclude Include="CircleCollider.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DeltaTime.h" />
+    <ClInclude Include="DigitTextureDisplay.h" />
     <ClInclude Include="EngineSettings.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="GameLoop.h" />
@@ -65,9 +68,14 @@
     <ClInclude Include="ScoreDisplay.h" />
     <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="StarFieldRenderer.h" />
+    <ClInclude Include="TimerDisplay.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Asteroid.hlsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <FileType>Document</FileType>
+    </Content>
+    <Content Include="DigitTexture.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
@@ -83,9 +91,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\26DirectXWLs\Lecture09-TextureMapping\digital-numbers.png" />
+    <Content Include="numbers.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

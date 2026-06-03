@@ -24,6 +24,9 @@
     <ClCompile Include="DeltaTime.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DigitTextureDisplay.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="EngineSettings.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -75,6 +78,9 @@
     <ClCompile Include="StarFieldRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TimerDisplay.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidTrailRenderer.h">
@@ -84,6 +90,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DeltaTime.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DigitTextureDisplay.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="EngineSettings.h">
@@ -134,16 +143,18 @@
     <ClInclude Include="StarFieldRenderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TimerDisplay.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Asteroid.hlsl" />
+    <Content Include="DigitTexture.hlsl" />
     <Content Include="Planet.hlsl" />
     <Content Include="Slime.hlsl" />
     <Content Include="StarField.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\26DirectXWLs\Lecture09-TextureMapping\digital-numbers.png">
+    <Content Include="numbers.png">
       <Filter>리소스 파일</Filter>
-    </Image>
+    </Content>
   </ItemGroup>
 </Project>
