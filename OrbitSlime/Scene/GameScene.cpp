@@ -98,7 +98,7 @@ void GameScene::CreateSlime(GameLoop& gEngine)
 {
     slime = new GameObject(0, 0, 0);
 
-    TrailRenderer* slimeTrail = new TrailRenderer(slimeMesh, slimeTrailMat, 15, TrailType::Slime);
+    TrailRenderer* slimeTrail = new TrailRenderer(slimeMesh, slimeTrailMat, 5, TrailType::Slime);
     slimeTrail->isEmitting = false;
     slime->AddComponent(slimeTrail);
 
@@ -118,7 +118,7 @@ void GameScene::CreateAsteroids(GameLoop& gEngine)
     {
         GameObject* asteroid = new GameObject(0, 0, 0);
 
-        asteroid->AddComponent(new TrailRenderer(asteroidMesh, asteroidTrailMat));
+        asteroid->AddComponent(new TrailRenderer(asteroidMesh, asteroidTrailMat, 25, TrailType::Asteroid));
         asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
         AsteroidMovement* astMove = new AsteroidMovement(planet, 0.0f, planetShake);
@@ -134,7 +134,7 @@ void GameScene::CreateAsteroids(GameLoop& gEngine)
 
 void GameScene::CreateParticles(GameLoop& gEngine)
 {
-    for (int i = 0; i < 60; i++)
+    for (int i = 0; i < 40; i++)
     {
         GameObject* pObj = new GameObject(0, 0, 0);
         pObj->isActive = false;

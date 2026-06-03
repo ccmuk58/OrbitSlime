@@ -89,7 +89,7 @@ void ParticleManager::Spawn(float x, float y, float z, float dirX, float dirY)
         {
             pool[i]->Fire(x, y, z, dirX, dirY);
             count++;
-            if (count >= 8) break;
+            if (count >= 5) break;
         }
     }
 }
