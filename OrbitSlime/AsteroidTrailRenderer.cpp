@@ -35,6 +35,9 @@ void AsteroidTrailRenderer::Update(float dt)
 
     recordTimer += dt;
     // 매 프레임 위치를 저장하면 잔상이 너무 촘촘해지므로 일정 간격마다 기록한다.
+    if (recordTimer < recordInterval) return;
+    recordTimer = 0.0f;
+
     if (isEmitting)
     {
         positions.insert(positions.begin(), pOwner->pos);
@@ -83,7 +86,7 @@ void AsteroidTrailRenderer::Render(GraphicsContext* gfx)
         float alpha = 0.04f + (1.0f - t) * 0.18f;
         float scale = 0.55f + (1.0f - t) * 0.35f;
 
-        pTrailMaterial->SetColor({ 1.0f, 0.28f, 0.05f, alpha });
+        pTrailMaterial->SetColor({ originalColor.x, originalColor.y, originalColor.z, alpha });
         pTrailMaterial->Bind(gfx->ImmediateContext);
 
         // 저장된 이전 위치마다 world matrix를 새로 만들어 같은 mesh를 다시 그린다.

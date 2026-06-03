@@ -179,14 +179,14 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     Mesh* particleMesh = new Mesh();
     particleMesh->Create(&gEngine.gfx, particleData.vertices, particleData.indices);
 
-    // ?åÌé∏ ?âÏÉÅ?Ä ?©Ïïî/Î∂àÍΩÉ ?êÎÇå??Ï£ºÌô©+Îπ®Í∞ï! (asteroidShader ?¨ÏÇ¨??
+    //
     ColorMaterial* particleMat = new ColorMaterial(asteroidShader, { 1.0f, 0.4f, 0.0f, 1.0f }, gEngine.gfx.Device);
     particleMat->SetSpecular(0.0f, 1.0f);
 
     for (int i = 0; i < 60; i++)
     {
         GameObject* pObj = new GameObject(0, 0, 0);
-        pObj->isActive = false; //?úÏùº Ï§ëÏöî! ?âÏÜå???¨Î™Ö?òÍ≤å ?®Í≤®??
+        pObj->isActive = false; //
 
         pObj->AddComponent(new MeshRenderer(particleMesh, particleMat));
 
@@ -194,7 +194,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
         pObj->AddComponent(pComp);
 
         gEngine.world.push_back(pObj);
-        ParticleManager::pool.push_back(pComp); // Îß§Îãà?Ä???±Î°ù
+        ParticleManager::pool.push_back(pComp); //
     }
     gEngine.world.push_back(planet);
     gEngine.world.push_back(slime);
@@ -211,6 +211,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     if (starMat) { delete starMat; starMat = nullptr; }
     if (particleMat) { delete particleMat; particleMat = nullptr; }
     if (timerMat) { delete timerMat; timerMat = nullptr; }
+    if (slimeTrailMat) { delete slimeTrailMat; slimeTrailMat = nullptr; }
 
     slimeShader.Release();
 	asteroidShader.Release();

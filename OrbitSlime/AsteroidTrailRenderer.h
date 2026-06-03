@@ -17,7 +17,7 @@ class AsteroidTrailRenderer : public Component
     std::vector<XMFLOAT3> positions;
     float recordTimer = 0.0f;
     float recordInterval = 0.04f;
-    int maxTrailCount = 10;
+    int maxTrailCount = 15;
 
 public:
     AsteroidTrailRenderer(Mesh* mesh, ColorMaterial* material);
