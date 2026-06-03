@@ -22,6 +22,7 @@
 #include "Particle.h"
 #include "TimerDisplay.h"
 #include "SlimeSquashStretch.h"
+#include "PlanetHealthVisual.h"
 #include <d3dcompiler.h>
 #include <vector>
 
@@ -108,6 +109,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	planetMat->SetSpecular(0.5f, 32.0f);
     GameObject* planet = new GameObject(0, 0, 0);
     planet->AddComponent(new MeshRenderer(planetMesh, planetMat));
+    planet->AddComponent(new PlanetHealthVisual(planetMat, 5));
 
     ObjectShake* planetShake = new ObjectShake();
     planet->AddComponent(planetShake);

@@ -78,6 +78,9 @@
     <ClCompile Include="PointLightManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PlanetHealthVisual.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="StarFieldRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -144,6 +147,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="PointLightManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanetHealthVisual.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="StarFieldRenderer.h">
