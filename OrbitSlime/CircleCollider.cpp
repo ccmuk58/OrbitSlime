@@ -1,4 +1,4 @@
-ï»¿#include "CircleCollider.h"
+#include "CircleCollider.h"
 #include "ScoreManager.h"
 #include <cmath>
 
@@ -25,17 +25,16 @@ void CircleCollider::Update(float dt)
 
     float dx = target->pos.x - pOwner->pos.x;
     float dy = target->pos.y - pOwner->pos.y;
-    float dz = target->pos.z - pOwner->pos.z;
-    float distance = sqrtf(dx * dx + dy * dy + dz * dz);
+    float distance = sqrtf(dx * dx + dy * dy);
 
     float myActualRadius = myBaseRadius * pOwner->scale.x;
     float targetActualRadius = targetBaseRadius * target->scale.x;
 
-    if (distance < (myActualRadius + targetActualRadius)/2)
+    if (distance < (myActualRadius + targetActualRadius))
     {
         ScoreManager::slimeHitCount++;
         ScoreManager::PrintScore();
-        // ì›€ì§ì„ ì»´í¬ë„ŒíŠ¸ì—ê²Œ ì¦‰ì‹œ 'ë¦¬ìŠ¤í°(Respawn)'
+        // ¿òÁ÷ÀÓ ÄÄÆ÷³ÍÆ®¿¡°Ô Áï½Ã '¸®½ºÆù(Respawn)'
         if (movement != nullptr)
         {
             movement->Respawn();
@@ -45,5 +44,5 @@ void CircleCollider::Update(float dt)
 
 void CircleCollider::Render(GraphicsContext* gfx)
 {
-    // ì¶©ëŒì²´ëŠ” ëˆˆì— ë³´ì´ì§€ ì•Šìœ¼ë¯€ë¡œ ë¹„ì›Œë‘ 
+    // Ãæµ¹Ã¼´Â ´«¿¡ º¸ÀÌÁö ¾ÊÀ¸¹Ç·Î ºñ¿öµÒ
 }

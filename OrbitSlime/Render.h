@@ -13,6 +13,7 @@ struct Vertex
     XMFLOAT3 pos;
     XMFLOAT4 col;
 	XMFLOAT3 normal;
+    XMFLOAT2 uv;
 };
 
 struct ConstantBuffer
@@ -85,4 +86,15 @@ public:
     void Render(GraphicsContext* gfx) override;
     void Input() override;
     void Update(float dt) override;
+};
+class TextureMaterial : public Material
+{
+public:
+    ID3D11ShaderResourceView* pSRV;
+    ID3D11SamplerState* pSampler;
+
+    TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Device* device);
+    virtual ~TextureMaterial();
+
+    virtual void Bind(ID3D11DeviceContext* context) override;
 };

@@ -65,7 +65,7 @@ void AsteroidMovement::Respawn()
 {
     // 1. 위치 무작위
     float randomAngle = (rand() % 360) * 3.141592f / 180.0f;
-    float randomDist = 1.0f + ((float)rand() / (float)RAND_MAX) * 1.5f;
+    float randomDist = 2.0f + ((float)rand() / (float)RAND_MAX) * 3.0f;
     pOwner->pos.x = cosf(randomAngle) * randomDist;
     pOwner->pos.y = sinf(randomAngle) * randomDist;
     pOwner->pos.z = 0.0f;

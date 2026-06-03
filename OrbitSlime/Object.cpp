@@ -29,6 +29,7 @@ void GameObject::AddComponent(Component* c)
 
 void GameObject::Input()
 {
+    if (!isActive) return;
     int componentCount = (int)components.size();
     for (int i = 0; i < componentCount; i++)
     {
@@ -41,6 +42,8 @@ void GameObject::Input()
 
 void GameObject::Update(float dt, GraphicsContext* gfx)
 {
+    if (!isActive) return;
+
     for (int j = 0; j < (int)components.size(); j++)
     {
         if (components[j] != nullptr)
@@ -58,6 +61,7 @@ void GameObject::Update(float dt, GraphicsContext* gfx)
 
 void GameObject::Render(GraphicsContext* gfx)
 {
+    if (!isActive) return;
     for (int i = 0; i < (int)components.size(); i++)
     {
         if (components[i] != nullptr)

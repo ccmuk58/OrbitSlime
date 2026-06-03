@@ -31,6 +31,7 @@ public:
     XMFLOAT3 rot = { 0, 0, 0 };
     XMFLOAT3 scale = { 1, 1, 1 };
     std::vector<Component*> components;
+    bool isActive = true;
 
     GameObject(float x, float y, float z);
     ~GameObject();

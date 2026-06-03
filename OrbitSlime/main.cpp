@@ -103,16 +103,17 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     const int ASTEROID_COUNT = 10;
     for (int i = 0; i < ASTEROID_COUNT; i++)
     {
-        // 위치, 크기 모두 알아서 할 테니 일단 대충 생성!
+        // 위치, 크기 모두 알아서 할 테니 일단 대충 생성
         GameObject* asteroid = new GameObject(0, 0, 0);
-
         asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
-        // 속도도 지가 알아서 정할 거니까 빈칸으로 넣기
+        // 속도도  랜덤으로 정할 거니까 빈칸으로 넣기
         AsteroidMovement* astMove = new AsteroidMovement(planet, 0.0f, planetShake);
         asteroid->AddComponent(astMove);
 
-        asteroid->AddComponent(new CircleCollider(slime, 0.05f, planetRadius, astMove));
+        gEngine.asteroids.push_back(astMove);
+
+        asteroid->AddComponent(new CircleCollider(slime, 0.05f, 0.1f, astMove));
 
         gEngine.world.push_back(asteroid);
     }
