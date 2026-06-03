@@ -98,9 +98,6 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     ColorMaterial* asteroidTrailMat = new ColorMaterial(asteroidShader, { 1.0f, 0.28f, 0.05f, 0.18f }, gEngine.gfx.Device);
     asteroidTrailMat->SetSpecular(0.0f, 1.0f);
     asteroidTrailMat->SetAlphaBlend(true);
-    
-    GameObject* asteroid = new GameObject(0.5f, 0.5f, 0);
-    asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
     // 슬라임
     Mesh* slimeMesh = new Mesh();
