@@ -1,7 +1,7 @@
 #include "GameScene.h"
 
 #include "AsteroidMovement.h"
-#include "AsteroidTrailRenderer.h"
+#include "TrailRenderer.h"
 #include "BitmapTextRenderer.h"
 #include "CircleCollider.h"
 #include "GameLoop.h"
@@ -62,7 +62,7 @@ void GameScene::LoadResources(GameLoop& gEngine)
     slimeMesh = new Mesh();
     slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
     slimeShader = gEngine.gfx.CompileAndCreate(L"Shaders\\Slime.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
-    slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 0.2f }, gEngine.gfx.Device);
+    slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 1.0f }, gEngine.gfx.Device);
     slimeMat->SetSpecular(0.25f, 12.0f);
     slimeMat->SetAlphaBlend(true);
 
@@ -98,7 +98,7 @@ void GameScene::CreateSlime(GameLoop& gEngine)
 {
     slime = new GameObject(0, 0, 0);
 
-    AsteroidTrailRenderer* slimeTrail = new AsteroidTrailRenderer(slimeMesh, slimeTrailMat);
+    TrailRenderer* slimeTrail = new TrailRenderer(slimeMesh, slimeTrailMat, 15, TrailType::Slime);
     slimeTrail->isEmitting = false;
     slime->AddComponent(slimeTrail);
 
@@ -118,7 +118,7 @@ void GameScene::CreateAsteroids(GameLoop& gEngine)
     {
         GameObject* asteroid = new GameObject(0, 0, 0);
 
-        asteroid->AddComponent(new AsteroidTrailRenderer(asteroidMesh, asteroidTrailMat));
+        asteroid->AddComponent(new TrailRenderer(asteroidMesh, asteroidTrailMat));
         asteroid->AddComponent(new MeshRenderer(asteroidMesh, asteroidMat));
 
         AsteroidMovement* astMove = new AsteroidMovement(planet, 0.0f, planetShake);
@@ -217,4 +217,5 @@ void GameScene::ReleaseResources()
     if (titleTextMesh) { delete titleTextMesh; titleTextMesh = nullptr; }
     if (gameOverTextMesh) { delete gameOverTextMesh; gameOverTextMesh = nullptr; }
 }
+
 

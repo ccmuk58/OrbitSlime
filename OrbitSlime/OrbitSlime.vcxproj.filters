@@ -25,7 +25,7 @@
     <ClCompile Include="Gameplay\PlayerController.cpp"><Filter>Gameplay</Filter></ClCompile>
     <ClCompile Include="Gameplay\ScoreManager.cpp"><Filter>Gameplay</Filter></ClCompile>
     <ClCompile Include="Gameplay\SlimeSquashStretch.cpp"><Filter>Gameplay</Filter></ClCompile>
-    <ClCompile Include="Rendering\AsteroidTrailRenderer.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\TrailRenderer.cpp"><Filter>Rendering</Filter></ClCompile>
     <ClCompile Include="Rendering\Camera.cpp"><Filter>Rendering</Filter></ClCompile>
     <ClCompile Include="Rendering\LightManager.cpp"><Filter>Rendering</Filter></ClCompile>
     <ClCompile Include="Rendering\Material.cpp"><Filter>Rendering</Filter></ClCompile>
@@ -55,7 +55,7 @@
     <ClInclude Include="Gameplay\PlayerController.h"><Filter>Gameplay</Filter></ClInclude>
     <ClInclude Include="Gameplay\ScoreManager.h"><Filter>Gameplay</Filter></ClInclude>
     <ClInclude Include="Gameplay\SlimeSquashStretch.h"><Filter>Gameplay</Filter></ClInclude>
-    <ClInclude Include="Rendering\AsteroidTrailRenderer.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\TrailRenderer.h"><Filter>Rendering</Filter></ClInclude>
     <ClInclude Include="Rendering\Camera.h"><Filter>Rendering</Filter></ClInclude>
     <ClInclude Include="Rendering\LightManager.h"><Filter>Rendering</Filter></ClInclude>
     <ClInclude Include="Rendering\Material.h"><Filter>Rendering</Filter></ClInclude>
@@ -79,3 +79,5 @@
     <Content Include="Assets\newFont.png"><Filter>Assets</Filter></Content>
   </ItemGroup>
 </Project>
+
+

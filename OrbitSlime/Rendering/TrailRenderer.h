@@ -8,20 +8,34 @@
 
 using namespace DirectX;
 
-class AsteroidTrailRenderer : public Component
+enum class TrailType
+{
+    Asteroid = 0,
+    Slime = 1
+};
+
+struct TrailSample
+{
+    XMFLOAT3 position;
+    XMFLOAT3 scale;
+    float rotationZ;
+};
+
+class TrailRenderer : public Component
 {
     Mesh* pMeshData = nullptr;
     ColorMaterial* pTrailMaterial = nullptr;
     ID3D11Buffer* cBuffer = nullptr;
 
-    std::vector<XMFLOAT3> positions;
+    std::vector<TrailSample> samples;
     float recordTimer = 0.0f;
     float recordInterval = 0.04f;
     int maxTrailCount = 15;
+    TrailType trailType = TrailType::Asteroid;
 
 public:
-    AsteroidTrailRenderer(Mesh* mesh, ColorMaterial* material);
-    ~AsteroidTrailRenderer() override;
+    TrailRenderer(Mesh* mesh, ColorMaterial* material, int maxTrailCount = 15, TrailType type = TrailType::Asteroid);
+    ~TrailRenderer() override;
     bool isEmitting = true;
 
     void Start(GraphicsContext* gfx) override;

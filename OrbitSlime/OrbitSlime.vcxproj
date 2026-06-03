@@ -34,7 +34,7 @@
     <ClCompile Include="Gameplay\PlayerController.cpp" />
     <ClCompile Include="Gameplay\ScoreManager.cpp" />
     <ClCompile Include="Gameplay\SlimeSquashStretch.cpp" />
-    <ClCompile Include="Rendering\AsteroidTrailRenderer.cpp" />
+    <ClCompile Include="Rendering\TrailRenderer.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\LightManager.cpp" />
     <ClCompile Include="Rendering\Material.cpp" />
@@ -64,7 +64,7 @@
     <ClInclude Include="Gameplay\PlayerController.h" />
     <ClInclude Include="Gameplay\ScoreManager.h" />
     <ClInclude Include="Gameplay\SlimeSquashStretch.h" />
-    <ClInclude Include="Rendering\AsteroidTrailRenderer.h" />
+    <ClInclude Include="Rendering\TrailRenderer.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\LightManager.h" />
     <ClInclude Include="Rendering\Material.h" />
@@ -216,5 +216,7 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
+
+
 
 
