@@ -149,7 +149,7 @@ void LoadResources(GameLoop& gEngine)
 	slimeTrailMat->SetSpecular(0.0f, 1.0f);
 	slimeTrailMat->SetAlphaBlend(true);
 
-	MeshData particleData = MeshGenerator::CreateIrregularSphere(1.0f, 6, 6, 0.0f);
+	MeshData particleData = MeshGenerator::CreateSphere(1.0f, 6, 6);
 	particleMesh = new Mesh();
 	particleMesh->Create(&gEngine.gfx, particleData.vertices, particleData.indices);
 	particleMat = new ColorMaterial(asteroidShader, { 1.0f, 0.4f, 0.0f, 1.0f }, gEngine.gfx.Device);
