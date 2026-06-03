@@ -100,11 +100,22 @@ void GameLoop::Input()
 
 void GameLoop::Update()
 {
-	float dt = timer.GetDelta();
-	frameCounter.Update(dt);
+    float dt = timer.GetDelta();
+    frameCounter.Update(dt);
 
     if (uiTitle) uiTitle->isActive = (currentState == GameState::Title);
     if (uiGameOver) uiGameOver->isActive = (currentState == GameState::GameOver);
+
+   
+    // 1.제어: 현재 상태에 따라 소행성들만 얼리기
+    bool shouldFreeze = (currentState == GameState::Title || currentState == GameState::GameOver);
+    for (int i = 0; i < (int)asteroids.size(); i++)
+    {
+        if (asteroids[i] != nullptr)
+        {
+            asteroids[i]->isFrozen = shouldFreeze;
+        }
+    }
 
     // 시작 화면일 때 안내 메시지 띄우기
     if (currentState == GameState::Title)
@@ -112,37 +123,24 @@ void GameLoop::Update()
         SetWindowText(win.hWnd, L"Orbit Slime | 방향키로 움직여보세요! [스페이스바]를 누르면 게임이 시작됩니다.");
     }
 
-    // 오브젝트 업데이트 루프 (시간 마법 적용)
+    
+    // 2. 오브젝트 업데이트
     for (int i = 0; i < (int)world.size(); i++)
     {
         if (world[i] != nullptr)
         {
-            float applyDt = dt;
-
-            // 시작 전(Title)에는 소행성(2번 이후 오브젝트)들만 시간을 0으로 얼려둠
-            if (currentState == GameState::Title && i >= 2)
-            {
-                applyDt = 0.0f;
-            }
-
-            // 게임오버 상태가 되면 모든 액션 정지!
-            if (currentState == GameState::GameOver)
-            {
-                applyDt = 0.0f;
-            }
-
+            // 게임오버일 때만 전체 화면을 멈추고, 타이틀(대기) 중일 때는 슬라임이 움직일 수 있게 dt를 그대로 전달
+            float applyDt = (currentState == GameState::GameOver) ? 0.0f : dt;
             world[i]->Update(applyDt, &gfx);
         }
     }
 
-    // ★ 플레이 중 슬라임이 맞으면 즉시 게임오버 상태로 전환! (MessageBox 삭제)
+    // 플레이 중 행성 피격 체크
     if (currentState == GameState::Playing)
     {
         if (ScoreManager::planetHitCount > 10)
         {
             currentState = GameState::GameOver;
-
-            // 전체화면 모니터 독점을 깨지 않고 완벽하게 안내 메시지 출력!
             SetWindowText(win.hWnd, L"Orbit Slime | [GAME OVER] 다시 시작하려면 [R] 키를 누르세요! 종료는 [ESC]");
         }
     }
@@ -152,7 +150,7 @@ void GameLoop::Render()
 {
     EngineSettings& settings = EngineSettings::Instance();
 
-    // ★ 게임오버 상태가 되면 화면 배경을 핏빛(어두운 빨간색)으로 바꿔서 연출 극대화!
+    // 게임오버 상태가 되면 화면 배경을 핏빛(어두운 빨간색)으로 바꿔서 연출 극대화!
     if (currentState == GameState::GameOver)
     {
         float gameOverColor[4] = { 0.4f, 0.0f, 0.0f, 1.0f };

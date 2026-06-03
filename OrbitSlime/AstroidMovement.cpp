@@ -25,6 +25,8 @@ void AsteroidMovement::Input()
 
 void AsteroidMovement::Update(float dt)
 {
+    if (isFrozen) return;
+
     if (!target || !pOwner) return;
 
     float dirX = target->pos.x - pOwner->pos.x;

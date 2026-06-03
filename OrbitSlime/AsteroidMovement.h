@@ -12,6 +12,8 @@ public:
     AsteroidMovement(GameObject* target = nullptr, float speed = 0.3f, ObjectShake* targetShake = nullptr);
     ~AsteroidMovement() override;
 
+    bool isFrozen = true;
+
     void Start(GraphicsContext* gfx) override;
     void Input() override;
     void Update(float dt) override;
