@@ -35,15 +35,23 @@ void AsteroidTrailRenderer::Update(float dt)
 
     recordTimer += dt;
     // 매 프레임 위치를 저장하면 잔상이 너무 촘촘해지므로 일정 간격마다 기록한다.
-    if (recordTimer < recordInterval) return;
-    recordTimer = 0.0f;
-
-    // 최신 위치를 앞쪽에 넣고, 오래된 위치는 maxTrailCount를 넘으면 제거한다.
-    positions.insert(positions.begin(), pOwner->pos);
-
-    if ((int)positions.size() > maxTrailCount)
+    if (isEmitting)
     {
-        positions.pop_back();
+        positions.insert(positions.begin(), pOwner->pos);
+
+        if ((int)positions.size() > maxTrailCount)
+        {
+            positions.pop_back();
+        }
+    }
+    else
+    {
+        // 스위치가 꺼지면, 새로운 위치를 추가하지 않고 꼬리(이전 위치들)를 하나씩 지움
+        // 이렇게 하면 대쉬가 끝났을 때 꼬리가 제자리에 멈춰있지 않고 자연스럽게 스르륵 사라짐
+        if (!positions.empty())
+        {
+            positions.pop_back();
+        }
     }
 }
 

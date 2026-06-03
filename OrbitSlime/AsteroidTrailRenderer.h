@@ -22,9 +22,12 @@ class AsteroidTrailRenderer : public Component
 public:
     AsteroidTrailRenderer(Mesh* mesh, ColorMaterial* material);
     ~AsteroidTrailRenderer() override;
+    bool isEmitting = true;
 
     void Start(GraphicsContext* gfx) override;
     void Input() override;
     void Update(float dt) override;
     void Render(GraphicsContext* gfx) override;
+
+
 };

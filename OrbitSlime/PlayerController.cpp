@@ -91,7 +91,11 @@ void PlayerController::Update(float dt)
     // 3. 기존 angularSpeed 대신 currentAngularSpeed를 곱해서 각도 업데이트!
     orbitAngle += orbitDir * currentAngularSpeed * dt;
 
-
+    // 대쉬 타이머가 남아있으면 잔상 스위치 ON, 아니면 OFF
+    if (trail != nullptr)
+    {
+        trail->isEmitting = (dashTimer > 0.0f);
+    }
 
     pOwner->pos.x = orbitTarget->pos.x + cosf(orbitAngle) * orbitRadius;
     pOwner->pos.y = orbitTarget->pos.y + sinf(orbitAngle) * orbitRadius;
