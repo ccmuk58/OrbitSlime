@@ -1,15 +1,16 @@
-#include "Render.h"
+ï»¿#include "Material.h"
 #include "Logger.h"
 
 #include <cstdio>
 #include <cwchar>
+#include <vector>
 #include <wincodec.h>
 
 #pragma comment(lib, "windowscodecs.lib")
 
 static DXGI_FORMAT GetWICFormat(WICPixelFormatGUID pixelFormat)
 {
-    // DirectX°¡ ¹Ù·Î ÅØ½ºÃ³·Î ¸¸µé ¼ö ÀÖ´Â WIC ÇÈ¼¿ Æ÷¸Ë¸¸ ¿ì¼± ÀÎÁ¤ÇÑ´Ù.
+    // DirectXê°€ ë°”ë¡œ í…ìŠ¤ì²˜ë¡œ ë§Œë“¤ ìˆ˜ ìžˆëŠ” WIC í”½ì…€ í¬ë§·ë§Œ ìš°ì„  ì¸ì •í•œë‹¤.
     if (pixelFormat == GUID_WICPixelFormat32bppRGBA) return DXGI_FORMAT_R8G8B8A8_UNORM;
     if (pixelFormat == GUID_WICPixelFormat32bppBGRA) return DXGI_FORMAT_B8G8R8A8_UNORM;
     return DXGI_FORMAT_UNKNOWN;
@@ -24,7 +25,7 @@ static bool LoadTextureFromFile(
 
     *outSRV = nullptr;
 
-    // WIC´Â Windows ±âº» ÀÌ¹ÌÁö µðÄÚ´õ´Ù. png/jpg/bmp °°Àº ÆÄÀÏÀ» ÇÈ¼¿ ¹è¿­·Î ÀÐÀ» ¼ö ÀÖ´Ù.
+    // WICëŠ” Windows ê¸°ë³¸ ì´ë¯¸ì§€ ë””ì½”ë”ë‹¤. png/jpg/bmp ê°™ì€ íŒŒì¼ì„ í”½ì…€ ë°°ì—´ë¡œ ì½ì„ ìˆ˜ ìžˆë‹¤.
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
     IWICImagingFactory* factory = nullptr;
@@ -40,7 +41,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // ÆÄÀÏ¿¡¼­ µðÄÚ´õ¸¦ ¸¸µé°í Ã¹ ¹øÂ° ÇÁ·¹ÀÓÀ» ÀÐ´Â´Ù. png´Â º¸Åë ÇÁ·¹ÀÓÀÌ 1°³´Ù.
+        // íŒŒì¼ì—ì„œ ë””ì½”ë”ë¥¼ ë§Œë“¤ê³  ì²« ë²ˆì§¸ í”„ë ˆìž„ì„ ì½ëŠ”ë‹¤. pngëŠ” ë³´í†µ í”„ë ˆìž„ì´ 1ê°œë‹¤.
         hr = factory->CreateDecoderFromFilename(
             filePath,
             nullptr,
@@ -63,7 +64,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr) && textureFormat == DXGI_FORMAT_UNKNOWN)
     {
-        // ¿øº» Æ÷¸ËÀ» DirectX°¡ ¹Ù·Î ¸ø ¾²¸é 32ºñÆ® RGBA·Î º¯È¯ÇØ¼­ ÅëÀÏÇÑ´Ù.
+        // ì›ë³¸ í¬ë§·ì„ DirectXê°€ ë°”ë¡œ ëª» ì“°ë©´ 32ë¹„íŠ¸ RGBAë¡œ ë³€í™˜í•´ì„œ í†µì¼í•œë‹¤.
         hr = factory->CreateFormatConverter(&converter);
         if (SUCCEEDED(hr))
         {
@@ -82,7 +83,7 @@ static bool LoadTextureFromFile(
     std::vector<unsigned char> pixels;
     if (SUCCEEDED(hr))
     {
-        // WIC°¡ ÀÐÀº ÀÌ¹ÌÁö¸¦ CPU ¸Þ¸ð¸®ÀÇ RGBA ÇÈ¼¿ ¹è¿­·Î º¹»çÇÑ´Ù.
+        // WICê°€ ì½ì€ ì´ë¯¸ì§€ë¥¼ CPU ë©”ëª¨ë¦¬ì˜ RGBA í”½ì…€ ë°°ì—´ë¡œ ë³µì‚¬í•œë‹¤.
         pixels.resize((size_t)width * (size_t)height * 4);
         hr = bitmapSource->CopyPixels(nullptr, width * 4, (UINT)pixels.size(), pixels.data());
     }
@@ -90,7 +91,7 @@ static bool LoadTextureFromFile(
     ID3D11Texture2D* texture = nullptr;
     if (SUCCEEDED(hr))
     {
-        // CPU ÇÈ¼¿ ¹è¿­À» GPU¿¡¼­ »ùÇÃ¸µ °¡´ÉÇÑ 2D ÅØ½ºÃ³·Î ¿Ã¸°´Ù.
+        // CPU í”½ì…€ ë°°ì—´ì„ GPUì—ì„œ ìƒ˜í”Œë§ ê°€ëŠ¥í•œ 2D í…ìŠ¤ì²˜ë¡œ ì˜¬ë¦°ë‹¤.
         D3D11_TEXTURE2D_DESC desc = {};
         desc.Width = width;
         desc.Height = height;
@@ -110,7 +111,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // Pixel Shader°¡ Texture2D·Î ÀÐÀ» ¼ö ÀÖ°Ô SRV(Shader Resource View)¸¦ ¸¸µç´Ù.
+        // Pixel Shaderê°€ Texture2Dë¡œ ì½ì„ ìˆ˜ ìžˆê²Œ SRV(Shader Resource View)ë¥¼ ë§Œë“ ë‹¤.
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
         srvDesc.Format = textureFormat;
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -125,74 +126,6 @@ static bool LoadTextureFromFile(
     if (factory) factory->Release();
 
     return SUCCEEDED(hr);
-}
-
-Mesh::Mesh()
-{
-    vBuffer = nullptr;
-    iBuffer = nullptr;
-    vertexCount = 0;
-    indexCount = 0;
-}
-
-Mesh::~Mesh()
-{
-    if (vBuffer)
-    {
-        vBuffer->Release();
-        vBuffer = nullptr;
-    }
-
-    if (iBuffer)
-    {
-        iBuffer->Release();
-        iBuffer = nullptr;
-    }
-}
-
-void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices)
-{
-    // ¼ýÀÚÃ³·³ ÀÚÁÖ ´Ù½Ã ¸¸µå´Â ¸Þ½¬¸¦ À§ÇØ ±âÁ¸ ¹öÆÛ¸¦ ¸ÕÀú ÇØÁ¦ÇÑ´Ù.
-    if (vBuffer)
-    {
-        vBuffer->Release();
-        vBuffer = nullptr;
-    }
-    if (iBuffer)
-    {
-        iBuffer->Release();
-        iBuffer = nullptr;
-        indexCount = 0;
-    }
-
-    vertexCount = (UINT)vertices.size();
-
-    D3D11_BUFFER_DESC bd = { 0 };
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(Vertex) * vertexCount;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-    D3D11_SUBRESOURCE_DATA sd = { 0 };
-    sd.pSysMem = vertices.data();
-
-    gfx->Device->CreateBuffer(&bd, &sd, &vBuffer);
-}
-
-void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices, const std::vector<UINT>& indices)
-{
-    Create(gfx, vertices);
-
-    indexCount = (UINT)indices.size();
-
-    D3D11_BUFFER_DESC bd = { 0 };
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(UINT) * indexCount;
-    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-    D3D11_SUBRESOURCE_DATA sd = { 0 };
-    sd.pSysMem = indices.data();
-
-    gfx->Device->CreateBuffer(&bd, &sd, &iBuffer);
 }
 
 Material::Material(ShaderSet s)
@@ -230,6 +163,7 @@ void ColorMaterial::SetSpecular(float strength, float power)
     specularStrength = strength;
     specularPower = power;
 }
+
 void ColorMaterial::SetAlphaBlend(bool enabled)
 {
     useAlphaBlend = enabled;
@@ -256,94 +190,10 @@ void ColorMaterial::Bind(ID3D11DeviceContext* context)
     context->PSSetConstantBuffers(1, 1, &pColorBuffer);
 }
 
-
-MeshRenderer::MeshRenderer(Mesh* mesh, Material* mat)
-    : Component(), pMeshData(mesh), cBuffer(nullptr), pMaterial(mat)
-{
-}
-
-MeshRenderer::MeshRenderer(Mesh* mesh)
-    : Component(), pMeshData(mesh), cBuffer(nullptr), pMaterial(nullptr)
-{
-}
-
-MeshRenderer::~MeshRenderer()
-{
-    if (cBuffer)
-    {
-        cBuffer->Release();
-        cBuffer = nullptr;
-    }
-}
-
-void MeshRenderer::Start(GraphicsContext* gfx)
-{
-    D3D11_BUFFER_DESC cbd = { 0 };
-    cbd.Usage = D3D11_USAGE_DEFAULT;
-    cbd.ByteWidth = sizeof(ConstantBuffer);
-    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
-    gfx->Device->CreateBuffer(&cbd, nullptr, &cBuffer);
-}
-
-void MeshRenderer::Render(GraphicsContext* gfx)
-{
-    if (!pMeshData || !pMaterial) return;
-
-
-    ColorMaterial* colorMat = dynamic_cast<ColorMaterial*>(pMaterial);
-    TextureMaterial* textureMat = dynamic_cast<TextureMaterial*>(pMaterial);
-
-    if (colorMat)
-    {
-        gfx->SetAlphaBlend(colorMat->UseAlphaBlend());
-    }
-    else if (textureMat)
-    {
-        gfx->SetAlphaBlend(textureMat->UseAlphaBlend());
-    }
-
-    pMaterial->Bind(gfx->ImmediateContext);
-
-    float s = 1.0f / (pOwner->pos.z + 1.0f);
-    XMMATRIX world = XMMatrixScaling(s * pOwner->scale.x, s * pOwner->scale.y, 1.0f) *
-        XMMatrixRotationZ(pOwner->rot.z) *
-        XMMatrixTranslation(pOwner->pos.x, pOwner->pos.y, 0.0f);
-
-    ConstantBuffer cb;
-    cb.matWorld = XMMatrixTranspose(world);
-    gfx->ImmediateContext->UpdateSubresource(cBuffer, 0, nullptr, &cb, 0, 0);
-    gfx->ImmediateContext->VSSetConstantBuffers(0, 1, &cBuffer);
-
-    UINT stride = sizeof(Vertex);
-    UINT offset = 0;
-    gfx->ImmediateContext->IASetVertexBuffers(0, 1, &pMeshData->vBuffer, &stride, &offset);
-
-    if (pMeshData->iBuffer)
-    {
-        gfx->ImmediateContext->IASetIndexBuffer(pMeshData->iBuffer, DXGI_FORMAT_R32_UINT, 0);
-        gfx->ImmediateContext->DrawIndexed(pMeshData->indexCount, 0, 0);
-    }
-    else
-    {
-        gfx->ImmediateContext->Draw(pMeshData->vertexCount, 0);
-    }
-	gfx->SetAlphaBlend(false);
-
-}
-
-void MeshRenderer::Input()
-{
-}
-
-void MeshRenderer::Update(float dt)
-{
-}
-
 TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Device* device)
     : Material(s), pSRV(nullptr), pSampler(nullptr)
 {
-    // filePath ¿¹: L"numbers.png". vcxproj¿¡¼­ CopyToOutputDirectory·Î ½ÇÇà Æú´õ¿¡ º¹»çµÈ´Ù.
+    // filePath ì˜ˆ: L"Assets\\newFont.png". vcxprojì—ì„œ CopyToOutputDirectoryë¡œ ì‹¤í–‰ í´ë”ì— ë³µì‚¬ëœë‹¤.
     bool loaded = LoadTextureFromFile(device, filePath, &pSRV);
 
     if (!loaded)
@@ -376,7 +226,7 @@ TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Dev
 
     D3D11_SAMPLER_DESC samplerDesc = {};
 
-    // ¼ýÀÚ ½ºÇÁ¶óÀÌÆ® ½ÃÆ® °¡ÀåÀÚ¸® ¹ÛÀ» ¹Ýº¹ÇÏÁö ¾Êµµ·Ï CLAMP¸¦ »ç¿ëÇÑ´Ù.
+    // ìˆ«ìž ìŠ¤í”„ë¼ì´íŠ¸ ì‹œíŠ¸ ê°€ìž¥ìžë¦¬ ë°–ì„ ë°˜ë³µí•˜ì§€ ì•Šë„ë¡ CLAMPë¥¼ ì‚¬ìš©í•œë‹¤.
     samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -406,11 +256,10 @@ bool TextureMaterial::UseAlphaBlend() const
 
 void TextureMaterial::Bind(ID3D11DeviceContext* context)
 {
-    // ÀÌ ¸ÓÆ¼¸®¾óÀ» ¾²´Â µ¿¾È¿¡´Â ÅØ½ºÃ³¿ë ¼ÎÀÌ´õ¿Í ¼ýÀÚ ÅØ½ºÃ³¸¦ ÆÄÀÌÇÁ¶óÀÎ¿¡ ¹­´Â´Ù.
+    // ì´ ë¨¸í‹°ë¦¬ì–¼ì„ ì“°ëŠ” ë™ì•ˆì—ëŠ” í…ìŠ¤ì²˜ìš© ì…°ì´ë”ì™€ ìˆ«ìž í…ìŠ¤ì²˜ë¥¼ íŒŒì´í”„ë¼ì¸ì— ë¬¶ëŠ”ë‹¤.
     context->IASetInputLayout(shaders.layout);
     context->VSSetShader(shaders.vs, nullptr, 0);
     context->PSSetShader(shaders.ps, nullptr, 0);
     context->PSSetShaderResources(0, 1, &pSRV);
     context->PSSetSamplers(0, 1, &pSampler);
 }
-

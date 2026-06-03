@@ -1,184 +1,81 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <Filter Include="Core"><UniqueIdentifier>{11111111-1111-1111-1111-111111111111}</UniqueIdentifier></Filter>
+    <Filter Include="Rendering"><UniqueIdentifier>{22222222-2222-2222-2222-222222222222}</UniqueIdentifier></Filter>
+    <Filter Include="Scene"><UniqueIdentifier>{33333333-3333-3333-3333-333333333333}</UniqueIdentifier></Filter>
+    <Filter Include="Gameplay"><UniqueIdentifier>{44444444-4444-4444-4444-444444444444}</UniqueIdentifier></Filter>
+    <Filter Include="UI"><UniqueIdentifier>{55555555-5555-5555-5555-555555555555}</UniqueIdentifier></Filter>
+    <Filter Include="Shaders"><UniqueIdentifier>{77777777-7777-7777-7777-777777777777}</UniqueIdentifier></Filter>
+    <Filter Include="Assets"><UniqueIdentifier>{88888888-8888-8888-8888-888888888888}</UniqueIdentifier></Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsteroidTrailRenderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="DeltaTime.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="BitmapTextRenderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineSettings.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Frame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameLoop.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerController.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Render.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshGenerator.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LightManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="AstroidMovement.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SlimeSquashStretch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectShake.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreDisplay.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CircleCollider.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PointLightManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="PlanetHealthVisual.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="StarFieldRenderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="TimerDisplay.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClCompile Include="Core\Core.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\DeltaTime.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\EngineSettings.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\Frame.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\GameLoop.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\Logger.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Core\Object.cpp"><Filter>Core</Filter></ClCompile>
+    <ClCompile Include="Gameplay\AsteroidMovement.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\CircleCollider.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\ObjectShake.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\Particle.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\PlanetHealthVisual.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\PlayerController.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\ScoreManager.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Gameplay\SlimeSquashStretch.cpp"><Filter>Gameplay</Filter></ClCompile>
+    <ClCompile Include="Rendering\AsteroidTrailRenderer.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\Camera.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\LightManager.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\Material.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\Mesh.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\MeshGenerator.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\MeshRenderer.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\PointLightManager.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Rendering\StarFieldRenderer.cpp"><Filter>Rendering</Filter></ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp"><Filter>Scene</Filter></ClCompile>
+    <ClCompile Include="UI\BitmapTextRenderer.cpp"><Filter>UI</Filter></ClCompile>
+    <ClCompile Include="UI\TimerDisplay.cpp"><Filter>UI</Filter></ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AsteroidTrailRenderer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Core.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="DeltaTime.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BitmapTextRenderer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineSettings.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameLoop.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerController.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Render.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshGenerator.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="AsteroidMovement.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CircleCollider.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SlimeSquashStretch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectShake.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreDisplay.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLightManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="PlanetHealthVisual.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="StarFieldRenderer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TimerDisplay.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    <ClInclude Include="Core\Core.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\DeltaTime.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\EngineSettings.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\Frame.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\GameLoop.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\Logger.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Core\Object.h"><Filter>Core</Filter></ClInclude>
+    <ClInclude Include="Gameplay\AsteroidMovement.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\CircleCollider.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\ObjectShake.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\Particle.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\PlanetHealthVisual.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\PlayerController.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\ScoreManager.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Gameplay\SlimeSquashStretch.h"><Filter>Gameplay</Filter></ClInclude>
+    <ClInclude Include="Rendering\AsteroidTrailRenderer.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\Camera.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\LightManager.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\Material.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\Mesh.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\MeshGenerator.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\MeshRenderer.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\PointLightManager.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\Render.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\RenderTypes.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Rendering\StarFieldRenderer.h"><Filter>Rendering</Filter></ClInclude>
+    <ClInclude Include="Scene\GameScene.h"><Filter>Scene</Filter></ClInclude>
+    <ClInclude Include="UI\BitmapTextRenderer.h"><Filter>UI</Filter></ClInclude>
+    <ClInclude Include="UI\TimerDisplay.h"><Filter>UI</Filter></ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Asteroid.hlsl" />
-    <Content Include="DigitTexture.hlsl" />
-    <Content Include="Planet.hlsl" />
-    <Content Include="Slime.hlsl" />
-    <Content Include="StarField.hlsl" />
-    <Content Include="newFont.png">
-      <Filter>리소스 파일</Filter>
-    </Content>
+    <Content Include="Shaders\Asteroid.hlsl"><Filter>Shaders</Filter></Content>
+    <Content Include="Shaders\DigitTexture.hlsl"><Filter>Shaders</Filter></Content>
+    <Content Include="Shaders\Planet.hlsl"><Filter>Shaders</Filter></Content>
+    <Content Include="Shaders\Slime.hlsl"><Filter>Shaders</Filter></Content>
+    <Content Include="Shaders\StarField.hlsl"><Filter>Shaders</Filter></Content>
+    <Content Include="Assets\newFont.png"><Filter>Assets</Filter></Content>
   </ItemGroup>
 </Project>

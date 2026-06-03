@@ -1,47 +1,7 @@
 #pragma once
 
 #include "Core.h"
-#include "Object.h"
-
-#include <directxmath.h>
-#include <vector>
-
-using namespace DirectX;
-
-struct Vertex
-{
-    XMFLOAT3 pos;
-    XMFLOAT4 col;
-	XMFLOAT3 normal;
-    XMFLOAT2 uv;
-};
-
-struct ConstantBuffer
-{
-    XMMATRIX matWorld;
-};
-struct ColorBuffer
-{
-    XMFLOAT4 tintColor;
-    float specularStrength;
-    float specularPower;
-    XMFLOAT2 padding;
-};
-
-struct Mesh
-{
-public:
-    ID3D11Buffer* vBuffer;
-    ID3D11Buffer* iBuffer;
-    UINT vertexCount;
-    UINT indexCount;
-
-    Mesh();
-    ~Mesh();
-
-    void Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices);
-    void Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices, const std::vector<UINT>& indices);
-};
+#include "RenderTypes.h"
 
 class Material
 {
@@ -53,7 +13,6 @@ public:
 
     virtual void Bind(ID3D11DeviceContext* context) = 0;
 };
-
 
 class ColorMaterial : public Material
 {
@@ -74,22 +33,6 @@ public:
     bool UseAlphaBlend() const;
 };
 
-class MeshRenderer : public Component
-{
-public:
-    Mesh* pMeshData = nullptr;
-    ID3D11Buffer* cBuffer = nullptr;
-    Material* pMaterial = nullptr;
-
-    MeshRenderer(Mesh* mesh, Material* mat);
-    MeshRenderer(Mesh* mesh);
-    ~MeshRenderer() override;
-
-    void Start(GraphicsContext* gfx) override;
-    void Render(GraphicsContext* gfx) override;
-    void Input() override;
-    void Update(float dt) override;
-};
 class TextureMaterial : public Material
 {
 public:

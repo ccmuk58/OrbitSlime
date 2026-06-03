@@ -1,4 +1,4 @@
-#include "AsteroidTrailRenderer.h"
+﻿#include "AsteroidTrailRenderer.h"
 
 AsteroidTrailRenderer::AsteroidTrailRenderer(Mesh* mesh, ColorMaterial* material)
     : pMeshData(mesh), pTrailMaterial(material)

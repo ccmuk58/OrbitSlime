@@ -19,86 +19,88 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AsteroidTrailRenderer.cpp" />
-    <ClCompile Include="AstroidMovement.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CircleCollider.cpp" />
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="DeltaTime.cpp" />
-    <ClCompile Include="BitmapTextRenderer.cpp" />
-    <ClCompile Include="EngineSettings.cpp" />
-    <ClCompile Include="Frame.cpp" />
-    <ClCompile Include="GameLoop.cpp" />
-    <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="LightManager.cpp" />
-    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Core\Core.cpp" />
+    <ClCompile Include="Core\DeltaTime.cpp" />
+    <ClCompile Include="Core\EngineSettings.cpp" />
+    <ClCompile Include="Core\Frame.cpp" />
+    <ClCompile Include="Core\GameLoop.cpp" />
+    <ClCompile Include="Core\Logger.cpp" />
+    <ClCompile Include="Core\Object.cpp" />
+    <ClCompile Include="Gameplay\AsteroidMovement.cpp" />
+    <ClCompile Include="Gameplay\CircleCollider.cpp" />
+    <ClCompile Include="Gameplay\ObjectShake.cpp" />
+    <ClCompile Include="Gameplay\Particle.cpp" />
+    <ClCompile Include="Gameplay\PlanetHealthVisual.cpp" />
+    <ClCompile Include="Gameplay\PlayerController.cpp" />
+    <ClCompile Include="Gameplay\ScoreManager.cpp" />
+    <ClCompile Include="Gameplay\SlimeSquashStretch.cpp" />
+    <ClCompile Include="Rendering\AsteroidTrailRenderer.cpp" />
+    <ClCompile Include="Rendering\Camera.cpp" />
+    <ClCompile Include="Rendering\LightManager.cpp" />
+    <ClCompile Include="Rendering\Material.cpp" />
+    <ClCompile Include="Rendering\Mesh.cpp" />
+    <ClCompile Include="Rendering\MeshGenerator.cpp" />
+    <ClCompile Include="Rendering\MeshRenderer.cpp" />
+    <ClCompile Include="Rendering\PointLightManager.cpp" />
+    <ClCompile Include="Rendering\StarFieldRenderer.cpp" />
+    <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="UI\BitmapTextRenderer.cpp" />
+    <ClCompile Include="UI\TimerDisplay.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MeshGenerator.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="ObjectShake.cpp" />
-    <ClCompile Include="PlayerController.cpp" />
-    <ClCompile Include="PointLightManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="PlanetHealthVisual.cpp" />
-    <ClCompile Include="Render.cpp" />
-    <ClCompile Include="ScoreManager.cpp" />
-    <ClCompile Include="SlimeSquashStretch.cpp" />
-    <ClCompile Include="StarFieldRenderer.cpp" />
-    <ClCompile Include="TimerDisplay.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AsteroidTrailRenderer.h" />
-    <ClInclude Include="AsteroidMovement.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="CircleCollider.h" />
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="DeltaTime.h" />
-    <ClInclude Include="BitmapTextRenderer.h" />
-    <ClInclude Include="EngineSettings.h" />
-    <ClInclude Include="Frame.h" />
-    <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="GameScene.h" />
-    <ClInclude Include="LightManager.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="MeshGenerator.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="ObjectShake.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="PlayerController.h" />
-    <ClInclude Include="PointLightManager.h" />
-    <ClInclude Include="PlanetHealthVisual.h" />
-    <ClInclude Include="Render.h" />
-    <ClInclude Include="ScoreManager.h" />
-    <ClInclude Include="SlimeSquashStretch.h" />
-    <ClInclude Include="StarFieldRenderer.h" />
-    <ClInclude Include="TimerDisplay.h" />
+    <ClInclude Include="Core\Core.h" />
+    <ClInclude Include="Core\DeltaTime.h" />
+    <ClInclude Include="Core\EngineSettings.h" />
+    <ClInclude Include="Core\Frame.h" />
+    <ClInclude Include="Core\GameLoop.h" />
+    <ClInclude Include="Core\Logger.h" />
+    <ClInclude Include="Core\Object.h" />
+    <ClInclude Include="Gameplay\AsteroidMovement.h" />
+    <ClInclude Include="Gameplay\CircleCollider.h" />
+    <ClInclude Include="Gameplay\ObjectShake.h" />
+    <ClInclude Include="Gameplay\Particle.h" />
+    <ClInclude Include="Gameplay\PlanetHealthVisual.h" />
+    <ClInclude Include="Gameplay\PlayerController.h" />
+    <ClInclude Include="Gameplay\ScoreManager.h" />
+    <ClInclude Include="Gameplay\SlimeSquashStretch.h" />
+    <ClInclude Include="Rendering\AsteroidTrailRenderer.h" />
+    <ClInclude Include="Rendering\Camera.h" />
+    <ClInclude Include="Rendering\LightManager.h" />
+    <ClInclude Include="Rendering\Material.h" />
+    <ClInclude Include="Rendering\Mesh.h" />
+    <ClInclude Include="Rendering\MeshGenerator.h" />
+    <ClInclude Include="Rendering\MeshRenderer.h" />
+    <ClInclude Include="Rendering\PointLightManager.h" />
+    <ClInclude Include="Rendering\Render.h" />
+    <ClInclude Include="Rendering\RenderTypes.h" />
+    <ClInclude Include="Rendering\StarFieldRenderer.h" />
+    <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="UI\BitmapTextRenderer.h" />
+    <ClInclude Include="UI\TimerDisplay.h" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Asteroid.hlsl">
+    <Content Include="Shaders\Asteroid.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="DigitTexture.hlsl">
+    <Content Include="Shaders\DigitTexture.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="Planet.hlsl">
+    <Content Include="Shaders\Planet.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="Slime.hlsl">
+    <Content Include="Shaders\Slime.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="StarField.hlsl">
+    <Content Include="Shaders\StarField.hlsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="newFont.png">
+    <Content Include="Assets\newFont.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -156,6 +158,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <AdditionalIncludeDirectories>.;Core;Rendering;Scene;Gameplay;UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -168,6 +171,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
+      <AdditionalIncludeDirectories>.;Core;Rendering;Scene;Gameplay;UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -182,6 +186,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <AdditionalIncludeDirectories>.;Core;Rendering;Scene;Gameplay;UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -194,6 +199,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <AdditionalIncludeDirectories>.;Core;Rendering;Scene;Gameplay;UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -210,3 +216,5 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
+
+

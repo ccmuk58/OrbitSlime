@@ -14,8 +14,6 @@
 #include "StarFieldRenderer.h"
 #include "TimerDisplay.h"
 
-std::vector<ParticleComponent*> ParticleManager::pool;
-
 void GameScene::SetupInputLayouts()
 {
     defaultInputLayout[0] = { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
@@ -37,23 +35,23 @@ void GameScene::LoadResources(GameLoop& gEngine)
     slimeMeshData = MeshGenerator::CreateHemiSphere(slimeRadius, 20, 20);
     asteroidMeshData = MeshGenerator::CreateIrregularSphere(0.05f, 14, 10, 0.32f);
 
-    starShader = gEngine.gfx.CompileAndCreate(L"StarField.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
+    starShader = gEngine.gfx.CompileAndCreate(L"Shaders\\StarField.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
     starMat = new ColorMaterial(starShader, { 0.85f, 0.9f, 1.0f, 1.0f }, gEngine.gfx.Device);
     starMat->SetSpecular(0.0f, 1.0f);
 
-    fontShader = gEngine.gfx.CompileAndCreate(L"DigitTexture.hlsl", 0, true, uiInputLayout, UI_INPUT_COUNT);
-    fontMat = new TextureMaterial(fontShader, L"newFont.png", gEngine.gfx.Device);
+    fontShader = gEngine.gfx.CompileAndCreate(L"Shaders\\DigitTexture.hlsl", 0, true, uiInputLayout, UI_INPUT_COUNT);
+    fontMat = new TextureMaterial(fontShader, L"Assets\\newFont.png", gEngine.gfx.Device);
     fontMat->SetAlphaBlend(true);
 
     planetMesh = new Mesh();
     planetMesh->Create(&gEngine.gfx, planetMeshData.vertices, planetMeshData.indices);
-    planetShader = gEngine.gfx.CompileAndCreate(L"Planet.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
+    planetShader = gEngine.gfx.CompileAndCreate(L"Shaders\\Planet.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
     planetMat = new ColorMaterial(planetShader, { 0.4f, 0.25f, 0.15f, 1.0f }, gEngine.gfx.Device);
     planetMat->SetSpecular(0.5f, 32.0f);
 
     asteroidMesh = new Mesh();
     asteroidMesh->Create(&gEngine.gfx, asteroidMeshData.vertices, asteroidMeshData.indices);
-    asteroidShader = gEngine.gfx.CompileAndCreate(L"Asteroid.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
+    asteroidShader = gEngine.gfx.CompileAndCreate(L"Shaders\\Asteroid.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
     asteroidMat = new ColorMaterial(asteroidShader, { 0.1f, 0.1f, 0.1f, 1.0f }, gEngine.gfx.Device);
     asteroidMat->SetSpecular(0.3f, 16.0f);
 
@@ -63,7 +61,7 @@ void GameScene::LoadResources(GameLoop& gEngine)
 
     slimeMesh = new Mesh();
     slimeMesh->Create(&gEngine.gfx, slimeMeshData.vertices, slimeMeshData.indices);
-    slimeShader = gEngine.gfx.CompileAndCreate(L"Slime.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
+    slimeShader = gEngine.gfx.CompileAndCreate(L"Shaders\\Slime.hlsl", 0, true, defaultInputLayout, DEFAULT_INPUT_COUNT);
     slimeMat = new ColorMaterial(slimeShader, { 0.1f, 0.8f, 0.3f, 0.2f }, gEngine.gfx.Device);
     slimeMat->SetSpecular(0.25f, 12.0f);
     slimeMat->SetAlphaBlend(true);
@@ -166,13 +164,15 @@ void GameScene::CreateWorld(GameLoop& gEngine)
 void GameScene::CreateUI(GameLoop& gEngine)
 {
     timerMesh = new Mesh();
+    titleTextMesh = new Mesh();
+    gameOverTextMesh = new Mesh();
+
     timerObject = new GameObject(0.0f, 0.72f, 0.0f);
     TimerDisplay* timerDisplay = new TimerDisplay(timerMesh, 0.07f, 0.12f, 0.002f);
     timerObject->AddComponent(new MeshRenderer(timerMesh, fontMat));
     timerObject->AddComponent(timerDisplay);
     gEngine.uiTimer = timerDisplay;
 
-    titleTextMesh = new Mesh();
     titleTextObject = new GameObject(0.0f, -0.62f, 0.0f);
     BitmapTextRenderer* titleText = new BitmapTextRenderer(titleTextMesh, 0.055f, 0.10f, 0.0015f);
     titleText->SetDisplayText("Press 'Space' to start");
@@ -180,7 +180,6 @@ void GameScene::CreateUI(GameLoop& gEngine)
     titleTextObject->AddComponent(titleText);
     gEngine.uiTitle = titleTextObject;
 
-    gameOverTextMesh = new Mesh();
     gameOverTextObject = new GameObject(0.0f, -0.62f, 0.0f);
     BitmapTextRenderer* gameOverText = new BitmapTextRenderer(gameOverTextMesh, 0.055f, 0.10f, 0.0015f);
     gameOverText->SetDisplayText("Press 'R' to restart");
@@ -218,3 +217,4 @@ void GameScene::ReleaseResources()
     if (titleTextMesh) { delete titleTextMesh; titleTextMesh = nullptr; }
     if (gameOverTextMesh) { delete gameOverTextMesh; gameOverTextMesh = nullptr; }
 }
+
