@@ -1,4 +1,5 @@
-ï»¿#include "Render.h"
+#include "Render.h"
+#include "Logger.h"
 
 #include <cstdio>
 #include <cwchar>
@@ -8,7 +9,7 @@
 
 static DXGI_FORMAT GetWICFormat(WICPixelFormatGUID pixelFormat)
 {
-    // DirectXê°€ ë°”ë¡œ í…ìŠ¤ì²˜ë¡œ ë§Œë“¤ ìˆ˜ ìˆëŠ” WIC í”½ì…€ í¬ë§·ë§Œ ìš°ì„  ì¸ì •í•œë‹¤.
+    // DirectX°¡ ¹Ù·Î ÅØ½ºÃ³·Î ¸¸µé ¼ö ÀÖ´Â WIC ÇÈ¼¿ Æ÷¸Ë¸¸ ¿ì¼± ÀÎÁ¤ÇÑ´Ù.
     if (pixelFormat == GUID_WICPixelFormat32bppRGBA) return DXGI_FORMAT_R8G8B8A8_UNORM;
     if (pixelFormat == GUID_WICPixelFormat32bppBGRA) return DXGI_FORMAT_B8G8R8A8_UNORM;
     return DXGI_FORMAT_UNKNOWN;
@@ -23,7 +24,7 @@ static bool LoadTextureFromFile(
 
     *outSRV = nullptr;
 
-    // WICëŠ” Windows ê¸°ë³¸ ì´ë¯¸ì§€ ë””ì½”ë”ë‹¤. png/jpg/bmp ê°™ì€ íŒŒì¼ì„ í”½ì…€ ë°°ì—´ë¡œ ì½ì„ ìˆ˜ ìˆë‹¤.
+    // WIC´Â Windows ±âº» ÀÌ¹ÌÁö µğÄÚ´õ´Ù. png/jpg/bmp °°Àº ÆÄÀÏÀ» ÇÈ¼¿ ¹è¿­·Î ÀĞÀ» ¼ö ÀÖ´Ù.
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
     IWICImagingFactory* factory = nullptr;
@@ -39,7 +40,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // íŒŒì¼ì—ì„œ ë””ì½”ë”ë¥¼ ë§Œë“¤ê³  ì²« ë²ˆì§¸ í”„ë ˆì„ì„ ì½ëŠ”ë‹¤. pngëŠ” ë³´í†µ í”„ë ˆì„ì´ 1ê°œë‹¤.
+        // ÆÄÀÏ¿¡¼­ µğÄÚ´õ¸¦ ¸¸µé°í Ã¹ ¹øÂ° ÇÁ·¹ÀÓÀ» ÀĞ´Â´Ù. png´Â º¸Åë ÇÁ·¹ÀÓÀÌ 1°³´Ù.
         hr = factory->CreateDecoderFromFilename(
             filePath,
             nullptr,
@@ -62,7 +63,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr) && textureFormat == DXGI_FORMAT_UNKNOWN)
     {
-        // ì›ë³¸ í¬ë§·ì„ DirectXê°€ ë°”ë¡œ ëª» ì“°ë©´ 32ë¹„íŠ¸ RGBAë¡œ ë³€í™˜í•´ì„œ í†µì¼í•œë‹¤.
+        // ¿øº» Æ÷¸ËÀ» DirectX°¡ ¹Ù·Î ¸ø ¾²¸é 32ºñÆ® RGBA·Î º¯È¯ÇØ¼­ ÅëÀÏÇÑ´Ù.
         hr = factory->CreateFormatConverter(&converter);
         if (SUCCEEDED(hr))
         {
@@ -81,7 +82,7 @@ static bool LoadTextureFromFile(
     std::vector<unsigned char> pixels;
     if (SUCCEEDED(hr))
     {
-        // WICê°€ ì½ì€ ì´ë¯¸ì§€ë¥¼ CPU ë©”ëª¨ë¦¬ì˜ RGBA í”½ì…€ ë°°ì—´ë¡œ ë³µì‚¬í•œë‹¤.
+        // WIC°¡ ÀĞÀº ÀÌ¹ÌÁö¸¦ CPU ¸Ş¸ğ¸®ÀÇ RGBA ÇÈ¼¿ ¹è¿­·Î º¹»çÇÑ´Ù.
         pixels.resize((size_t)width * (size_t)height * 4);
         hr = bitmapSource->CopyPixels(nullptr, width * 4, (UINT)pixels.size(), pixels.data());
     }
@@ -89,7 +90,7 @@ static bool LoadTextureFromFile(
     ID3D11Texture2D* texture = nullptr;
     if (SUCCEEDED(hr))
     {
-        // CPU í”½ì…€ ë°°ì—´ì„ GPUì—ì„œ ìƒ˜í”Œë§ ê°€ëŠ¥í•œ 2D í…ìŠ¤ì²˜ë¡œ ì˜¬ë¦°ë‹¤.
+        // CPU ÇÈ¼¿ ¹è¿­À» GPU¿¡¼­ »ùÇÃ¸µ °¡´ÉÇÑ 2D ÅØ½ºÃ³·Î ¿Ã¸°´Ù.
         D3D11_TEXTURE2D_DESC desc = {};
         desc.Width = width;
         desc.Height = height;
@@ -109,7 +110,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // Pixel Shaderê°€ Texture2Dë¡œ ì½ì„ ìˆ˜ ìˆê²Œ SRV(Shader Resource View)ë¥¼ ë§Œë“ ë‹¤.
+        // Pixel Shader°¡ Texture2D·Î ÀĞÀ» ¼ö ÀÖ°Ô SRV(Shader Resource View)¸¦ ¸¸µç´Ù.
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
         srvDesc.Format = textureFormat;
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -151,7 +152,7 @@ Mesh::~Mesh()
 
 void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices)
 {
-    // ìˆ«ìì²˜ëŸ¼ ìì£¼ ë‹¤ì‹œ ë§Œë“œëŠ” ë©”ì‰¬ë¥¼ ìœ„í•´ ê¸°ì¡´ ë²„í¼ë¥¼ ë¨¼ì € í•´ì œí•œë‹¤.
+    // ¼ıÀÚÃ³·³ ÀÚÁÖ ´Ù½Ã ¸¸µå´Â ¸Ş½¬¸¦ À§ÇØ ±âÁ¸ ¹öÆÛ¸¦ ¸ÕÀú ÇØÁ¦ÇÑ´Ù.
     if (vBuffer)
     {
         vBuffer->Release();
@@ -342,7 +343,7 @@ void MeshRenderer::Update(float dt)
 TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Device* device)
     : Material(s), pSRV(nullptr), pSampler(nullptr)
 {
-    // filePath ì˜ˆ: L"numbers.png". vcxprojì—ì„œ CopyToOutputDirectoryë¡œ ì‹¤í–‰ í´ë”ì— ë³µì‚¬ëœë‹¤.
+    // filePath ¿¹: L"numbers.png". vcxproj¿¡¼­ CopyToOutputDirectory·Î ½ÇÇà Æú´õ¿¡ º¹»çµÈ´Ù.
     bool loaded = LoadTextureFromFile(device, filePath, &pSRV);
 
     if (!loaded)
@@ -370,13 +371,12 @@ TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Dev
 
     if (!loaded)
     {
-        wprintf(L"[TextureMaterial] Failed to load texture: %s\n", filePath);
-        OutputDebugStringW(L"[TextureMaterial] Failed to load texture.\n");
+        Logger::LogWideFormat(L"[TextureMaterial] Failed to load texture: %s", filePath);
     }
 
     D3D11_SAMPLER_DESC samplerDesc = {};
 
-    // ìˆ«ì ìŠ¤í”„ë¼ì´íŠ¸ ì‹œíŠ¸ ê°€ì¥ìë¦¬ ë°–ì„ ë°˜ë³µí•˜ì§€ ì•Šë„ë¡ CLAMPë¥¼ ì‚¬ìš©í•œë‹¤.
+    // ¼ıÀÚ ½ºÇÁ¶óÀÌÆ® ½ÃÆ® °¡ÀåÀÚ¸® ¹ÛÀ» ¹İº¹ÇÏÁö ¾Êµµ·Ï CLAMP¸¦ »ç¿ëÇÑ´Ù.
     samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -406,7 +406,7 @@ bool TextureMaterial::UseAlphaBlend() const
 
 void TextureMaterial::Bind(ID3D11DeviceContext* context)
 {
-    // ì´ ë¨¸í‹°ë¦¬ì–¼ì„ ì“°ëŠ” ë™ì•ˆì—ëŠ” í…ìŠ¤ì²˜ìš© ì…°ì´ë”ì™€ ìˆ«ì í…ìŠ¤ì²˜ë¥¼ íŒŒì´í”„ë¼ì¸ì— ë¬¶ëŠ”ë‹¤.
+    // ÀÌ ¸ÓÆ¼¸®¾óÀ» ¾²´Â µ¿¾È¿¡´Â ÅØ½ºÃ³¿ë ¼ÎÀÌ´õ¿Í ¼ıÀÚ ÅØ½ºÃ³¸¦ ÆÄÀÌÇÁ¶óÀÎ¿¡ ¹­´Â´Ù.
     context->IASetInputLayout(shaders.layout);
     context->VSSetShader(shaders.vs, nullptr, 0);
     context->PSSetShader(shaders.ps, nullptr, 0);

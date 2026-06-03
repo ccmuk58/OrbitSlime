@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "Logger.h"
 
 #include <cstdio>
 #include <d3dcompiler.h>
@@ -137,8 +138,7 @@ ShaderSet GraphicsContext::CompileAndCreate(const void* source, size_t length, b
         if (errBlob)
         {
             const char* errorText = (const char*)errBlob->GetBufferPointer();
-            printf("[ShaderCompile] %s\n", errorText);
-            OutputDebugStringA(errorText);
+            Logger::LogFormat("[ShaderCompile] %s", errorText);
             errBlob->Release();
         }
         if (vsBlob) vsBlob->Release();

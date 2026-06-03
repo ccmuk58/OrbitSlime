@@ -27,7 +27,7 @@
 #include <vector>
 
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:windows")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -160,7 +160,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     slime->AddComponent(slimeTrail);
 
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
-    PlayerController* slimeController = new PlayerController(planet, planetRadius-0.015, 2.5f);
+    PlayerController* slimeController = new PlayerController(planet, planetRadius - 0.015f, 2.5f);
     slimeController->trail = slimeTrail;
     slime->AddComponent(slimeController);
     SlimeSquashStretch* slimeSquash = new SlimeSquashStretch(slimeController);

@@ -1,4 +1,5 @@
 #include "PlayerController.h"
+#include "Logger.h"
 
 #include <cmath>
 #include <windows.h>
@@ -63,7 +64,7 @@ void PlayerController::Input()
             dashTimer = 0.15f;    // 0.15초 동안 눈썹 휘날리게 뜀!
             dashCooldown = 1.0f;  // 1초 뒤에 다시 사용 가능
 
-            printf("[Player] Dash 발동!\n"); // 콘솔로 확인용
+            Logger::Log("[Player] Dash activated!"); // 콘솔로 확인용
         }
     }
 }

@@ -3,15 +3,15 @@
 #include "ScoreManager.h" // 점수 확인을 위해 추가
 #include "AsteroidMovement.h" // 소행성 리셋을 위해 추가
 #include "TimerDisplay.h"
+#include "Logger.h"
 
-#include <cstdio>
 #include <windows.h>
 
 GameLoop::GameLoop()
 	: isRunning(true)
 {
 	world.clear();
-	printf("[Engine] GameLoop Created.\n");
+	Logger::Log("[Engine] GameLoop Created.");
 }
 
 GameLoop::~GameLoop()
@@ -30,7 +30,7 @@ GameLoop::~GameLoop()
 	if (pDefaultVS) pDefaultVS->Release();
 	if (pDefaultPS) pDefaultPS->Release();
 
-	printf("[Engine] GameLoop Destroyed. All resources released.\n");
+	Logger::Log("[Engine] GameLoop Destroyed. All resources released.");
 }
 
 void GameLoop::Initialize(HINSTANCE hInst, LRESULT(CALLBACK* wndProc)(HWND, UINT, WPARAM, LPARAM))
@@ -229,7 +229,7 @@ void GameLoop::ResizeWindow(int width, int height)
 	SetWindowPos(win.hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top, SWP_NOMOVE | SWP_NOZORDER);
 	gfx.Resize(win.Width, win.Height);
 
-	printf("[Engine] Window Resized to %dx%d\n", win.Width, win.Height);
+	Logger::LogFormat("[Engine] Window Resized to %dx%d", win.Width, win.Height);
 }
 
 void GameLoop::ToggleFullscreen()
@@ -256,7 +256,7 @@ void GameLoop::ToggleFullscreen()
 		}
 
 		gfx.SetFullscreen(true);
-		printf("[Engine] Fullscreen Enabled at %dx%d\n", win.Width, win.Height);
+		Logger::LogFormat("[Engine] Fullscreen Enabled at %dx%d", win.Width, win.Height);
 		return;
 	}
 
@@ -266,7 +266,7 @@ void GameLoop::ToggleFullscreen()
 	const int restoreHeight = windowedHeight > 0 ? windowedHeight : settings.GetResizedWindowHeight();
 	ResizeWindow(restoreWidth, restoreHeight);
 
-	printf("[Engine] Fullscreen Disabled. Restored to %dx%d\n", restoreWidth, restoreHeight);
+	Logger::LogFormat("[Engine] Fullscreen Disabled. Restored to %dx%d", restoreWidth, restoreHeight);
 }
 
 void GameLoop::ResetGame()

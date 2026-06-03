@@ -1,6 +1,5 @@
 #include "Frame.h"
-
-#include <cstdio>
+#include "Logger.h"
 
 Frame::Frame(float printInterval)
     : printIntervalSeconds(printInterval)
@@ -19,8 +18,8 @@ void Frame::Update(float dt)
 
     if (elapsedSeconds >= printIntervalSeconds)
     {
-        int fps = frameCount / elapsedSeconds;
-        printf("FPS: %d\n", fps);
+        int fps = (int)(frameCount / elapsedSeconds);
+        Logger::LogFormat("FPS: %d", fps);
 
         frameCount = 0;
         elapsedSeconds = 0.0f;
