@@ -44,7 +44,6 @@
     </ClCompile>
     <ClCompile Include="PlanetHealthVisual.cpp" />
     <ClCompile Include="Render.cpp" />
-    <ClCompile Include="ScoreDisplay.cpp" />
     <ClCompile Include="ScoreManager.cpp" />
     <ClCompile Include="SlimeSquashStretch.cpp" />
     <ClCompile Include="StarFieldRenderer.cpp" />
@@ -71,7 +70,6 @@
     <ClInclude Include="PointLightManager.h" />
     <ClInclude Include="PlanetHealthVisual.h" />
     <ClInclude Include="Render.h" />
-    <ClInclude Include="ScoreDisplay.h" />
     <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="SlimeSquashStretch.h" />
     <ClInclude Include="StarFieldRenderer.h" />
