@@ -17,6 +17,7 @@ protected:
 
     // 같은 숫자를 매 프레임 다시 만들지 않기 위한 캐시.
     std::string currentText;
+    std::string initialText = "00:00.0";
 
     // 월드 좌표 기준 숫자 한 칸의 크기와 숫자 사이 간격.
     float digitWidth = 0.08f;
@@ -29,6 +30,8 @@ protected:
 public:
     DigitTextureDisplay(Mesh* mesh, float width = 0.08f, float height = 0.16f, float gap = 0.012f);
     ~DigitTextureDisplay() override;
+
+    void SetDisplayText(const std::string& text);
 
     void Start(GraphicsContext* gfx) override;
     void Input() override;
