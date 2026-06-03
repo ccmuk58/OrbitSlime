@@ -109,6 +109,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     GameObject* slime = new GameObject(0, 0, 0);
     slime->AddComponent(new MeshRenderer(slimeMesh, slimeMat));
     slime->AddComponent(new PlayerController(planet, planetRadius, 2.5f));
+    slime->AddComponent(new AsteroidTrailRenderer(slimeMesh, slimeMat));
 
     gEngine.world.push_back(starField);
 

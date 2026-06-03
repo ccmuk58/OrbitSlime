@@ -36,6 +36,17 @@ void PlayerController::Input()
 
     if (GetAsyncKeyState(VK_LEFT) & 0x8000 || GetAsyncKeyState('A') & 0x8000)  orbitDir += 1.0f;
     if (GetAsyncKeyState(VK_RIGHT) & 0x8000 || GetAsyncKeyState('D') & 0x8000) orbitDir -= 1.0f;
+
+    if (GetAsyncKeyState(VK_LSHIFT) & 0x8000)
+    {
+        if (dashCooldown <= 0.0f)
+        {
+            dashTimer = 0.15f;    // 0.15초 동안 눈썹 휘날리게 뜀!
+            dashCooldown = 1.0f;  // 1초 뒤에 다시 사용 가능
+
+            printf("[Player] Dash 발동!\n"); // 콘솔로 확인용
+        }
+    }
 }
 
 void PlayerController::Update(float dt)
@@ -45,7 +56,23 @@ void PlayerController::Update(float dt)
         return;
     }
 
-    orbitAngle += orbitDir * angularSpeed * dt;
+    // 1. 대쉬 타이머와 쿨다운 깎기
+    if (dashTimer > 0.0f) dashTimer -= dt;
+    if (dashCooldown > 0.0f) dashCooldown -= dt;
+
+    // 2. 현재 스피드(각속도) 결정! 
+    float currentAngularSpeed = angularSpeed;
+
+    // 대쉬 중이면 각속도를 3배로 확 올려버림!
+    if (dashTimer > 0.0f)
+    {
+        currentAngularSpeed = angularSpeed * 3.0f;
+    }
+
+    // 3. 기존 angularSpeed 대신 currentAngularSpeed를 곱해서 각도 업데이트!
+    orbitAngle += orbitDir * currentAngularSpeed * dt;
+
+
 
     pOwner->pos.x = orbitTarget->pos.x + cosf(orbitAngle) * orbitRadius;
     pOwner->pos.y = orbitTarget->pos.y + sinf(orbitAngle) * orbitRadius;
