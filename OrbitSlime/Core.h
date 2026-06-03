@@ -40,6 +40,10 @@ public:
     IDXGISwapChain* SwapChain = nullptr;
     ID3D11RenderTargetView* RTV = nullptr;
 
+	// alpha blending states
+    ID3D11BlendState* alphaBlendState = nullptr;
+    ID3D11BlendState* opaqueBlendState = nullptr;
+
     ~GraphicsContext();
 
     bool InitDX(HWND hWnd, int w, int h);
@@ -48,4 +52,7 @@ public:
     void SetFullscreen(bool goFull);
     ID3DBlob* CompileShader(const std::string& src, const std::string& entry, const std::string& profile);
     ShaderSet CompileAndCreate(const void* source, size_t length, bool isFile, D3D11_INPUT_ELEMENT_DESC* ied, UINT iedCount);
+
+    bool CreateBlendStates();
+    void SetAlphaBlend(bool enabled);
 };

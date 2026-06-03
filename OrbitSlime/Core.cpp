@@ -53,14 +53,12 @@ bool WindowContext::Initialize(HINSTANCE hInst, int w, int h, LRESULT(CALLBACK* 
 
 GraphicsContext::~GraphicsContext()
 {
-    if (RTV)
-        RTV->Release();
-    if (SwapChain)
-        SwapChain->Release();
-    if (ImmediateContext)
-        ImmediateContext->Release();
-    if (Device)
-        Device->Release();
+    if (alphaBlendState) alphaBlendState->Release();
+    if (opaqueBlendState) opaqueBlendState->Release();
+    if (RTV) RTV->Release();
+    if (SwapChain) SwapChain->Release();
+    if (ImmediateContext) ImmediateContext->Release();
+    if (Device) Device->Release();
 }
 
 bool GraphicsContext::InitDX(HWND hWnd, int w, int h)
@@ -78,7 +76,7 @@ bool GraphicsContext::InitDX(HWND hWnd, int w, int h)
     HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, NULL, 0,
         D3D11_SDK_VERSION, &sd, &SwapChain, &Device, NULL, &ImmediateContext);
 
-    return SUCCEEDED(hr) && CreateRTV(w, h);
+    return SUCCEEDED(hr) && CreateRTV(w, h) && CreateBlendStates();
 }
 
 bool GraphicsContext::CreateRTV(int w, int h)
@@ -157,4 +155,39 @@ ShaderSet GraphicsContext::CompileAndCreate(const void* source, size_t length, b
     if (psBlob) psBlob->Release();
 
     return res;
+}
+
+// alpha blending
+bool GraphicsContext::CreateBlendStates()
+{
+    D3D11_BLEND_DESC alphaDesc = {};
+    alphaDesc.RenderTarget[0].BlendEnable = TRUE;
+    alphaDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+    alphaDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+    alphaDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    alphaDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+    alphaDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+    alphaDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+    alphaDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    if (FAILED(Device->CreateBlendState(&alphaDesc, &alphaBlendState)))
+    {
+        return false;
+    }
+
+    D3D11_BLEND_DESC opaqueDesc = {};
+    opaqueDesc.RenderTarget[0].BlendEnable = FALSE;
+    opaqueDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+    if (FAILED(Device->CreateBlendState(&opaqueDesc, &opaqueBlendState)))
+    {
+        return false;
+    }
+
+    return true;
+}
+void GraphicsContext::SetAlphaBlend(bool enabled)
+{
+    float blendFactor[4] = { 0, 0, 0, 0 };
+    ImmediateContext->OMSetBlendState(enabled ? alphaBlendState : opaqueBlendState ,blendFactor,0xffffffff);
 }

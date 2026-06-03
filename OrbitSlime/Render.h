@@ -62,6 +62,8 @@ public:
     float specularStrength = 0.55f;
     float specularPower = 32.0f;
     ID3D11Buffer* pColorBuffer = nullptr;
+    bool useAlphaBlend = false;
+    void SetAlphaBlend(bool enabled);
 
     ColorMaterial(ShaderSet s, XMFLOAT4 col, ID3D11Device* device);
     ~ColorMaterial() override;
@@ -69,6 +71,7 @@ public:
     void SetColor(XMFLOAT4 col);
     void SetSpecular(float strength, float power);
     void Bind(ID3D11DeviceContext* context) override;
+    bool UseAlphaBlend() const;
 };
 
 class MeshRenderer : public Component

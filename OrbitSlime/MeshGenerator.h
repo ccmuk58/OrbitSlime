@@ -13,7 +13,7 @@ struct MeshData
 class MeshGenerator
 {
 public:
-    static std::vector<Vertex> CreateCircle(float radius, int segmentCount);
     static MeshData CreateSphere(float radius, int sliceCount, int stackCount);
+    static MeshData CreateHemiSphere(float radius, int sliceCount, int stackCount);
+    static MeshData CreateIrregularSphere(float radius, int sliceCount, int stackCount, float roughness);
 };
-

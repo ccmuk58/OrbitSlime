@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsteroidTrailRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -61,6 +64,7 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ScoreDisplay.cpp">
+    <ClCompile Include="CircleCollider.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
@@ -69,8 +73,17 @@
     <ClCompile Include="CircleCollider.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PointLightManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StarFieldRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AsteroidTrailRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -107,6 +120,9 @@
     <ClInclude Include="Camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="CircleCollider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="ScoreManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -122,15 +138,23 @@
     <ClInclude Include="CircleCollider.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="PointLightManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StarFieldRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Asteroid.hlsl" />
-    <FxCompile Include="Planet.hlsl" />
-    <FxCompile Include="Slime.hlsl" />
+    <Content Include="Asteroid.hlsl" />
+    <Content Include="Planet.hlsl" />
+    <Content Include="Slime.hlsl" />
+    <Content Include="StarField.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\26DirectXWLs\Lecture09-TextureMapping\digital-numbers.png">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
+</Project>
 </Project>

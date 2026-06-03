@@ -5,6 +5,7 @@
 #include "DeltaTime.h"
 #include "Frame.h"
 #include "LightManager.h"
+#include "PointLightManager.h"
 
 #include <d3d11.h>
 #include <vector>
@@ -28,7 +29,9 @@ public:
     Frame frameCounter;
     Camera camera;
     LightManager lightManager;
+    PointLightManager pointLightManager;
     std::vector<GameObject*> world;
+    std::vector<GameObject*> pointLightObjects;
     std::vector<AsteroidMovement*> asteroids;
     bool isRunning = true;
     GameObject* uiTitle = nullptr;    // 타이틀 UI 리모컨
@@ -37,6 +40,8 @@ public:
     ID3D11VertexShader* pDefaultVS = nullptr;
     ID3D11PixelShader* pDefaultPS = nullptr;
     ID3D11InputLayout* pDefaultLayout = nullptr;
+    int windowedWidth = 0;
+    int windowedHeight = 0;
 
     GameLoop();
     ~GameLoop();
@@ -50,4 +55,5 @@ public:
 
     GameState currentState = GameState::Title;
     void ResetGame();
+    void ToggleFullscreen();
 };
