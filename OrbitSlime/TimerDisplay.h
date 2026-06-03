@@ -6,7 +6,7 @@ class TimerDisplay : public DigitTextureDisplay
 {
 private:
     float elapsedSeconds = 0.0f;
-    int lastShownSecond = -1;
+    int lastShownDecisecond = -1;
     bool isRunning = false;
 
 public:

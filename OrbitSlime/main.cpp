@@ -93,13 +93,28 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     // numbers.png를 잘라서 쓰는 화면 상단 타이머
     Mesh* timerMesh = new Mesh();
     ShaderSet digitShader = gEngine.gfx.CompileAndCreate(L"DigitTexture.hlsl", 0, true, uiIed, uiIedCount);
-    TextureMaterial* timerMat = new TextureMaterial(digitShader, L"numbers.png", gEngine.gfx.Device);
+    TextureMaterial* timerMat = new TextureMaterial(digitShader, L"newFont.png", gEngine.gfx.Device);
     timerMat->SetAlphaBlend(true);
     GameObject* timerObject = new GameObject(0.0f, 0.72f, 0.0f);
-    TimerDisplay* timerDisplay = new TimerDisplay(timerMesh, 0.2f, 0.16f, 0.01f);
+    TimerDisplay* timerDisplay = new TimerDisplay(timerMesh, 0.07f, 0.12f, 0.002f);
     timerObject->AddComponent(new MeshRenderer(timerMesh, timerMat));
     timerObject->AddComponent(timerDisplay);
     gEngine.uiTimer = timerDisplay;
+    Mesh* titleTextMesh = new Mesh();
+    GameObject* titleTextObject = new GameObject(0.0f, -0.62f, 0.0f);
+    DigitTextureDisplay* titleText = new DigitTextureDisplay(titleTextMesh, 0.055f, 0.10f, 0.0015f);
+    titleText->SetDisplayText("Press 'Space' to start");
+    titleTextObject->AddComponent(new MeshRenderer(titleTextMesh, timerMat));
+    titleTextObject->AddComponent(titleText);
+    gEngine.uiTitle = titleTextObject;
+
+    Mesh* gameOverTextMesh = new Mesh();
+    GameObject* gameOverTextObject = new GameObject(0.0f, -0.62f, 0.0f);
+    DigitTextureDisplay* gameOverText = new DigitTextureDisplay(gameOverTextMesh, 0.055f, 0.10f, 0.0015f);
+    gameOverText->SetDisplayText("Press 'R' to restart");
+    gameOverTextObject->AddComponent(new MeshRenderer(gameOverTextMesh, timerMat));
+    gameOverTextObject->AddComponent(gameOverText);
+    gEngine.uiGameOver = gameOverTextObject;
 
 	// 행성
     Mesh* planetMesh = new Mesh();
@@ -199,6 +214,8 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
     gEngine.world.push_back(planet);
     gEngine.world.push_back(slime);
     gEngine.world.push_back(timerObject);
+    gEngine.world.push_back(titleTextObject);
+    gEngine.world.push_back(gameOverTextObject);
 
 	// 게임 루프 시작
     gEngine.Run();
@@ -224,5 +241,7 @@ int WINAPI WinMain(HINSTANCE hI, HINSTANCE, LPSTR, int nS)
 	if (planetMesh) { delete planetMesh; planetMesh = nullptr; }
     if (particleMesh) { delete particleMesh; particleMesh = nullptr; }
     if (timerMesh) { delete timerMesh; timerMesh = nullptr; }
+    if (titleTextMesh) { delete titleTextMesh; titleTextMesh = nullptr; }
+    if (gameOverTextMesh) { delete gameOverTextMesh; gameOverTextMesh = nullptr; }
     return 0;
 }

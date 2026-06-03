@@ -96,7 +96,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <FileType>Document</FileType>
     </Content>
-    <Content Include="numbers.png">
+    <Content Include="newFont.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

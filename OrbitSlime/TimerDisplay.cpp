@@ -1,5 +1,6 @@
 ﻿#include "TimerDisplay.h"
 
+#include <cstdio>
 #include <string>
 
 TimerDisplay::TimerDisplay(Mesh* mesh, float width, float height, float gap)
@@ -11,8 +12,8 @@ void TimerDisplay::Reset()
 {
     // 게임 재시작 때 누적 시간과 화면 표시를 모두 처음 상태로 돌린다.
     elapsedSeconds = 0.0f;
-    lastShownSecond = -1;
-    SetText("0");
+    lastShownDecisecond = -1;
+    SetText("00:00.0");
 }
 
 void TimerDisplay::SetRunning(bool running)
@@ -29,12 +30,19 @@ void TimerDisplay::Update(float dt)
         elapsedSeconds += dt;
     }
 
-    int shownSecond = (int)elapsedSeconds;
+    int shownDecisecond = (int)(elapsedSeconds * 10.0f);
 
-    // 초가 바뀔 때만 메쉬를 다시 만든다. 매 프레임 만들면 불필요하게 비용이 든다.
-    if (shownSecond != lastShownSecond)
+    // 0.1초 단위가 바뀔 때만 메쉬를 다시 만든다.
+    if (shownDecisecond != lastShownDecisecond)
     {
-        lastShownSecond = shownSecond;
-        SetText(std::to_string(shownSecond));
+        lastShownDecisecond = shownDecisecond;
+
+        int minutes = shownDecisecond / 600;
+        int seconds = (shownDecisecond / 10) % 60;
+        int deciseconds = shownDecisecond % 10;
+
+        char text[16];
+        sprintf_s(text, "%02d:%02d.%01d", minutes, seconds, deciseconds);
+        SetText(text);
     }
 }

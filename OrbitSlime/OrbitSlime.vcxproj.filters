@@ -165,7 +165,7 @@
     <Content Include="Planet.hlsl" />
     <Content Include="Slime.hlsl" />
     <Content Include="StarField.hlsl" />
-    <Content Include="numbers.png">
+    <Content Include="newFont.png">
       <Filter>리소스 파일</Filter>
     </Content>
   </ItemGroup>
