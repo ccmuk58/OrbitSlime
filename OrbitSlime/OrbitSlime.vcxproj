@@ -36,7 +36,7 @@
     <ClCompile Include="Gameplay\SlimePhysics.cpp" />
     <ClCompile Include="Rendering\TrailRenderer.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
-    <ClCompile Include="Rendering\LightManager.cpp" />
+    <ClCompile Include="Rendering\GlobalLightManager.cpp" />
     <ClCompile Include="Rendering\Material.cpp" />
     <ClCompile Include="Rendering\Mesh.cpp" />
     <ClCompile Include="Rendering\MeshGenerator.cpp" />
@@ -65,7 +65,7 @@
     <ClInclude Include="Gameplay\SlimePhysics.h" />
     <ClInclude Include="Rendering\TrailRenderer.h" />
     <ClInclude Include="Rendering\Camera.h" />
-    <ClInclude Include="Rendering\LightManager.h" />
+    <ClInclude Include="Rendering\GlobalLightManager.h" />
     <ClInclude Include="Rendering\Material.h" />
     <ClInclude Include="Rendering\Mesh.h" />
     <ClInclude Include="Rendering\MeshGenerator.h" />
@@ -214,6 +214,9 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
+
+
+
 
 
 

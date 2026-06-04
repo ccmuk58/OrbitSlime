@@ -39,7 +39,7 @@ void GameLoop::Initialize(HINSTANCE hInst, LRESULT(CALLBACK* wndProc)(HWND, UINT
 	win.Initialize(hInst, settings.GetWindowWidth(), settings.GetWindowHeight(), wndProc);
 	gfx.InitDX(win.hWnd, settings.GetWindowWidth(), settings.GetWindowHeight());
 	camera.Initialize(&gfx);
-	lightManager.Initialize(&gfx);
+	globalLightManager.Initialize(&gfx);
 	pointLightManager.Initialize(&gfx);
 }
 
@@ -157,7 +157,7 @@ void GameLoop::Render()
 	}
 	gfx.ImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	camera.Bind(&gfx, settings.GetWindowWidth(), settings.GetWindowHeight());
-	lightManager.Bind(gfx.ImmediateContext);
+	globalLightManager.Bind(gfx.ImmediateContext);
 
 	pointLightManager.Clear();
 	for (int i = 0; i < (int)pointLightObjects.size(); i++)
@@ -278,5 +278,8 @@ void GameLoop::ResetGame()
         }
     }
 }
+
+
+
 
 

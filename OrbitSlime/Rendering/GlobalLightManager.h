@@ -15,7 +15,7 @@ struct LightBuffer
     float diffuseStrength;
 };
 
-class LightManager
+class GlobalLightManager
 {
     ID3D11Buffer* pLightBuffer = nullptr;
 
@@ -25,8 +25,8 @@ class LightManager
     float diffuseStrength = 0.7f;
 
 public:
-    LightManager();
-    ~LightManager();
+    GlobalLightManager();
+    ~GlobalLightManager();
 
     void Initialize(GraphicsContext* gfx);
     void Bind(ID3D11DeviceContext* context);
@@ -34,3 +34,5 @@ public:
     void SetDirectionalLight(XMFLOAT3 dir, XMFLOAT3 color);
     void SetIntensity(float ambientValue, float diffuseValue);
 };
+
+

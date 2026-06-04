@@ -1,10 +1,10 @@
-#include "LightManager.h"
+#include "GlobalLightManager.h"
 
-LightManager::LightManager()
+GlobalLightManager::GlobalLightManager()
 {
 }
 
-LightManager::~LightManager()
+GlobalLightManager::~GlobalLightManager()
 {
     if (pLightBuffer)
     {
@@ -13,7 +13,7 @@ LightManager::~LightManager()
     }
 }
 
-void LightManager::Initialize(GraphicsContext* gfx)
+void GlobalLightManager::Initialize(GraphicsContext* gfx)
 {
     D3D11_BUFFER_DESC lbd = { 0 };
     lbd.Usage = D3D11_USAGE_DEFAULT;
@@ -23,7 +23,7 @@ void LightManager::Initialize(GraphicsContext* gfx)
     gfx->Device->CreateBuffer(&lbd, nullptr, &pLightBuffer);
 }
 
-void LightManager::Bind(ID3D11DeviceContext* context)
+void GlobalLightManager::Bind(ID3D11DeviceContext* context)
 {
     if (!pLightBuffer)
     {
@@ -40,14 +40,16 @@ void LightManager::Bind(ID3D11DeviceContext* context)
     context->PSSetConstantBuffers(2, 1, &pLightBuffer);
 }
 
-void LightManager::SetDirectionalLight(XMFLOAT3 dir, XMFLOAT3 color)
+void GlobalLightManager::SetDirectionalLight(XMFLOAT3 dir, XMFLOAT3 color)
 {
     lightDir = dir;
     lightColor = color;
 }
 
-void LightManager::SetIntensity(float ambientValue, float diffuseValue)
+void GlobalLightManager::SetIntensity(float ambientValue, float diffuseValue)
 {
     ambient = ambientValue;
     diffuseStrength = diffuseValue;
 }
+
+

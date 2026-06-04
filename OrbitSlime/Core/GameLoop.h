@@ -4,7 +4,7 @@
 #include "Core.h"
 #include "DeltaTime.h"
 #include "Frame.h"
-#include "LightManager.h"
+#include "GlobalLightManager.h"
 #include "PointLightManager.h"
 
 #include <d3d11.h>
@@ -29,7 +29,7 @@ public:
     DeltaTime timer;
     Frame frameCounter;
     Camera camera;
-    LightManager lightManager;
+    GlobalLightManager globalLightManager;
     PointLightManager pointLightManager;
     std::vector<GameObject*> world;
     std::vector<GameObject*> pointLightObjects;
@@ -60,3 +60,6 @@ public:
     void ResetGame();
     void ToggleFullscreen();
 };
+
+
+
