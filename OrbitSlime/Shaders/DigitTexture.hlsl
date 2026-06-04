@@ -33,7 +33,7 @@ PS_IN VS(VS_IN input)
 {
     PS_IN output;
 
-    // Transform the digit quad with the same world/view/projection path as normal objects.
+    
     float4 worldPos = mul(float4(input.pos, 1.0f), matWorld);
     float4 viewPos = mul(worldPos, matView);
     output.pos = mul(viewPos, matProjection);
@@ -47,11 +47,11 @@ float4 PS(PS_IN input) : SV_Target
     float4 sampled = digitTexture.Sample(digitSampler, input.uv) * input.col;
     float brightness = max(sampled.r, max(sampled.g, sampled.b));
 
-    // newFont.png has bright glyphs on a dark background.
-    // The threshold removes dark cell backgrounds and grid-border bleed.
+    
+    
     sampled.a = sampled.a * smoothstep(0.35f, 0.75f, brightness);
 
-    // Draw the glyphs as white so they stand out on the space background.
+    
     sampled.rgb = float3(1.0f, 1.0f, 1.0f);
     return sampled;
 }

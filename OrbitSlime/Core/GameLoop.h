@@ -16,9 +16,9 @@ class TimerDisplay;
 
 enum class GameState
 {
-    Title,    // 시작 화면 (스페이스바 대기)
-    Playing,  // 게임 진행 중
-    GameOver  // 게임 오버
+    Title,    
+    Playing,  
+    GameOver  
 };
 
 class GameLoop
@@ -35,8 +35,8 @@ public:
     std::vector<GameObject*> pointLightObjects;
     std::vector<AsteroidMovement*> asteroids;
     bool isRunning = true;
-    GameObject* uiTitle = nullptr;    // 타이틀 UI 리모컨
-    GameObject* uiGameOver = nullptr; // 게임오버 UI 리모컨
+    GameObject* uiTitle = nullptr;    
+    GameObject* uiGameOver = nullptr; 
 
     TimerDisplay* uiTimer = nullptr;
 

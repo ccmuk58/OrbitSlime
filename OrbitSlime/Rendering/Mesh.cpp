@@ -1,4 +1,4 @@
-﻿#include "Mesh.h"
+#include "Mesh.h"
 
 Mesh::Mesh()
 {
@@ -25,7 +25,7 @@ Mesh::~Mesh()
 
 void Mesh::Create(GraphicsContext* gfx, const std::vector<Vertex>& vertices)
 {
-    // 숫자처럼 자주 다시 만드는 메쉬를 위해 기존 버퍼를 먼저 해제한다.
+    
     if (vBuffer)
     {
         vBuffer->Release();

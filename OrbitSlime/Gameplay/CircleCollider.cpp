@@ -39,7 +39,7 @@ void CircleCollider::Update(float dt)
         {
             targetSlimePhysics->TriggerAbsorbSquash();
         }
-        // 움직임 컴포넌트에게 즉시 '리스폰(Respawn)'
+        
         if (movement != nullptr)
         {
             movement->Respawn();
@@ -49,6 +49,6 @@ void CircleCollider::Update(float dt)
 
 void CircleCollider::Render(GraphicsContext* gfx)
 {
-    // 충돌체는 눈에 보이지 않으므로 비워둠
+    
 }
 

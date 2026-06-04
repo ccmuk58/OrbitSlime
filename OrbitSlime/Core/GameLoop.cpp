@@ -1,7 +1,7 @@
 #include "GameLoop.h"
 #include "Object.h"
-#include "ScoreManager.h" // 점수 확인을 위해 추가
-#include "AsteroidMovement.h" // 소행성 리셋을 위해 추가
+#include "ScoreManager.h" 
+#include "AsteroidMovement.h" 
 #include "TimerDisplay.h"
 #include "Logger.h"
 
@@ -45,7 +45,7 @@ void GameLoop::Initialize(HINSTANCE hInst, LRESULT(CALLBACK* wndProc)(HWND, UINT
 
 void GameLoop::Input()
 {
-    // 1. 공통 키 입력 (ESC 누르면 종료)
+    
     if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
         isRunning = false;
 
@@ -54,7 +54,7 @@ void GameLoop::Input()
         ToggleFullscreen();
     }
 
-    // 2. ★ 대기(Title) 상태일 때 입력
+    
     if (currentState == GameState::Title)
     {
         if (GetAsyncKeyState(VK_SPACE) & 0x8000)
@@ -64,10 +64,10 @@ void GameLoop::Input()
         }
     }
 
-    // 3. ★ 게임오버(GameOver) 상태일 때 입력 (MessageBox 대체!)
+    
     if (currentState == GameState::GameOver)
     {
-        // R 키를 누르면 전체화면 깨짐 없이 즉시 다시 시작!
+        
         if (GetAsyncKeyState('R') & 0x8000)
         {
             ResetGame();
@@ -75,7 +75,7 @@ void GameLoop::Input()
         }
     }
 
-    // 4. 게임오버가 아닐 때만 오브젝트들이 키보드 입력을 받음 (슬라임 조작 등)
+    
     if (currentState != GameState::GameOver)
     {
         int objectCount = (int)world.size();
@@ -97,11 +97,11 @@ void GameLoop::Update()
 
     if (uiTitle) uiTitle->isActive = (currentState == GameState::Title);
     if (uiGameOver) uiGameOver->isActive = (currentState == GameState::GameOver);
-    // 게임 플레이 중에만 타이머가 흐르게 한다.
+    
     if (uiTimer) uiTimer->SetRunning(currentState == GameState::Playing);
 
    
-    // 1.제어: 현재 상태에 따라 소행성들만 얼리기
+    
     bool shouldFreeze = (currentState == GameState::Title || currentState == GameState::GameOver);
     for (int i = 0; i < (int)asteroids.size(); i++)
     {
@@ -111,18 +111,18 @@ void GameLoop::Update()
         }
     }
     
-    // 2. 오브젝트 업데이트
+    
     for (int i = 0; i < (int)world.size(); i++)
     {
         if (world[i] != nullptr)
         {
-            // 게임오버일 때만 전체 화면을 멈추고, 타이틀(대기) 중일 때는 슬라임이 움직일 수 있게 dt를 그대로 전달
+            
             float applyDt = (currentState == GameState::GameOver) ? 0.0f : dt;
             world[i]->Update(applyDt, &gfx);
         }
     }
 
-    // 플레이 중 행성 피격 체크
+    
     if (currentState == GameState::Playing)
     {
         if (ScoreManager::planetHitCount > 4)
@@ -136,7 +136,7 @@ void GameLoop::Render()
 {
     EngineSettings& settings = EngineSettings::Instance();
 
-    // 게임오버 상태가 되면 화면 배경을 핏빛(어두운 빨간색)으로 바꿔서 연출 극대화!
+    
     if (currentState == GameState::GameOver)
     {
         float gameOverColor[4] = { 0.4f, 0.0f, 0.0f, 1.0f };
@@ -267,7 +267,7 @@ void GameLoop::ResetGame()
 {
     ScoreManager::slimeHitCount = 0;
     ScoreManager::planetHitCount = 0;
-    // 새 게임을 시작하면 타이머도 0초로 되돌린다.
+    
     if (uiTimer) uiTimer->Reset();
 
     for (int i = 0; i < (int)asteroids.size(); i++)

@@ -40,7 +40,7 @@ public:
     IDXGISwapChain* SwapChain = nullptr;
     ID3D11RenderTargetView* RTV = nullptr;
 
-	// alpha blending states
+	
     ID3D11BlendState* alphaBlendState = nullptr;
     ID3D11BlendState* opaqueBlendState = nullptr;
 

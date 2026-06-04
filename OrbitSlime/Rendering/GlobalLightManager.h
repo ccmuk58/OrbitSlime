@@ -6,7 +6,7 @@
 
 using namespace DirectX;
 
-// 조명 버퍼 구조체
+
 struct LightBuffer
 {
     XMFLOAT3 lightDir;

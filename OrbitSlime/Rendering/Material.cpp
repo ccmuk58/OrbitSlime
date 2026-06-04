@@ -1,4 +1,4 @@
-﻿#include "Material.h"
+#include "Material.h"
 #include "Logger.h"
 
 #include <cstdio>
@@ -10,7 +10,7 @@
 
 static DXGI_FORMAT GetWICFormat(WICPixelFormatGUID pixelFormat)
 {
-    // DirectX가 바로 텍스처로 만들 수 있는 WIC 픽셀 포맷만 우선 인정한다.
+    
     if (pixelFormat == GUID_WICPixelFormat32bppRGBA) return DXGI_FORMAT_R8G8B8A8_UNORM;
     if (pixelFormat == GUID_WICPixelFormat32bppBGRA) return DXGI_FORMAT_B8G8R8A8_UNORM;
     return DXGI_FORMAT_UNKNOWN;
@@ -25,7 +25,7 @@ static bool LoadTextureFromFile(
 
     *outSRV = nullptr;
 
-    // WIC는 Windows 기본 이미지 디코더다. png/jpg/bmp 같은 파일을 픽셀 배열로 읽을 수 있다.
+    
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
     IWICImagingFactory* factory = nullptr;
@@ -41,7 +41,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // 파일에서 디코더를 만들고 첫 번째 프레임을 읽는다. png는 보통 프레임이 1개다.
+        
         hr = factory->CreateDecoderFromFilename(
             filePath,
             nullptr,
@@ -64,7 +64,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr) && textureFormat == DXGI_FORMAT_UNKNOWN)
     {
-        // 원본 포맷을 DirectX가 바로 못 쓰면 32비트 RGBA로 변환해서 통일한다.
+        
         hr = factory->CreateFormatConverter(&converter);
         if (SUCCEEDED(hr))
         {
@@ -83,7 +83,7 @@ static bool LoadTextureFromFile(
     std::vector<unsigned char> pixels;
     if (SUCCEEDED(hr))
     {
-        // WIC가 읽은 이미지를 CPU 메모리의 RGBA 픽셀 배열로 복사한다.
+        
         pixels.resize((size_t)width * (size_t)height * 4);
         hr = bitmapSource->CopyPixels(nullptr, width * 4, (UINT)pixels.size(), pixels.data());
     }
@@ -91,7 +91,7 @@ static bool LoadTextureFromFile(
     ID3D11Texture2D* texture = nullptr;
     if (SUCCEEDED(hr))
     {
-        // CPU 픽셀 배열을 GPU에서 샘플링 가능한 2D 텍스처로 올린다.
+        
         D3D11_TEXTURE2D_DESC desc = {};
         desc.Width = width;
         desc.Height = height;
@@ -111,7 +111,7 @@ static bool LoadTextureFromFile(
 
     if (SUCCEEDED(hr))
     {
-        // Pixel Shader가 Texture2D로 읽을 수 있게 SRV(Shader Resource View)를 만든다.
+        
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
         srvDesc.Format = textureFormat;
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -193,7 +193,7 @@ void ColorMaterial::Bind(ID3D11DeviceContext* context)
 TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Device* device)
     : Material(s), pSRV(nullptr), pSampler(nullptr)
 {
-    // filePath 예: L"Assets\\newFont.png". vcxproj에서 CopyToOutputDirectory로 실행 폴더에 복사된다.
+    
     bool loaded = LoadTextureFromFile(device, filePath, &pSRV);
 
     if (!loaded)
@@ -226,7 +226,7 @@ TextureMaterial::TextureMaterial(ShaderSet s, const wchar_t* filePath, ID3D11Dev
 
     D3D11_SAMPLER_DESC samplerDesc = {};
 
-    // 숫자 스프라이트 시트 가장자리 밖을 반복하지 않도록 CLAMP를 사용한다.
+    
     samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -256,7 +256,7 @@ bool TextureMaterial::UseAlphaBlend() const
 
 void TextureMaterial::Bind(ID3D11DeviceContext* context)
 {
-    // 이 머티리얼을 쓰는 동안에는 텍스처용 셰이더와 숫자 텍스처를 파이프라인에 묶는다.
+    
     context->IASetInputLayout(shaders.layout);
     context->VSSetShader(shaders.vs, nullptr, 0);
     context->PSSetShader(shaders.ps, nullptr, 0);

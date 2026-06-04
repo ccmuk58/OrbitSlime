@@ -160,7 +160,7 @@ ShaderSet GraphicsContext::CompileAndCreate(const void* source, size_t length, b
     return res;
 }
 
-// alpha blending
+
 bool GraphicsContext::CreateBlendStates()
 {
     D3D11_BLEND_DESC alphaDesc = {};

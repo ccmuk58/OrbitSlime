@@ -1,13 +1,13 @@
-﻿#pragma once
+#pragma once
 #include "Object.h"
 
 class ObjectShake : public Component
 {
 private:
-    float originX;         // 원래 있던 원래 X 위치
-    float originY;         // 원래 있던 원래 Y 위치
-    float shakeDuration;   // 남은 흔들림 시간
-    float shakeMagnitude;  // 흔들림 강도
+    float originX;         
+    float originY;         
+    float shakeDuration;   
+    float shakeMagnitude;  
 
 public:
     ObjectShake();

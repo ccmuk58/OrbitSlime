@@ -16,14 +16,14 @@ class PlayerController : public Component
     float orbitAngle = XM_PIDIV2;
     float orbitDir = 0.0f;
     float angularSpeed = 2.5f;
-    float dashTimer = 0.15f;    // 대쉬가 유지되는 시간
-    float dashCooldown = 1.0f; // 대쉬를 다시 쓰기 위한 대기 시간
+    float dashTimer = 0.15f;    
+    float dashCooldown = 1.0f; 
 
 public:
     PlayerController(GameObject* target = nullptr, float radius = 0.5f, float speed = 2.5f);
     ~PlayerController() override;
 
-    TrailRenderer* trail = nullptr; // 잔상을 조종할 리모컨
+    TrailRenderer* trail = nullptr; 
 
     bool IsMoving() const;
     bool IsDashing() const;

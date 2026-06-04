@@ -35,7 +35,7 @@ void SlimePhysics::Update(float dt)
     const bool isMoving = controller->IsMoving();
     const bool isDashing = controller->IsDashing();
 
-    // When fast movement ends, the slime briefly compresses into the planet.
+    
     if ((wasDashing && !isDashing) || (wasMoving && !isMoving))
     {
         TriggerPlanetSquash();
@@ -66,7 +66,7 @@ void SlimePhysics::Update(float dt)
 
     const XMFLOAT3 targetScale = GetTargetScale();
 
-    // Squash should hit quickly, then relax more softly back to idle.
+    
     const float speed = (state == SquashState::PlanetSquash || state == SquashState::AbsorbSquash)
         ? 14.0f
         : 8.0f;
